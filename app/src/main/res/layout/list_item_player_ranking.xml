@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="3dp"
+    android:background="@color/cardbackground">
+
+    <TextView
+        android:id="@+id/tv_player_rank"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:layout_height="match_parent"
+        android:textSize="14sp"
+        android:text="Rank"
+        android:gravity="center"
+        android:textColor="@color/Black"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/player_image"
+            android:src="@drawable/default_image"
+            android:adjustViewBounds="true"
+            android:maxWidth="40dp"
+            android:maxHeight="40dp"
+            android:layout_marginRight="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_player_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Player Name"
+                android:textSize="16sp"
+                android:textColor="@color/Black"/>
+            <TextView
+                android:id="@+id/tv_player_average"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Average"
+                android:textSize="14sp"
+                android:textColor="@color/Black"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/player_country_image"
+        android:src="@drawable/default_image"
+        android:adjustViewBounds="true"
+        android:maxWidth="40dp"
+        android:layout_gravity="center"
+        android:layout_width="0dp"
+        android:layout_weight="0.7"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/tv_player_rating"
+        android:layout_width="0dp"
+        android:layout_weight="0.7"
+        android:layout_height="match_parent"
+        android:text="Rating"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="@color/Black"/>
+</LinearLayout>

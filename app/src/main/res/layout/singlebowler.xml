@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/batsmanScoredetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/bowl_Name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="Bowler Name"
+            android:textColor="@color/cpb_blue" />
+
+        <TextView
+            android:id="@+id/bowl_overs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="Overs"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/bowl_maiden"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="Mdns"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/bowl_runs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+
+            android:text="Runs"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/bowl_wickets"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="Wkts"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+</LinearLayout>

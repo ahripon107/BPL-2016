@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pagebackground">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewFixture"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/fixture">
+    </com.google.android.gms.ads.AdView>
+
+    <include layout="@layout/recycler_view_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_above="@id/adViewFixture"
+        android:layout_alignParentTop="true"/>
+</RelativeLayout>

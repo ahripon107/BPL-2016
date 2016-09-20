@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sfuronlabs.bpl2016">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.CricketNewsListActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.FixtureActivity"
+            android:screenOrientation="portrait"
+            android:label="Fixture"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.NewsDetailsActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.Highlights"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.videoplayers.HighlightsVids"
+            android:screenOrientation="landscape"
+            android:label="@string/app_name"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.LiveScore"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.LiveScoreListActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.TeamDetailsActivity"
+            android:screenOrientation="portrait"
+            android:label="Team Profile"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.TeamProfile"
+            android:screenOrientation="portrait"
+            android:label="Team Profile"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.PastMatchesActivity"
+            android:screenOrientation="portrait"
+            android:label="Past Matches"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.videoplayers.FrameStream"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.videoplayers.LiveStreamView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.videoplayers.DMPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.TrollPostListActivity"
+            android:screenOrientation="portrait"
+            android:label="Cricket Trolls"/>
+
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.PlayerProfileActivity"
+            android:screenOrientation="portrait"
+            android:label="Player Profile"/>
+
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.ActivityMatchDetails"
+            android:screenOrientation="portrait"
+            android:label="Score Details"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.FullCommentryActivity"
+            android:screenOrientation="portrait"
+            android:label="Full Commentry"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.RankingActivity"
+            android:screenOrientation="portrait"
+            android:label="Ranking"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.RecordsActivity"
+            android:screenOrientation="portrait"
+            android:label="Records"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.RecordDetailsActivity"
+            android:screenOrientation="portrait"
+            android:label="Record Details"/>
+
+        <activity
+            android:name="com.androidfragmant.cricket.allabout.activity.PointsTableActivity"
+            android:screenOrientation="portrait"
+            android:label="Points Table"/>
+
+    </application>
+
+</manifest>

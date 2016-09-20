@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">বাংলাদেশ প্রিমিয়ার লীগ</string>
+
+    <string name="livescorelist">xyz</string>
+    <string name="matchdetails">xyz</string>
+    <string name="fixture">xyz</string>
+    <string name="dmplayer">xyz</string>
+    <string name="playerprofile">xyz</string>
+    <string name="pointstable">xyz</string>
+    <string name="iframe">xyz</string>
+    <string name="highlights">xyz</string>
+    <string name="youtubeplayer">xyz</string>
+    <string name="newsinwebview">xyz</string>
+    <string name="m3u8">xyz</string>
+    <string name="newslist">xyz</string>
+    <string name="newsdetails">xyz</string>
+    <string name="teamprofiledetails">xyz</string>
+
+
+    <string name="load">Refresh</string>
+</resources>
