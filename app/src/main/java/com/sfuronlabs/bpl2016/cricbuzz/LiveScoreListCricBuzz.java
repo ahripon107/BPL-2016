@@ -1,4 +1,4 @@
-package com.sfuronlabs.bpl2016.activity;
+package com.sfuronlabs.bpl2016.cricbuzz;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -21,6 +21,8 @@ import com.google.android.gms.ads.AdView;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sfuronlabs.bpl2016.R;
+import com.sfuronlabs.bpl2016.activity.ActivityMatchDetails;
+import com.sfuronlabs.bpl2016.activity.LiveScoreListActivity;
 import com.sfuronlabs.bpl2016.adapter.BasicListAdapter;
 import com.sfuronlabs.bpl2016.model.Match;
 import com.sfuronlabs.bpl2016.util.CircleImageView;
@@ -46,7 +48,7 @@ import roboguice.inject.InjectView;
  * @author ripon
  */
 @ContentView(R.layout.activity_live_score)
-public class LiveScoreListActivity extends RoboAppCompatActivity {
+public class LiveScoreListCricBuzz extends RoboAppCompatActivity {
 
     @InjectView(R.id.rv_live_score)
     RecyclerView recyclerView;
@@ -63,21 +65,21 @@ public class LiveScoreListActivity extends RoboAppCompatActivity {
         setTitle("Live Score");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView.setAdapter(new BasicListAdapter<Match, LiveScoreViewHolder>(datas) {
+        recyclerView.setAdapter(new BasicListAdapter<Match, LiveScoreListCricBuzz.LiveScoreViewHolder>(datas) {
             @Override
-            public LiveScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public LiveScoreListCricBuzz.LiveScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_live_score, parent, false);
-                return new LiveScoreViewHolder(view);
+                return new LiveScoreListCricBuzz.LiveScoreViewHolder(view);
             }
 
             @Override
-            public void onBindViewHolder(LiveScoreViewHolder holder, final int position) {
-                Picasso.with(LiveScoreListActivity.this)
+            public void onBindViewHolder(LiveScoreListCricBuzz.LiveScoreViewHolder holder, final int position) {
+                Picasso.with(LiveScoreListCricBuzz.this)
                         .load(Constants.resolveLogo(datas.get(position).getTeam1()))
                         .placeholder(R.drawable.default_image)
                         .into(holder.imgteam1);
 
-                Picasso.with(LiveScoreListActivity.this)
+                Picasso.with(LiveScoreListCricBuzz.this)
                         .load(Constants.resolveLogo(datas.get(position).getTeam2()))
                         .placeholder(R.drawable.default_image)
                         .into(holder.imgteam2);
@@ -94,17 +96,17 @@ public class LiveScoreListActivity extends RoboAppCompatActivity {
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(LiveScoreListActivity.this, ActivityMatchDetails.class);
+                        Intent intent = new Intent(LiveScoreListCricBuzz.this, ActivityMatchDetails.class);
                         intent.putExtra("matchID", datas.get(position).getMatchId());
                         startActivity(intent);
                     }
                 })
         );
 
-        String url = Constants.CRICBUZZ_LIVE_MATCHES;
+        String url = "http://cricinfo-mukki.rhcloud.com/api/match/live";
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(LiveScoreListActivity.this, R.style.Custom);
+        final AlertDialog progressDialog = new SpotsDialog(LiveScoreListCricBuzz.this, R.style.Custom);
         progressDialog.show();
         progressDialog.setCancelable(true);
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
@@ -129,13 +131,13 @@ public class LiveScoreListActivity extends RoboAppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 progressDialog.dismiss();
-                Toast.makeText(LiveScoreListActivity.this, "Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(LiveScoreListCricBuzz.this, "Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 progressDialog.dismiss();
-                Toast.makeText(LiveScoreListActivity.this, "Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(LiveScoreListCricBuzz.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
 

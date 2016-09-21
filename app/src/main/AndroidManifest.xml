@@ -17,115 +17,115 @@
         </activity>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.CricketNewsListActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.CricketNewsListActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.FixtureActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.FixtureActivity"
             android:screenOrientation="portrait"
             android:label="Fixture"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.NewsDetailsActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.NewsDetailsActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.Highlights"
+            android:name="com.sfuronlabs.bpl2016.activity.Highlights"
             android:screenOrientation="portrait"
             android:label="@string/app_name"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.videoplayers.HighlightsVids"
+            android:name="com.sfuronlabs.bpl2016.videoplayers.HighlightsVids"
             android:screenOrientation="landscape"
             android:label="@string/app_name"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.LiveScore"
+            android:name="com.sfuronlabs.bpl2016.activity.LiveScore"
             android:screenOrientation="portrait"
             android:label="@string/app_name"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.LiveScoreListActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.LiveScoreListActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"/>
 
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.TeamDetailsActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.TeamDetailsActivity"
             android:screenOrientation="portrait"
             android:label="Team Profile"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.TeamProfile"
+            android:name="com.sfuronlabs.bpl2016.activity.TeamProfile"
             android:screenOrientation="portrait"
             android:label="Team Profile"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.PastMatchesActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.PastMatchesActivity"
             android:screenOrientation="portrait"
             android:label="Past Matches"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.videoplayers.FrameStream"
+            android:name="com.sfuronlabs.bpl2016.videoplayers.FrameStream"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
 
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.videoplayers.LiveStreamView"
+            android:name="com.sfuronlabs.bpl2016.videoplayers.LiveStreamView"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.videoplayers.DMPlayerActivity"
+            android:name="com.sfuronlabs.bpl2016.videoplayers.DMPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
 
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.TrollPostListActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.TrollPostListActivity"
             android:screenOrientation="portrait"
             android:label="Cricket Trolls"/>
 
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.PlayerProfileActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.PlayerProfileActivity"
             android:screenOrientation="portrait"
             android:label="Player Profile"/>
 
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.ActivityMatchDetails"
+            android:name="com.sfuronlabs.bpl2016.activity.ActivityMatchDetails"
             android:screenOrientation="portrait"
             android:label="Score Details"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.FullCommentryActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.FullCommentryActivity"
             android:screenOrientation="portrait"
             android:label="Full Commentry"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.RankingActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.RankingActivity"
             android:screenOrientation="portrait"
             android:label="Ranking"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.RecordsActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.RecordsActivity"
             android:screenOrientation="portrait"
             android:label="Records"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.RecordDetailsActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.RecordDetailsActivity"
             android:screenOrientation="portrait"
             android:label="Record Details"/>
 
         <activity
-            android:name="com.androidfragmant.cricket.allabout.activity.PointsTableActivity"
+            android:name="com.sfuronlabs.bpl2016.activity.PointsTableActivity"
             android:screenOrientation="portrait"
             android:label="Points Table"/>
 

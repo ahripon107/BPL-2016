@@ -43,6 +43,7 @@ public class Constants {
     public static final String NED_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/15_l-11-2-2012-1d31b4506a132712ed228b4b62d4b81c.png";
     public static final String SCO_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/16_l-11-2-2012-c7bedaa78b23b63de75b4cfc7533e0ae.png";
 
+    public static final String CRICBUZZ_LIVE_MATCHES = "http://mapps.cricbuzz.com/cbzandroid/2.0/currentmatches.json";
 
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
