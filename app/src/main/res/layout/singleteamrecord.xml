@@ -43,7 +43,7 @@
                 android:layout_weight="1"
                 android:text="Wins: "
                 android:textSize="18sp"
-                android:textColor="@color/cpb_green"/>
+                android:textColor="@color/cpb_green_dark"/>
 
         </LinearLayout>
 

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796B</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1565C0</color>
     <color name="colorAccent">#FF4081</color>
     <color name="dark">#FF222222</color>
     <color name="light">#FFEEEEEE</color>
     <color name="shadow">#555555</color>
     <color name="title">#777777</color>
 
-    <color name="cardbackground">#4DB6AC</color>
-    <color name="pagebackground">#B2DFDB</color>
+    <color name="cardbackground">#64B5F6</color>
+    <color name="pagebackground">#BBDEFB</color>
 
     <color name="tabsScrollColor">#8a140e</color>
     <color name="NiceButtonStartColor">#4AA02C</color>

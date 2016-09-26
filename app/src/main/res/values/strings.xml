@@ -1,21 +1,22 @@
 <resources>
-    <string name="app_name">বাংলাদেশ প্রিমিয়ার লীগ</string>
+    <string name="app_name">বিপিএল লাইভ</string>
 
-    <string name="livescorelist">xyz</string>
-    <string name="matchdetails">xyz</string>
-    <string name="fixture">xyz</string>
-    <string name="dmplayer">xyz</string>
-    <string name="playerprofile">xyz</string>
-    <string name="pointstable">xyz</string>
-    <string name="iframe">xyz</string>
-    <string name="highlights">xyz</string>
-    <string name="youtubeplayer">xyz</string>
-    <string name="newsinwebview">xyz</string>
-    <string name="m3u8">xyz</string>
-    <string name="newslist">xyz</string>
-    <string name="newsdetails">xyz</string>
-    <string name="teamprofiledetails">xyz</string>
+    <string name="livescorelist">ca-app-pub-9201945236996508/6548636072</string>
+    <string name="matchdetails">ca-app-pub-9201945236996508/8025369274</string>
+    <string name="fixture">ca-app-pub-9201945236996508/1978835676</string>
+    <string name="dmplayer">ca-app-pub-9201945236996508/3455568870</string>
+    <string name="playerprofile">ca-app-pub-9201945236996508/4932302076</string>
+    <string name="pointstable">ca-app-pub-9201945236996508/6409035279</string>
+    <string name="iframe">ca-app-pub-9201945236996508/7885768470</string>
+    <string name="highlights">ca-app-pub-9201945236996508/9362501679</string>
+    <string name="youtubeplayer">ca-app-pub-9201945236996508/1839234873</string>
+    <string name="newsinwebview">ca-app-pub-9201945236996508/3315968071</string>
+    <string name="m3u8">ca-app-pub-9201945236996508/4792701271</string>
+    <string name="newslist">ca-app-pub-9201945236996508/6269434473</string>
+    <string name="newsdetails">ca-app-pub-9201945236996508/7746167678</string>
+    <string name="teamprofiledetails">ca-app-pub-9201945236996508/1699634077</string>
 
 
+    <string name="youtube">AIzaSyAOc85baT1PT4tqIZZheYx6A2nKr7NK4bc</string>
     <string name="load">Refresh</string>
 </resources>

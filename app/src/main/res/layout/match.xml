@@ -53,7 +53,7 @@
                 android:layout_weight="2"
                 android:orientation="vertical">
 
-                <com.sfuronlabs.bpl2016.util.CircleImageView
+                <com.tigersapp.bdcricket.util.CircleImageView
                     android:id="@+id/civTeam1"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -91,7 +91,7 @@
                 android:layout_weight="2"
                 android:orientation="vertical">
 
-                <com.sfuronlabs.bpl2016.util.CircleImageView
+                <com.tigersapp.bdcricket.util.CircleImageView
                     android:id="@+id/civTeam2"
                     android:layout_width="60dp"
                     android:layout_height="60dp"

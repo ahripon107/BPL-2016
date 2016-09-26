@@ -15,7 +15,7 @@
         android:clickable="true"
         android:focusable="true">
 
-        <com.sfuronlabs.bpl2016.util.CircleImageView
+        <com.tigersapp.bdcricket.util.CircleImageView
             android:id="@+id/civTeams"
             android:layout_width="90dp"
             android:layout_height="90dp"
