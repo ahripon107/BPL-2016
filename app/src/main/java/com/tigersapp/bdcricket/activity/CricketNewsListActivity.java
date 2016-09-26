@@ -206,6 +206,36 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
             }
         });
 
+        url = "http://api.risingbd.com/index.php/News?name=Latest&cat_id=3";
+        Log.d(Constants.TAG, url);
+
+        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                try {
+                    response = response.getJSONObject(0).getJSONArray("data");
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        CricketNews cricketNews = new CricketNews(jsonObject.getString("NewsId"),jsonObject.getString("ImageSMPath"),
+                                jsonObject.getString("main_news_url"),jsonObject.getString("NewsHeading"),
+                                jsonObject.getString("DateTimeInserted"),"risingbd","বাংলাদেশ প্রতিদিন");
+                        cricketNewses.add(cricketNews);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Collections.sort(cricketNewses);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                Log.d(Constants.TAG, response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            }
+        });
+
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);
