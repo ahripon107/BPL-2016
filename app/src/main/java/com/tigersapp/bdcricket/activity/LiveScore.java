@@ -34,7 +34,7 @@ public class LiveScore extends RoboAppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("News Details");
+        setTitle("Details");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String url = getIntent().getStringExtra(EXTRA_URL);
 

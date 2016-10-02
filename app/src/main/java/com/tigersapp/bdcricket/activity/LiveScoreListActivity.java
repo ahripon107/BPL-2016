@@ -62,7 +62,7 @@ public class LiveScoreListActivity extends RoboAppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("Live Score");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String source = getIntent().getStringExtra("source");
+        final String source = getIntent().getStringExtra("source");
 
         recyclerView.setAdapter(new BasicListAdapter<Match, LiveScoreViewHolder>(datas) {
             @Override
@@ -95,9 +95,16 @@ public class LiveScoreListActivity extends RoboAppCompatActivity {
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(LiveScoreListActivity.this, ActivityMatchDetails.class);
-                        intent.putExtra("matchID", datas.get(position).getMatchId());
-                        startActivity(intent);
+                        if (source.equals("webview")) {
+                            Intent intent = new Intent(LiveScoreListActivity.this, LiveScore.class);
+                            intent.putExtra("url", "http://www.criconly.com/ipl/2013/get__summary.php?id="+datas.get(position).getMatchId());
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(LiveScoreListActivity.this, ActivityMatchDetails.class);
+                            intent.putExtra("matchID", datas.get(position).getMatchId());
+                            startActivity(intent);
+                        }
+
                     }
                 })
         );
@@ -181,6 +188,50 @@ public class LiveScoreListActivity extends RoboAppCompatActivity {
                 }
             });
 
+        } else if (source.equals("webview")) {
+            String url = "http://www.criconly.com/ipl/2013/html/iphone_home_json.json";
+            Log.d(Constants.TAG, url);
+
+            final AlertDialog progressDialog = new SpotsDialog(LiveScoreListActivity.this, R.style.Custom);
+            progressDialog.show();
+            progressDialog.setCancelable(true);
+
+            FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    progressDialog.dismiss();
+                    try {
+
+                        JSONArray jsonArray = response.getJSONArray("live");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject obj = jsonArray.getJSONObject(i);
+                            datas.add(new Match(obj.getString("team1_sname"), obj.getString("team2_sname"),
+                                    obj.getString("result"), "", "", "", obj.getString("match_id")));
+                        }
+
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(Constants.TAG, response.toString());
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    progressDialog.dismiss();
+                }
+            });
         }
 
 

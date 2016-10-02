@@ -217,9 +217,9 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                     response = response.getJSONObject(0).getJSONArray("data");
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
-                        CricketNews cricketNews = new CricketNews(jsonObject.getString("NewsId"),jsonObject.getString("ImageSMPath"),
-                                jsonObject.getString("main_news_url"),jsonObject.getString("NewsHeading"),
-                                jsonObject.getString("DateTimeInserted"),"risingbd","বাংলাদেশ প্রতিদিন");
+                        CricketNews cricketNews = new CricketNews(jsonObject.getString("NewsId"),"http://cdn.risingbd.com/assets/"+jsonObject.getString("ImageSMPath"),
+                                "http://api.risingbd.com/index.php/News/Details?id="+jsonObject.getString("NewsId"),jsonObject.getString("NewsHeading"),
+                                jsonObject.getString("DateTimeInserted"),"risingbd","rising bd");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -227,6 +227,36 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 }
 
                 Collections.sort(cricketNewses);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                Log.d(Constants.TAG, response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            }
+        });
+
+        url = "http://209.58.178.96/ipllive/new-home-api.php?key=bl01911905577";
+        Log.d(Constants.TAG, url);
+
+        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                try {
+                    response = response.getJSONObject(0).getJSONArray("data");
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        CricketNews cricketNews = new CricketNews(jsonObject.getString("id"),jsonObject.getString("image"),
+                                "http://209.58.178.96/ipllive/news-details-api.php?key=bl01911905577&id="+jsonObject.getString("id"),jsonObject.getString("title"),
+                                jsonObject.getString("news_date"),"pavilion","pavilion");
+                        cricketNewses.add(cricketNews);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
                 Log.d(Constants.TAG, response.toString());
             }

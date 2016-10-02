@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         cricketLiveScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v1/livescoresource.php";
+                String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v2/livescoresource.php";
                 Log.d(Constants.TAG, idMatcherURL);
 
                 final AlertDialog progressDialog = new SpotsDialog(MainActivity.this, R.style.Custom);
@@ -171,11 +171,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             if (response.getString("msg").equals("Successful")) {
                                 String source = response.getJSONArray("content").getJSONObject(0).getString("scoresource");
-                                if (source.equals("myself")) {
-                                    Intent intent = new Intent(MainActivity.this, LiveScoreListActivity.class);
-                                    intent.putExtra("source", source);
-                                    startActivity(intent);
-                                } else if (source.equals("cricinfo")) {
+                                if (source.equals("myself") || source.equals("cricinfo") || source.equals("webview")) {
                                     Intent intent = new Intent(MainActivity.this, LiveScoreListActivity.class);
                                     intent.putExtra("source", source);
                                     startActivity(intent);
