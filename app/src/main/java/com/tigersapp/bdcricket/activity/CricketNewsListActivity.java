@@ -131,7 +131,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 }
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
+                Log.d(Constants.TAG, "banglanews "+response.toString());
             }
 
             @Override
@@ -168,7 +168,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 }
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
+                Log.d(Constants.TAG, "kaler kantho "+response.toString());
             }
 
             @Override
@@ -198,7 +198,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
+                Log.d(Constants.TAG, "bd protidin "+response.toString());
             }
 
             @Override
@@ -228,7 +228,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
+                Log.d(Constants.TAG, "rising bd "+response.toString());
             }
 
             @Override
@@ -241,10 +241,11 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject object) {
 
                 try {
-                    response = response.getJSONObject(0).getJSONArray("data");
+
+                    JSONArray response = object.getJSONArray("contents");
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("id"),jsonObject.getString("image"),
@@ -258,7 +259,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
                 //Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
+                Log.d(Constants.TAG, "pavilion "+object.toString());
             }
 
             @Override
