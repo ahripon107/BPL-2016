@@ -85,7 +85,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 holder.headline.setTypeface(typeface);
                 holder.author.setTypeface(typeface);
                 holder.headline.setText(cricketNewses.get(position).getTitle());
-                holder.author.setText(cricketNewses.get(position).getSourceBangla());
+                holder.author.setVisibility(View.GONE);
 
                 holder.time.setText(cricketNewses.get(position).getDate());
                 Picasso.with(CricketNewsListActivity.this)
@@ -123,7 +123,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("ContentID"),"http://www.banglanews24.com/media/imgAll/"+jsonObject.getString("ImageSMPath"),
                                 "http://www.banglanews24.com/api/details/"+jsonObject.getString("ContentID"),jsonObject.getString("ContentHeading"),
-                                jsonObject.getString("updated_at"),"banglanews","বাংলানিউজ ২৪ ");
+                                jsonObject.getString("updated_at"),"banglanews","");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -160,7 +160,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("item_id"),jsonObject.getString("featured_image"),
                                 jsonObject.getString("main_news_url"),jsonObject.getString("title"),
-                                jsonObject.getString("datetime"),"kalerkantho","কালের কণ্ঠ");
+                                jsonObject.getString("datetime"),"kalerkantho","");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -189,7 +189,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("item_id"),jsonObject.getString("featured_image"),
                                 jsonObject.getString("main_news_url"),jsonObject.getString("title"),
-                                jsonObject.getString("datetime"),"bdprotidin","বাংলাদেশ প্রতিদিন");
+                                jsonObject.getString("datetime"),"bdprotidin","");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -219,7 +219,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("NewsId"),"http://cdn.risingbd.com/assets/"+jsonObject.getString("ImageSMPath"),
                                 "http://api.risingbd.com/index.php/News/Details?id="+jsonObject.getString("NewsId"),jsonObject.getString("NewsHeading"),
-                                jsonObject.getString("DateTimeInserted"),"risingbd","rising bd");
+                                jsonObject.getString("DateTimeInserted"),"risingbd","");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -249,7 +249,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("id"),jsonObject.getString("image"),
                                 "http://209.58.178.96/ipllive/news-details-api.php?key=bl01911905577&id="+jsonObject.getString("id"),jsonObject.getString("title"),
-                                jsonObject.getString("news_date"),"pavilion","pavilion");
+                                jsonObject.getString("news_date"),"pavilion","");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {

@@ -19,4 +19,38 @@
 
     <string name="youtube">AIzaSyAOc85baT1PT4tqIZZheYx6A2nKr7NK4bc</string>
     <string name="load">Refresh</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string-array name="nav_drawer_labels">
+        <item>@string/title_visitedplaces</item>
+        <item>@string/aboutapp</item>
+        <item>@string/givefeedback</item>
+        <item>@string/suggestplace</item>
+        <item>@string/updatedatabase</item>
+        <item>@string/costcalculator</item>
+        <item>@string/rateus</item>
+        <item>@string/update</item>
+
+    </string-array>
+
+    <string name="title_messages">My Wishlist</string>
+    <string name="title_home">Home</string>
+    <string name="title_wishlist">My Wishlist</string>
+    <string name="title_visitedplaces">My Visited Places</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="aboutapp">About App</string>
+    <string name="givefeedback">Give Feedback</string>
+    <string name="suggestplace">Suggest New Place</string>
+    <string name="rateus">Rate Us</string>
+    <string name="update">Update App</string>
+    <string name="updatedatabase">Update Database</string>
+    <string name="costcalculator">Tour Cost Calculator</string>
+    <string name="title_activity_front_page">FrontPage</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
