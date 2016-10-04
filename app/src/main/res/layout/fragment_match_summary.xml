@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="12dp"
     android:background="@color/pagebackground">
 
     <TextView
@@ -43,6 +42,7 @@
     </com.dd.ShadowLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:paddingLeft="3dp"
         android:id="@+id/commentry_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

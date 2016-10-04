@@ -11,8 +11,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,11 +33,18 @@ import android.widget.Toast;
 import com.batch.android.Batch;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
+import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.adapter.SlideShowViewPagerAdapter;
+import com.tigersapp.bdcricket.model.Match;
+import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
+import com.tigersapp.bdcricket.util.ViewHolder;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,9 +56,6 @@ import dmax.dialog.SpotsDialog;
 public class FrontPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    LinearLayout cricketLive, cricketLiveScore, cricketHighlights, cricketFixture, cricketNews, trollPosts, teamProfile, pastMatches, rate, ranking, records, pointsTable, quotes;
-
-    TextView liveStreaming, liveScore, news, highlights, fixture, pastMatch, rankings, record, pointSTable, trolls, quote, profile, update;
     TextView[] dots1;
 
     TextView welcomeText;
@@ -59,22 +67,19 @@ public class FrontPage extends AppCompatActivity
 
     LinearLayout placeImageDotsLayout, cardContainer;
 
+    RecyclerView recyclerView;
+
     Typeface typeface;
+
+    ArrayList<Match> datas;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        datas = new ArrayList<>();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -87,53 +92,13 @@ public class FrontPage extends AppCompatActivity
 
         typeface = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
 
-        cricketLive = (LinearLayout) findViewById(R.id.button_cricket_live);
-        cricketLiveScore = (LinearLayout) findViewById(R.id.button_cricket_live_score);
-        cricketHighlights = (LinearLayout) findViewById(R.id.button_cricket_highlights);
-        cricketFixture = (LinearLayout) findViewById(R.id.button_cricket_fixture);
-        cricketNews = (LinearLayout) findViewById(R.id.button_cricket_news);
-        trollPosts = (LinearLayout) findViewById(R.id.button_troll_posts);
-        teamProfile = (LinearLayout) findViewById(R.id.button_team_profile);
-        pastMatches = (LinearLayout) findViewById(R.id.button_cricket_past_matches);
-        rate = (LinearLayout) findViewById(R.id.button_rate);
-        ranking = (LinearLayout) findViewById(R.id.button_ranking);
-        records = (LinearLayout) findViewById(R.id.button_records);
-        pointsTable = (LinearLayout) findViewById(R.id.button_points_table);
-        quotes = (LinearLayout) findViewById(R.id.button_quotes);
-
-        liveStreaming = (TextView) findViewById(R.id.tv_livestreaming);
-        liveScore = (TextView) findViewById(R.id.tv_livescore);
-        news = (TextView) findViewById(R.id.tv_news);
-        highlights = (TextView) findViewById(R.id.tv_highlights);
-        fixture = (TextView) findViewById(R.id.tv_fixture);
-        pastMatch = (TextView) findViewById(R.id.tv_pastmatches);
-        rankings = (TextView) findViewById(R.id.tv_ranking);
-        record = (TextView) findViewById(R.id.tv_records);
-        pointSTable = (TextView) findViewById(R.id.tv_ptsTable);
-        trolls = (TextView) findViewById(R.id.tv_trolls);
-        quote = (TextView) findViewById(R.id.tv_quotes);
-        profile = (TextView) findViewById(R.id.tv_profiles);
-        update = (TextView) findViewById(R.id.tv_update);
-
-        liveStreaming.setTypeface(typeface);
-        liveScore.setTypeface(typeface);
-        news.setTypeface(typeface);
-        highlights.setTypeface(typeface);
-        fixture.setTypeface(typeface);
-        pastMatch.setTypeface(typeface);
-        rankings.setTypeface(typeface);
-        record.setTypeface(typeface);
-        pointSTable.setTypeface(typeface);
-        trolls.setTypeface(typeface);
-        quote.setTypeface(typeface);
-        profile.setTypeface(typeface);
-        update.setTypeface(typeface);
 
         welcomeText = (TextView) findViewById(R.id.tv_welcome_text);
 
         viewPager = (ViewPager) findViewById(R.id.placeViewPagerImageSlideShow);
         placeImageDotsLayout = (LinearLayout) findViewById(R.id.placeImageDots);
         cardContainer = (LinearLayout) findViewById(R.id.placecardcontainer);
+        recyclerView = (RecyclerView) findViewById(R.id.live_matches);
 
         imageUrls = new ArrayList<>();
         texts = new ArrayList<>();
@@ -141,7 +106,7 @@ public class FrontPage extends AppCompatActivity
         viewPagerAdapter = new SlideShowViewPagerAdapter(this, imageUrls, texts);
         viewPager.setAdapter(viewPagerAdapter);
 
-        String welcomeTextUrl = "http://apisea.xyz/BPL2016/apis/v1/welcometext.php?key=bl905577";
+        String welcomeTextUrl = "http://apisea.xyz/BPL2016/apis/v2/welcometext.php?key=bl905577";
         Log.d(Constants.TAG, welcomeTextUrl);
 
         FetchFromWeb.get(welcomeTextUrl, null, new JsonHttpResponseHandler() {
@@ -164,6 +129,40 @@ public class FrontPage extends AppCompatActivity
                             }
                         });
                     }
+
+                    String url = "https://skysportsapi.herokuapp.com/sky/getnews/cricket/v1.0/";
+                    Log.d(Constants.TAG, url);
+
+                    if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("image").equals("true")) {
+                        cardContainer.setVisibility(View.VISIBLE);
+                        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                                try {
+
+                                    for (int i = 0; i < response.length(); i++) {
+                                        JSONObject jsonObject = response.getJSONObject(i);
+                                        imageUrls.add(jsonObject.getString("imgsrc"));
+                                        texts.add(jsonObject.getString("title"));
+
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                viewPagerAdapter.notifyDataSetChanged();
+                                addBottomDots(0);
+                                Log.d(Constants.TAG, response.toString());
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+
+                            }
+                        });
+                    } else {
+                        cardContainer.setVisibility(View.GONE);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -171,189 +170,214 @@ public class FrontPage extends AppCompatActivity
             }
         });
 
-        cricketLive.setOnClickListener(new View.OnClickListener() {
+
+        String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v2/livescoresource.php";
+        Log.d(Constants.TAG, idMatcherURL);
+
+        final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+        progressDialog.show();
+        progressDialog.setCancelable(true);
+        RequestParams params = new RequestParams();
+        params.add("key", "bl905577");
+
+        FetchFromWeb.get(idMatcherURL, params, new JsonHttpResponseHandler() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, Highlights.class);
-                intent.putExtra("cause", "livestream");
-                startActivity(intent);
-            }
-        });
-
-        cricketLiveScore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v2/livescoresource.php";
-                Log.d(Constants.TAG, idMatcherURL);
-
-                final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
-                progressDialog.show();
-                progressDialog.setCancelable(true);
-                RequestParams params = new RequestParams();
-                params.add("key", "bl905577");
-
-                FetchFromWeb.get(idMatcherURL, params, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        progressDialog.dismiss();
-                        try {
-                            if (response.getString("msg").equals("Successful")) {
-                                String source = response.getJSONArray("content").getJSONObject(0).getString("scoresource");
-                                if (source.equals("myself") || source.equals("cricinfo") || source.equals("webview")) {
-                                    Intent intent = new Intent(FrontPage.this, LiveScoreListActivity.class);
-                                    intent.putExtra("source", source);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(FrontPage.this, "Please Update App", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            Log.d(Constants.TAG, response.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        progressDialog.dismiss();
-                        Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-
-        cricketHighlights.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, Highlights.class);
-                intent.putExtra("cause", "highlights");
-                startActivity(intent);
-            }
-        });
-
-        cricketFixture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        cricketNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v1/fetchNewsUrls.php";
-                Log.d(Constants.TAG, isAllowedUrl);
-
-                final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
-                progressDialog.show();
-                progressDialog.setCancelable(true);
-                RequestParams params = new RequestParams();
-                params.add("key", "bl905577");
-
-                FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        progressDialog.dismiss();
-                        try {
-                            if (response.getString("msg").equals("Successful")) {
-                                String source = response.getJSONArray("content").getJSONObject(0).getString("permitted");
-                                if (source.equals("true")) {
-                                    Intent intent = new Intent(FrontPage.this, CricketNewsListActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            Log.d(Constants.TAG, response.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        progressDialog.dismiss();
-                        Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-            }
-        });
-
-        trollPosts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, TrollPostListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        teamProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, TeamProfile.class);
-                startActivity(intent);
-            }
-        });
-
-        pastMatches.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, PastMatchesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        rate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String appPackageName = getPackageName();
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progressDialog.dismiss();
                 try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    if (response.getString("msg").equals("Successful")) {
+                        final String source = response.getJSONArray("content").getJSONObject(0).getString("scoresource");
+                        String url = response.getJSONArray("content").getJSONObject(0).getString("url");
+                        if (source.equals("myself") || source.equals("cricinfo") || source.equals("webview")) {
+                            recyclerView.setAdapter(new BasicListAdapter<Match, FrontPage.LiveScoreViewHolder>(datas) {
+                                @Override
+                                public FrontPage.LiveScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_live_score, parent, false);
+                                    return new FrontPage.LiveScoreViewHolder(view);
+                                }
+
+                                @Override
+                                public void onBindViewHolder(FrontPage.LiveScoreViewHolder holder, final int position) {
+                                    Picasso.with(FrontPage.this)
+                                            .load(Constants.resolveLogo(datas.get(position).getTeam1()))
+                                            .placeholder(R.drawable.default_image)
+                                            .into(holder.imgteam1);
+
+                                    Picasso.with(FrontPage.this)
+                                            .load(Constants.resolveLogo(datas.get(position).getTeam2()))
+                                            .placeholder(R.drawable.default_image)
+                                            .into(holder.imgteam2);
+
+                                    holder.textteam1.setText(datas.get(position).getTeam1());
+                                    holder.textteam2.setText(datas.get(position).getTeam2());
+                                    holder.venue.setText(Html.fromHtml(datas.get(position).getVenue()));
+                                    holder.time.setText(datas.get(position).getTime());
+                                }
+                            });
+                            recyclerView.setLayoutManager(new LinearLayoutManager(FrontPage.this));
+
+                            recyclerView.addOnItemTouchListener(
+                                    new RecyclerItemClickListener(FrontPage.this, new RecyclerItemClickListener.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            if (source.equals("webview")) {
+                                                Intent intent = new Intent(FrontPage.this, LiveScore.class);
+                                                intent.putExtra("url", "http://www.criconly.com/ipl/2013/get__summary.php?id=" + datas.get(position).getMatchId());
+                                                startActivity(intent);
+                                            } else {
+                                                Intent intent = new Intent(FrontPage.this, ActivityMatchDetails.class);
+                                                intent.putExtra("matchID", datas.get(position).getMatchId());
+                                                startActivity(intent);
+                                            }
+
+                                        }
+                                    })
+                            );
+
+                            if (source.equals("cricinfo")) {
+                                //String url = "http://cricinfo-mukki.rhcloud.com/api/match/live";
+                                Log.d(Constants.TAG, url);
+
+                                final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+                                progressDialog.show();
+                                progressDialog.setCancelable(true);
+                                FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                        progressDialog.dismiss();
+                                        try {
+                                            Log.d(Constants.TAG, response.toString());
+                                            JSONArray jsonArray = response.getJSONArray("items");
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject obj = jsonArray.getJSONObject(i);
+
+                                                datas.add(new Match(obj.getJSONObject("team1").getString("teamName"), obj.getJSONObject("team2").getString("teamName"),
+                                                        obj.getString("matchDescription"), "", "", "", obj.getString("matchId")));
+                                            }
+                                            recyclerView.getAdapter().notifyDataSetChanged();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            } else if (source.equals("myself")) {
+                                //String url = "http://apisea.xyz/Cricket/apis/v1/fetchMyLiveScores.php?key=bl905577";
+                                Log.d(Constants.TAG, url);
+
+                                final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+                                progressDialog.show();
+                                progressDialog.setCancelable(true);
+                                FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                        progressDialog.dismiss();
+                                        try {
+                                            Log.d(Constants.TAG, response.toString());
+                                            if (response.getString("msg").equals("Successful")) {
+                                                JSONArray jsonArray = response.getJSONArray("content");
+                                                for (int i = 0; i < jsonArray.length(); i++) {
+                                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                                    datas.add(new Match(obj.getString("team1"), obj.getString("team2"),
+                                                            obj.getString("status"), "", "", "", obj.getString("matchId")));
+                                                }
+                                            }
+                                            recyclerView.getAdapter().notifyDataSetChanged();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            } else if (source.equals("webview")) {
+                                //String url = "http://www.criconly.com/ipl/2013/html/iphone_home_json.json";
+                                Log.d(Constants.TAG, url);
+
+                                final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+                                progressDialog.show();
+                                progressDialog.setCancelable(true);
+
+                                FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                        progressDialog.dismiss();
+                                        try {
+
+                                            JSONArray jsonArray = response.getJSONArray("live");
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject obj = jsonArray.getJSONObject(i);
+                                                datas.add(new Match(obj.getString("team1_sname"), obj.getString("team2_sname"),
+                                                        obj.getString("result"), "", "", "", obj.getString("match_id")));
+                                            }
+
+                                            recyclerView.getAdapter().notifyDataSetChanged();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Log.d(Constants.TAG, response.toString());
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                        progressDialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                        progressDialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                        progressDialog.dismiss();
+                                    }
+                                });
+                            }
+                        } else {
+                            Toast.makeText(FrontPage.this, "Please Update App", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    Log.d(Constants.TAG, response.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-        });
 
-        ranking.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, RankingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        records.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, RecordsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        pointsTable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        quotes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FrontPage.this, QuotesListActivity.class);
-                startActivity(intent);
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                progressDialog.dismiss();
+                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
 
 
-        cardContainer.setVisibility(View.GONE);
+        //cardContainer.setVisibility(View.GONE);
 
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -410,18 +434,79 @@ public class FrontPage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_live_streaming) {
+            Intent intent = new Intent(FrontPage.this, Highlights.class);
+            intent.putExtra("cause", "livestream");
+            startActivity(intent);
+        } else if (id == R.id.nav_sports_news) {
+            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v1/fetchNewsUrls.php";
+            Log.d(Constants.TAG, isAllowedUrl);
 
-        } else if (id == R.id.nav_slideshow) {
+            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+            progressDialog.show();
+            progressDialog.setCancelable(true);
+            RequestParams params = new RequestParams();
+            params.add("key", "bl905577");
 
-        } else if (id == R.id.nav_manage) {
+            FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    progressDialog.dismiss();
+                    try {
+                        if (response.getString("msg").equals("Successful")) {
+                            String source = response.getJSONArray("content").getJSONObject(0).getString("permitted");
+                            if (source.equals("true")) {
+                                Intent intent = new Intent(FrontPage.this, CricketNewsListActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-        } else if (id == R.id.nav_share) {
+                        Log.d(Constants.TAG, response.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-        } else if (id == R.id.nav_send) {
-
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    progressDialog.dismiss();
+                    Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                }
+            });
+        } else if (id == R.id.nav_highlights) {
+            Intent intent = new Intent(FrontPage.this, Highlights.class);
+            intent.putExtra("cause", "highlights");
+            startActivity(intent);
+        } else if (id == R.id.nav_fixture) {
+            Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_past_matches) {
+            Intent intent = new Intent(FrontPage.this, PastMatchesActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_ranking) {
+            Intent intent = new Intent(FrontPage.this, RankingActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_records) {
+            Intent intent = new Intent(FrontPage.this, RecordsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_points_table) {
+            Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_quotes) {
+            Intent intent = new Intent(FrontPage.this, QuotesListActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_team_profile) {
+            Intent intent = new Intent(FrontPage.this, TeamProfile.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_update_app) {
+            String appPackageName = getPackageName();
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -479,5 +564,26 @@ public class FrontPage extends AppCompatActivity
         Batch.onNewIntent(this, intent);
 
         super.onNewIntent(intent);
+    }
+
+
+    private static class LiveScoreViewHolder extends RecyclerView.ViewHolder {
+        protected CircleImageView imgteam1;
+        protected CircleImageView imgteam2;
+        protected TextView textteam1;
+        protected TextView textteam2;
+        protected TextView venue;
+        protected TextView time;
+
+        public LiveScoreViewHolder(final View itemView) {
+            super(itemView);
+
+            imgteam1 = ViewHolder.get(itemView, R.id.civTeam1);
+            imgteam2 = ViewHolder.get(itemView, R.id.civTeam2);
+            textteam1 = ViewHolder.get(itemView, R.id.tvTeam1);
+            textteam2 = ViewHolder.get(itemView, R.id.tvTeam2);
+            venue = ViewHolder.get(itemView, R.id.tvVenue);
+            time = ViewHolder.get(itemView, R.id.tvTime);
+        }
     }
 }

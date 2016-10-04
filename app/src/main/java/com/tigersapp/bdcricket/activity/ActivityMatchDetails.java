@@ -20,6 +20,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.FragmentMatchSummary;
 import com.tigersapp.bdcricket.fragment.FragmentScoreBoard;
+import com.tigersapp.bdcricket.model.Commentry;
 import com.tigersapp.bdcricket.model.Summary;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
@@ -41,7 +42,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
     private ViewPager viewPager;
     private Gson gson;
-    ArrayList<String> commentry = new ArrayList<>();
+    ArrayList<Commentry> commentry = new ArrayList<>();
 
     AdView adView;
 
@@ -77,7 +78,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
     }
 
     private void sendRequestForLiveMatchDetails() {
-        String url = "http://cricinfo-mukki.rhcloud.com/api/match/" + this.liveMatchID;
+        String url = "http://37.187.95.220:8080/cricket-api/api/match/" + this.liveMatchID;
         Log.d(Constants.TAG, url);
 
         final AlertDialog progressDialog = new SpotsDialog(ActivityMatchDetails.this, R.style.Custom);
@@ -227,26 +228,35 @@ public class ActivityMatchDetails extends AppCompatActivity {
                                     JSONObject obj = jsonArray1.getJSONObject(i);
                                     if (obj.getString("type").equals("ball")) {
                                         String string = "";
-                                        string += (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                        String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
                                         string += obj.getString("shc") + " - ";
                                         string += obj.getString("r") + " run; ";
                                         string += obj.getString("c");
-                                        commentry.add(string);
+                                        if (obj.has("dmsl")) {
+                                            commentry.add(new Commentry("ball","W",ov,string));
+                                        } else {
+                                            commentry.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                        }
+
                                     } else {
-                                        commentry.add(obj.getString("c"));
+                                        commentry.add(new Commentry("nonball","","",obj.getString("c")));
                                     }
                                 }
                             } else if (object instanceof JSONObject) {
                                 JSONObject obj = (JSONObject) object;
                                 if (obj.getString("type").equals("ball")) {
                                     String string = "";
-                                    string += (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                    String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
                                     string += obj.getString("shc") + " - ";
                                     string += obj.getString("r") + " run; ";
                                     string += obj.getString("c");
-                                    commentry.add(string);
+                                    if (obj.has("dmsl")) {
+                                        commentry.add(new Commentry("ball","W",ov,string));
+                                    } else {
+                                        commentry.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                    }
                                 } else {
-                                    commentry.add(obj.getString("c"));
+                                    commentry.add(new Commentry("nonball","","",obj.getString("c")));
                                 }
                             }
                             //commentry.add("-------------------------------------------");
@@ -258,13 +268,17 @@ public class ActivityMatchDetails extends AppCompatActivity {
                             JSONObject obj = jsonArray1.getJSONObject(i);
                             if (obj.getString("type").equals("ball")) {
                                 String string = "";
-                                string += (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
                                 string += obj.getString("shc") + " - ";
                                 string += obj.getString("r") + " run; ";
                                 string += obj.getString("c");
-                                commentry.add(string);
+                                if (obj.has("dmsl")) {
+                                    commentry.add(new Commentry("ball","W",ov,string));
+                                } else {
+                                    commentry.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                }
                             } else {
-                                commentry.add(obj.getString("c"));
+                                commentry.add(new Commentry("nonball","","",obj.getString("c")));
                             }
                         }
 
