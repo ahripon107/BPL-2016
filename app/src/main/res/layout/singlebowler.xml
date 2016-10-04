@@ -11,7 +11,8 @@
         android:id="@+id/batsmanScoredetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:orientation="horizontal">
 
         <TextView
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:text="Overs"
+            android:textColor="@color/Black"
             android:textSize="12sp" />
 
         <TextView
@@ -36,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:text="Mdns"
+            android:textColor="@color/Black"
             android:textSize="12sp" />
 
         <TextView
@@ -43,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-
+            android:textColor="@color/Black"
             android:text="Runs"
             android:textSize="12sp" />
 
@@ -53,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:text="Wkts"
+            android:textColor="@color/Black"
             android:textSize="12sp" />
 
     </LinearLayout>

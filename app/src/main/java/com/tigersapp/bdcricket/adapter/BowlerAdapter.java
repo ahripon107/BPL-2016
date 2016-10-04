@@ -2,10 +2,12 @@ package com.tigersapp.bdcricket.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tigersapp.bdcricket.R;
@@ -51,7 +53,17 @@ public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerView
                 context.startActivity(intent);
             }
         });
+
+        if (position%2 == 1) {
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context,R.color.batsmanbowlerbackground));
+        }
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 
     @Override
     public int getItemCount() {
@@ -64,6 +76,7 @@ public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerView
         protected TextView maidens;
         protected TextView runs;
         protected TextView wickets;
+        protected LinearLayout linearLayout;
 
         public BowlerViewHolder(View itemView) {
             super(itemView);
@@ -73,6 +86,7 @@ public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerView
             maidens = ViewHolder.get(itemView, R.id.bowl_maiden);
             runs = ViewHolder.get(itemView, R.id.bowl_runs);
             wickets = ViewHolder.get(itemView, R.id.bowl_wickets);
+            linearLayout = ViewHolder.get(itemView,R.id.batsmanScoredetails);
         }
     }
 }

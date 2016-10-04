@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_live_streaming"
+            android:title="লাইভ স্ট্রিমিং" />
+        <item
+            android:id="@+id/nav_sports_news"
+            android:title="স্পোর্টস নিউজ" />
+        <item
+            android:id="@+id/nav_highlights"
+            android:title="হাইলাইটস" />
+        <item
+            android:id="@+id/nav_fixture"
+            android:title="ফিক্সচার" />
+
+
+        <item
+            android:id="@+id/nav_past_matches"
+            android:title="পূর্বের খেলা" />
+        <item
+            android:id="@+id/nav_ranking"
+            android:title="রাঙ্কিং" />
+        <item
+            android:id="@+id/nav_records"
+            android:title="ক্রিকেটের যত রেকর্ড" />
+        <item
+            android:id="@+id/nav_points_table"
+            android:title="পয়েন্ট টেবিল" />
+        <item
+            android:id="@+id/nav_quotes"
+            android:title="উদ্ধৃতি" />
+        <item
+            android:id="@+id/nav_team_profile"
+            android:title="টিম প্রোফাইল" />
+        <item
+            android:id="@+id/nav_update_app"
+            android:title="অ্যাপ আপডেট করুন" />
+
+    </group>
+</menu>

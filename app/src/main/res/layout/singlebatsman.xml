@@ -5,13 +5,15 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:orientation="vertical"
+    android:id="@+id/batsman_layout">
 
     <LinearLayout
         android:id="@+id/batsmanScoredetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -28,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:textSize="12sp"
+            android:textColor="@color/Black"
             android:text="Runs" />
 
         <TextView
@@ -36,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:textSize="12sp"
+            android:textColor="@color/Black"
             android:text="Balls" />
 
         <TextView
@@ -44,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:textSize="12sp"
+            android:textColor="@color/Black"
             android:text="Fours" />
 
         <TextView
@@ -52,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:textSize="12sp"
+            android:textColor="@color/Black"
             android:text="Sixes" />
 
         <TextView
@@ -60,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:textSize="12sp"
+            android:textColor="@color/Black"
             android:text="SR" />
     </LinearLayout>
 

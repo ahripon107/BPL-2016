@@ -163,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:layout_width="0dp"
-                    android:text="Strike Rate"
+                    android:text="SR"
                     android:textColor="#000000"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -412,7 +412,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:layout_width="0dp"
-                    android:text="Strike Rate"
+                    android:text="SR"
                     android:textColor="#000000"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -661,7 +661,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:layout_width="0dp"
-                    android:text="Strike Rate"
+                    android:text="SR"
                     android:textColor="#000000"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -913,7 +913,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:layout_width="0dp"
-                    android:text="Strike Rate"
+                    android:text="SR"
                     android:textColor="#000000"
                     android:textSize="12sp" />
             </LinearLayout>
