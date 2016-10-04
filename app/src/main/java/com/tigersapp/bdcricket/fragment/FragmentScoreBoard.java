@@ -406,7 +406,7 @@ public class FragmentScoreBoard extends Fragment {
     }
 
     public void loadEachTeamScore (final String matchID) {
-        String url = "http://cricinfo-mukki.rhcloud.com/api/match/live";
+        String url = "http://37.187.95.220:8080/cricket-api/api/match/live";
         Log.d(Constants.TAG, url);
 
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {

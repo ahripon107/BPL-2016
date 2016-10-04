@@ -60,6 +60,12 @@ public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerView
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+
+    @Override
     public int getItemCount() {
         return bowlers.size();
     }

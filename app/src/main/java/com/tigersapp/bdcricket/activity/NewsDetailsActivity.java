@@ -101,7 +101,12 @@ public class NewsDetailsActivity extends RoboAppCompatActivity {
                 try {
 
                     JSONObject jsonObject = response.getJSONObject(0);
-                    details.setText(Html.fromHtml(jsonObject.getString("ContentDetails")));
+                    if (jsonObject.has("ContentDetails")) {
+                        details.setText(Html.fromHtml(jsonObject.getString("ContentDetails")));
+                    } else {
+                        details.setText(Html.fromHtml(jsonObject.getString("NewsDetails")));
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -114,9 +119,14 @@ public class NewsDetailsActivity extends RoboAppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progressDialog.dismiss();
                 try {
+                    if (response.has("getnewsby_id")) {
+                        JSONObject jsonObject = response.getJSONObject("getnewsby_id");
+                        details.setText(Html.fromHtml(jsonObject.getString("summery")));
+                    } else {
+                        response = response.getJSONArray("contents").getJSONObject(0);
+                        details.setText(Html.fromHtml(response.getString("news_details")));
+                    }
 
-                    JSONObject jsonObject = response.getJSONObject("getnewsby_id");
-                    details.setText(Html.fromHtml(jsonObject.getString("summery")));
 
                 } catch (JSONException e) {
                     e.printStackTrace();

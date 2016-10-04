@@ -31,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.batch.android.Batch;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
@@ -72,12 +74,14 @@ public class FrontPage extends AppCompatActivity
     Typeface typeface;
 
     ArrayList<Match> datas;
+    AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        adView = (AdView) findViewById(R.id.adViewFontPage);
         setSupportActionBar(toolbar);
         datas = new ArrayList<>();
 
@@ -91,6 +95,10 @@ public class FrontPage extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         typeface = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
+
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+        adView.loadAd(adRequest);
 
 
         welcomeText = (TextView) findViewById(R.id.tv_welcome_text);
@@ -406,28 +414,6 @@ public class FrontPage extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.front_page, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -435,11 +421,7 @@ public class FrontPage extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_live_streaming) {
-            Intent intent = new Intent(FrontPage.this, Highlights.class);
-            intent.putExtra("cause", "livestream");
-            startActivity(intent);
-        } else if (id == R.id.nav_sports_news) {
-            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v1/fetchNewsUrls.php";
+            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v2/accessChecker.php";
             Log.d(Constants.TAG, isAllowedUrl);
 
             final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
@@ -454,7 +436,46 @@ public class FrontPage extends AppCompatActivity
                     progressDialog.dismiss();
                     try {
                         if (response.getString("msg").equals("Successful")) {
-                            String source = response.getJSONArray("content").getJSONObject(0).getString("permitted");
+                            String source = response.getJSONArray("content").getJSONObject(0).getString("livestream");
+                            if (source.equals("true")) {
+                                Intent intent = new Intent(FrontPage.this, Highlights.class);
+                                intent.putExtra("cause", "livestream");
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        Log.d(Constants.TAG, response.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    progressDialog.dismiss();
+                    Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                }
+            });
+
+        } else if (id == R.id.nav_sports_news) {
+            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v2/accessChecker.php";
+            Log.d(Constants.TAG, isAllowedUrl);
+
+            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+            progressDialog.show();
+            progressDialog.setCancelable(true);
+            RequestParams params = new RequestParams();
+            params.add("key", "bl905577");
+
+            FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    progressDialog.dismiss();
+                    try {
+                        if (response.getString("msg").equals("Successful")) {
+                            String source = response.getJSONArray("content").getJSONObject(0).getString("news");
                             if (source.equals("true")) {
                                 Intent intent = new Intent(FrontPage.this, CricketNewsListActivity.class);
                                 startActivity(intent);
@@ -476,9 +497,44 @@ public class FrontPage extends AppCompatActivity
                 }
             });
         } else if (id == R.id.nav_highlights) {
-            Intent intent = new Intent(FrontPage.this, Highlights.class);
-            intent.putExtra("cause", "highlights");
-            startActivity(intent);
+            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v2/accessChecker.php";
+            Log.d(Constants.TAG, isAllowedUrl);
+
+            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+            progressDialog.show();
+            progressDialog.setCancelable(true);
+            RequestParams params = new RequestParams();
+            params.add("key", "bl905577");
+
+            FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    progressDialog.dismiss();
+                    try {
+                        if (response.getString("msg").equals("Successful")) {
+                            String source = response.getJSONArray("content").getJSONObject(0).getString("highlights");
+                            if (source.equals("true")) {
+                                Intent intent = new Intent(FrontPage.this, Highlights.class);
+                                intent.putExtra("cause", "highlights");
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        Log.d(Constants.TAG, response.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    progressDialog.dismiss();
+                    Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                }
+            });
+
         } else if (id == R.id.nav_fixture) {
             Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
             startActivity(intent);
@@ -495,8 +551,43 @@ public class FrontPage extends AppCompatActivity
             Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_quotes) {
-            Intent intent = new Intent(FrontPage.this, QuotesListActivity.class);
-            startActivity(intent);
+            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v2/accessChecker.php";
+            Log.d(Constants.TAG, isAllowedUrl);
+
+            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+            progressDialog.show();
+            progressDialog.setCancelable(true);
+            RequestParams params = new RequestParams();
+            params.add("key", "bl905577");
+
+            FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    progressDialog.dismiss();
+                    try {
+                        if (response.getString("msg").equals("Successful")) {
+                            String source = response.getJSONArray("content").getJSONObject(0).getString("quotes");
+                            if (source.equals("true")) {
+                                Intent intent = new Intent(FrontPage.this, QuotesListActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        Log.d(Constants.TAG, response.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    progressDialog.dismiss();
+                    Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                }
+            });
+
         } else if (id == R.id.nav_team_profile) {
             Intent intent = new Intent(FrontPage.this, TeamProfile.class);
             startActivity(intent);

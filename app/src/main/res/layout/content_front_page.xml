@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_front_page"
     android:layout_width="match_parent"
@@ -9,9 +10,18 @@
     tools:context="com.tigersapp.bdcricket.activity.FrontPage"
     tools:showIn="@layout/app_bar_front_page">
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewFontPage"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/frontpage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/adViewFontPage">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,4 +80,5 @@
 
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>

@@ -20,6 +20,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.FragmentMatchSummary;
 import com.tigersapp.bdcricket.fragment.FragmentScoreBoard;
+import com.tigersapp.bdcricket.fragment.PlayingXIFragment;
 import com.tigersapp.bdcricket.model.Commentry;
 import com.tigersapp.bdcricket.model.Summary;
 import com.tigersapp.bdcricket.util.Constants;
@@ -74,6 +75,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(new FragmentScoreBoard(), "Score Board");
         this.matchDetailsViewPagerAdapter.addFragment(new FragmentMatchSummary(), "Commentry");
+        //this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(),"Playing XI");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
@@ -97,7 +99,12 @@ public class ActivityMatchDetails extends AppCompatActivity {
                     ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setMatchSummary(summary);
                     ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).loadEachTeamScore(liveMatchID);
 
+                    /*if (response.has("innings1") && response.has("innings2")) {
+                        ((PlayingXIFragment) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(2)).setPlayingXI(response.getJSONObject("innings1").getJSONArray("batting"),response.getJSONObject("innings1").getJSONArray("dnb"),response.getJSONObject("innings2").getJSONArray("batting"),response.getJSONObject("innings2").getJSONArray("dnb"),summary.getTeam1(),summary.getTeam2());
+                    }*/
+
                     if (response.has("innings1")) {
+
                         if (response.getJSONObject("innings1").has("summary")) {
                             numberOfInnings = 1;
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsBattingList(response.getJSONObject("innings1").getJSONArray("batting"));
@@ -105,6 +112,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsSummary(response.getJSONObject("innings1").getJSONObject("summary"));
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsFOW(response.getJSONObject("innings1").getJSONArray("fow"));
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsDNB(response.getJSONObject("innings1").getJSONArray("dnb"));
+
                         } else {
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideFirstInnings();
                         }
@@ -120,6 +128,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setSecondInningsSummary(response.getJSONObject("innings2").getJSONObject("summary"));
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setSecondInningsFOW(response.getJSONObject("innings2").getJSONArray("fow"));
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setSecondInningsDNB(response.getJSONObject("innings2").getJSONArray("dnb"));
+
                         } else {
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideSecondInnings();
                         }

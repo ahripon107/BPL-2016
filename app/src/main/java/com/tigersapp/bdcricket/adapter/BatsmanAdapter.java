@@ -71,6 +71,11 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public int getItemCount() {
         return batsmans.size();
     }

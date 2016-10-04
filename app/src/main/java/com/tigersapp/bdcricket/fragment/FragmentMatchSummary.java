@@ -80,7 +80,7 @@ public class FragmentMatchSummary extends Fragment {
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT
                         );
-                        params.setMargins(5, 12, 2, 12);
+                        params.setMargins(15, 22, 2, 22);
                         holder.item.setLayoutParams(params);
                     } else {
                         holder.overno.setText(commentry.getOver());

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.tigersapp.bdcricket.R;
@@ -56,6 +57,10 @@ public class QuotesListActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         adView = (AdView) findViewById(R.id.adViewNews);
         quotes = new ArrayList<>();
+
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+        adView.loadAd(adRequest);
 
         recyclerView.setAdapter(new BasicListAdapter<CricketNews,QuotesViewHolder>(quotes) {
             @Override
