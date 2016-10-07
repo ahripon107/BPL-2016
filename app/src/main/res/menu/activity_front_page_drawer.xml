@@ -20,6 +20,9 @@
             android:id="@+id/nav_past_matches"
             android:title="পূর্বের খেলা" />
         <item
+            android:id="@+id/nav_gallery"
+            android:title="গ্যালারী" />
+        <item
             android:id="@+id/nav_ranking"
             android:title="রাঙ্কিং" />
         <item

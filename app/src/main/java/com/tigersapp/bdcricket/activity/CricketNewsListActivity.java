@@ -236,7 +236,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
             }
         });
 
-        url = "http://209.58.178.96/ipllive/new-home-api.php?key=bl01911905577";
+        url = "http://37.187.95.220/ipllive/new-home-api.php?key=jkfjkfgkfgkfghkg";
         Log.d(Constants.TAG, url);
 
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
@@ -249,7 +249,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("id"),jsonObject.getString("image"),
-                                "http://209.58.178.96/ipllive/news-details-api.php?key=bl01911905577&id="+jsonObject.getString("id"),jsonObject.getString("title"),
+                                "http://37.187.95.220/ipllive/news-details-api.php?key=yruguegbjbmdf&id="+jsonObject.getString("id"),jsonObject.getString("title"),
                                 jsonObject.getString("news_date"),"pavilion","");
                         cricketNewses.add(cricketNews);
                     }

@@ -1,5 +1,6 @@
 package com.tigersapp.bdcricket.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,10 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
+import com.tigersapp.bdcricket.activity.PlayerProfileActivity;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
+import com.tigersapp.bdcricket.model.Player;
+import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
 import org.json.JSONArray;
@@ -28,7 +34,7 @@ public class PlayingXIFragment extends Fragment {
 
     private RecyclerView t1,t2;
     private TextView team1N,team2N;
-    ArrayList<String> team1,team2;
+    ArrayList<Player> team1,team2;
 
     @Nullable
     @Override
@@ -40,6 +46,8 @@ public class PlayingXIFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         t1 = (RecyclerView) view.findViewById(R.id.list_team1);
         t2 = (RecyclerView) view.findViewById(R.id.list_team2);
+        t1.setNestedScrollingEnabled(false);
+        t2.setNestedScrollingEnabled(false);
         team1N = (TextView) view.findViewById(R.id.tv_team1Name);
         team2N = (TextView) view.findViewById(R.id.tv_team2Name);
         team1 = new ArrayList<>();
@@ -47,14 +55,32 @@ public class PlayingXIFragment extends Fragment {
     }
 
     public void setPlayingXI (JSONArray batTeam1,JSONArray dnbTeam1,JSONArray batTeam2,JSONArray dnbTeam2,String team1Name,String team2Name) {
+        team1.clear();
+        team2.clear();
         team1N.setText(team1Name);
         team2N.setText(team2Name);
+        for (int i=0;i<batTeam1.length();i++) {
+            try {
+                JSONObject jsonObject = batTeam1.getJSONObject(i);
+                team1.add(new Player(jsonObject.getJSONObject("player").getString("playerName"),"",jsonObject.getJSONObject("player").getString("playerId")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
+        for (int i=0;i<batTeam2.length();i++) {
+            try {
+                JSONObject jsonObject = batTeam2.getJSONObject(i);
+                team2.add(new Player(jsonObject.getJSONObject("player").getString("playerName"),"",jsonObject.getJSONObject("player").getString("playerId")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         for (int i=0;i<dnbTeam1.length();i++) {
             try {
                 JSONObject jsonObject = dnbTeam1.getJSONObject(i);
-                team1.add(jsonObject.getString("playerName"));
+                team1.add(new Player(jsonObject.getString("playerName"),"",jsonObject.getString("playerId")));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -63,13 +89,13 @@ public class PlayingXIFragment extends Fragment {
         for (int i=0;i<dnbTeam2.length();i++) {
             try {
                 JSONObject jsonObject = dnbTeam2.getJSONObject(i);
-                team2.add(jsonObject.getString("playerName"));
+                team2.add(new Player(jsonObject.getString("playerName"),"",jsonObject.getString("playerId")));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        t1.setAdapter(new BasicListAdapter<String,PlayingXIViewHolder>(team1) {
+        t1.setAdapter(new BasicListAdapter<Player,PlayingXIViewHolder>(team1) {
             @Override
             public PlayingXIViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_playing_xi,parent,false);
@@ -77,13 +103,28 @@ public class PlayingXIFragment extends Fragment {
             }
 
             @Override
-            public void onBindViewHolder(PlayingXIViewHolder holder, int position) {
-                holder.textView.setText(team1.get(position));
+            public void onBindViewHolder(PlayingXIViewHolder holder, final int position) {
+                holder.textView.setText(team1.get(position).getName());
+                if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
+                    Picasso.with(getContext())
+                            .load("http://cdn.cricapi.com/players/"+team1.get(position).getPersonid()+".jpg")
+                            .placeholder(R.drawable.default_image)
+                            .into(holder.imageView);
+                }
+
+                holder.textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), PlayerProfileActivity.class);
+                        intent.putExtra("playerID", team1.get(position).getPersonid());
+                        getActivity().startActivity(intent);
+                    }
+                });
             }
         });
         t1.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        t2.setAdapter(new BasicListAdapter<String,PlayingXIViewHolder>(team2) {
+        t2.setAdapter(new BasicListAdapter<Player,PlayingXIViewHolder>(team2) {
             @Override
             public PlayingXIViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_playing_xi,parent,false);
@@ -91,8 +132,22 @@ public class PlayingXIFragment extends Fragment {
             }
 
             @Override
-            public void onBindViewHolder(PlayingXIViewHolder holder, int position) {
-                holder.textView.setText(team2.get(position));
+            public void onBindViewHolder(PlayingXIViewHolder holder, final int position) {
+                holder.textView.setText(team2.get(position).getName());
+                if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
+                    Picasso.with(getContext())
+                            .load("http://cdn.cricapi.com/players/"+team2.get(position).getPersonid()+".jpg")
+                            .placeholder(R.drawable.default_image)
+                            .into(holder.imageView);
+                }
+                holder.textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), PlayerProfileActivity.class);
+                        intent.putExtra("playerID", team2.get(position).getPersonid());
+                        getActivity().startActivity(intent);
+                    }
+                });
             }
         });
         t2.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -101,10 +156,12 @@ public class PlayingXIFragment extends Fragment {
     private static class PlayingXIViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView textView;
+        protected ImageView imageView;
 
         public PlayingXIViewHolder(View itemView) {
             super(itemView);
             textView = ViewHolder.get(itemView,R.id.tv_player_name);
+            imageView = ViewHolder.get(itemView,R.id.civ_player_image);
         }
     }
 }

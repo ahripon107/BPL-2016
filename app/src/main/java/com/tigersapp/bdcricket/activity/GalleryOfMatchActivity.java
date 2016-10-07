@@ -1,6 +1,9 @@
 package com.tigersapp.bdcricket.activity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +25,8 @@ import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
+import com.tigersapp.bdcricket.model.Gallery;
+import com.tigersapp.bdcricket.model.ImageHolder;
 import com.tigersapp.bdcricket.model.TrollPost;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
@@ -32,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -43,7 +50,7 @@ import roboguice.inject.InjectView;
  * @author ripon
  */
 @ContentView(R.layout.fixture)
-public class TrollPostListActivity extends RoboAppCompatActivity {
+public class GalleryOfMatchActivity extends RoboAppCompatActivity {
 
     @InjectView(R.id.adViewFixture)
     AdView adView;
@@ -52,10 +59,13 @@ public class TrollPostListActivity extends RoboAppCompatActivity {
     RecyclerView recyclerView;
 
     @Inject
-    ArrayList<TrollPost> trollPosts;
+    ArrayList<Gallery> galleries;
 
     @Inject
     Gson gson;
+
+    @Inject
+    private ImageHolder imageHolder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,29 +75,48 @@ public class TrollPostListActivity extends RoboAppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-        recyclerView.setAdapter(new BasicListAdapter<TrollPost, TrollPostViewHolder>(trollPosts) {
+        recyclerView.setAdapter(new BasicListAdapter<Gallery, GalleryMatchViewHolder>(galleries) {
             @Override
-            public TrollPostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public GalleryMatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_troll_posts, parent, false);
-                return new TrollPostViewHolder(view);
+                return new GalleryMatchViewHolder(view);
             }
 
             @Override
-            public void onBindViewHolder(TrollPostViewHolder holder, int position) {
-                holder.courtesy.setText(trollPosts.get(position).getCourtesy());
-                holder.title.setText(trollPosts.get(position).getImagetext());
-                Picasso.with(TrollPostListActivity.this)
-                        .load((trollPosts.get(position).getImageurl()))
+            public void onBindViewHolder(GalleryMatchViewHolder holder, final int position) {
+                holder.courtesy.setVisibility(View.GONE);
+                holder.title.setText(galleries.get(position).getName());
+                Picasso.with(GalleryOfMatchActivity.this)
+                        .load((galleries.get(position).getImg()))
                         .placeholder(R.drawable.default_image)
                         .into(holder.imageView);
+
+                /*holder.imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        File imgFile = new File(galleries.get(position).getImg());
+                        if(imgFile.exists()){
+
+                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                            imageHolder.setImage(myBitmap);
+                            startActivity(new Intent(GalleryOfMatchActivity.this, ImageViewerActivity.class));
+
+                        }
+                    }
+                });*/
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return position;
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String url = "http://apisea.xyz/Cricket/apis/v1/FetchFunPosts.php?key=bl905577";
+        String url = getIntent().getStringExtra("url");
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(TrollPostListActivity.this, R.style.Custom);
+        final AlertDialog progressDialog = new SpotsDialog(GalleryOfMatchActivity.this, R.style.Custom);
         progressDialog.show();
         progressDialog.setCancelable(true);
 
@@ -96,11 +125,11 @@ public class TrollPostListActivity extends RoboAppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progressDialog.dismiss();
                 try {
-                    JSONArray jsonArray = response.getJSONArray("content");
+                    JSONArray jsonArray = response.getJSONArray("Image Details");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        TrollPost trollPost = gson.fromJson(String.valueOf(obj), TrollPost.class);
-                        trollPosts.add(trollPost);
+                        Gallery gallery = new Gallery(obj.getString("cap"),"","",response.getJSONObject("Event Details").getString("base")+obj.getString("urlLarge"));
+                        galleries.add(gallery);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -112,7 +141,7 @@ public class TrollPostListActivity extends RoboAppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 progressDialog.dismiss();
-                Toast.makeText(TrollPostListActivity.this, "Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(GalleryOfMatchActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -133,16 +162,18 @@ public class TrollPostListActivity extends RoboAppCompatActivity {
         }
     }
 
-    private static class TrollPostViewHolder extends RecyclerView.ViewHolder {
+    private static class GalleryMatchViewHolder extends RecyclerView.ViewHolder {
         protected ImageView imageView;
         protected TextView title;
         protected TextView courtesy;
+        protected LinearLayout linearLayout;
 
-        public TrollPostViewHolder(View itemView) {
+        public GalleryMatchViewHolder(View itemView) {
             super(itemView);
             imageView = ViewHolder.get(itemView, R.id.img_troll_post);
             title = ViewHolder.get(itemView, R.id.tv_troll_post_title);
             courtesy = ViewHolder.get(itemView, R.id.tv_troll_post_courtesy);
+            linearLayout = ViewHolder.get(itemView,R.id.image_container);
         }
     }
 }

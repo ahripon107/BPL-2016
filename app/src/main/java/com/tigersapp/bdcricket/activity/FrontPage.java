@@ -114,7 +114,7 @@ public class FrontPage extends AppCompatActivity
         viewPagerAdapter = new SlideShowViewPagerAdapter(this, imageUrls, texts);
         viewPager.setAdapter(viewPagerAdapter);
 
-        String welcomeTextUrl = "http://apisea.xyz/BPL2016/apis/v2/welcometext.php?key=bl905577";
+        String welcomeTextUrl = "http://apisea.xyz/BPL2016/apis/v3/welcometext.php?key=bl905577";
         Log.d(Constants.TAG, welcomeTextUrl);
 
         FetchFromWeb.get(welcomeTextUrl, null, new JsonHttpResponseHandler() {
@@ -122,6 +122,7 @@ public class FrontPage extends AppCompatActivity
             @Override
             public void onSuccess(int statusCode, Header[] headers, final JSONObject response) {
                 try {
+                    Constants.SHOW_PLAYER_IMAGE = response.getJSONArray("content").getJSONObject(0).getString("playerimage");
                     welcomeText.setText(response.getJSONArray("content").getJSONObject(0).getString("description"));
                     if (response.getJSONArray("content").getJSONObject(0).getString("clickable").equals("true")) {
                         welcomeText.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +180,7 @@ public class FrontPage extends AppCompatActivity
         });
 
 
-        String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v2/livescoresource.php";
+        String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v3/livescoresource.php";
         Log.d(Constants.TAG, idMatcherURL);
 
         final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
@@ -402,6 +403,8 @@ public class FrontPage extends AppCompatActivity
             public void onPageScrollStateChanged(int state) {
             }
         });
+
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -421,7 +424,7 @@ public class FrontPage extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_live_streaming) {
-            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v2/accessChecker.php";
+            String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
             final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
@@ -460,7 +463,7 @@ public class FrontPage extends AppCompatActivity
             });
 
         } else if (id == R.id.nav_sports_news) {
-            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v2/accessChecker.php";
+            String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
             final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
@@ -497,7 +500,7 @@ public class FrontPage extends AppCompatActivity
                 }
             });
         } else if (id == R.id.nav_highlights) {
-            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v2/accessChecker.php";
+            String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
             final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
@@ -541,6 +544,45 @@ public class FrontPage extends AppCompatActivity
         } else if (id == R.id.nav_past_matches) {
             Intent intent = new Intent(FrontPage.this, PastMatchesActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_gallery) {
+            String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
+            Log.d(Constants.TAG, isAllowedUrl);
+
+            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
+            progressDialog.show();
+            progressDialog.setCancelable(true);
+            RequestParams params = new RequestParams();
+            params.add("key", "bl905577");
+
+            FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    progressDialog.dismiss();
+                    try {
+                        if (response.getString("msg").equals("Successful")) {
+                            String source = response.getJSONArray("content").getJSONObject(0).getString("gallery");
+                            if (source.equals("true")) {
+                                Intent intent = new Intent(FrontPage.this, GalleryActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        Log.d(Constants.TAG, response.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    progressDialog.dismiss();
+                    Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
+                }
+            });
+
+
         } else if (id == R.id.nav_ranking) {
             Intent intent = new Intent(FrontPage.this, RankingActivity.class);
             startActivity(intent);
@@ -551,7 +593,7 @@ public class FrontPage extends AppCompatActivity
             Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_quotes) {
-            String isAllowedUrl = "http://apisea.xyz/BPL2016/apis/v2/accessChecker.php";
+            String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
             final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);

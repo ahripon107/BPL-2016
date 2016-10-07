@@ -79,6 +79,16 @@ public class FragmentScoreBoard extends Fragment {
         bowlingInnings3 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings3);
         bowlingInnings4 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings4);
 
+        battingInnings1.setNestedScrollingEnabled(false);
+        battingInnings2.setNestedScrollingEnabled(false);
+        battingInnings3.setNestedScrollingEnabled(false);
+        battingInnings4.setNestedScrollingEnabled(false);
+
+        bowlingInnings1.setNestedScrollingEnabled(false);
+        bowlingInnings2.setNestedScrollingEnabled(false);
+        bowlingInnings3.setNestedScrollingEnabled(false);
+        bowlingInnings4.setNestedScrollingEnabled(false);
+
         innings1extra = (TextView) view.findViewById(R.id.innings1extra);
         innings1total = (TextView) view.findViewById(R.id.innings1total);
         innings1fallofwickets = (TextView) view.findViewById(R.id.innings1fow);
