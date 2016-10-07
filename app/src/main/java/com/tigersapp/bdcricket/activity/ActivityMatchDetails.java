@@ -75,7 +75,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(new FragmentScoreBoard(), "Score Board");
         this.matchDetailsViewPagerAdapter.addFragment(new FragmentMatchSummary(), "Commentry");
-        //this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(),"Playing XI");
+        this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(),"Playing XI");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
@@ -99,9 +99,9 @@ public class ActivityMatchDetails extends AppCompatActivity {
                     ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setMatchSummary(summary);
                     //((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).loadEachTeamScore(liveMatchID);
 
-                    /*if (response.has("innings1") && response.has("innings2")) {
+                    if (response.has("innings1")) {
                         ((PlayingXIFragment) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(2)).setPlayingXI(response.getJSONObject("innings1").getJSONArray("batting"),response.getJSONObject("innings1").getJSONArray("dnb"),response.getJSONObject("innings2").getJSONArray("batting"),response.getJSONObject("innings2").getJSONArray("dnb"),summary.getTeam1(),summary.getTeam2());
-                    }*/
+                    }
 
                     if (response.has("innings1")) {
 

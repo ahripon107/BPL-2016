@@ -85,8 +85,8 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".activity.TrollPostListActivity"
-            android:label="Cricket Trolls"
+            android:name=".activity.GalleryOfMatchActivity"
+            android:label="Gallery"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PlayerProfileActivity"
@@ -119,6 +119,18 @@
         <activity
             android:name=".activity.QuotesListActivity"
             android:label="Quotes"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.GalleryActivity"
+            android:label="Gallery"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ImageViewerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
 
         <service android:name="com.batch.android.BatchPushService" />

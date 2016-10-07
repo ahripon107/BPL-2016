@@ -95,6 +95,9 @@ public class PlayerProfileActivity extends RoboAppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        battingRecord.setNestedScrollingEnabled(false);
+        bowlingRecord.setNestedScrollingEnabled(false);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String playerID = getIntent().getStringExtra("playerID");
 
@@ -200,7 +203,7 @@ public class PlayerProfileActivity extends RoboAppCompatActivity {
 
                     if (bowlingObject.has("tests")) {
                         ProfileBowling profileBowl = processProfileBowling(bowlingObject.getJSONObject("tests"));
-                        if (profileBowl!=null) profileBowl.setGameType("tests");
+                        if (profileBowl!=null) profileBowl.setGameType("Tests");
                         profileBowlings.add(profileBowl);
                     }
 
@@ -216,17 +219,17 @@ public class PlayerProfileActivity extends RoboAppCompatActivity {
                     }
                     if (bowlingObject.has("firstClass")) {
                         ProfileBowling profileBowl = processProfileBowling(bowlingObject.getJSONObject("firstClass"));
-                        if (profileBowl!=null) profileBowl.setGameType("firstClass");
+                        if (profileBowl!=null) profileBowl.setGameType("FirstClass");
                         profileBowlings.add(profileBowl);
                     }
                     if (bowlingObject.has("listA")) {
                         ProfileBowling profileBowl = processProfileBowling(bowlingObject.getJSONObject("listA"));
-                        if (profileBowl!=null) profileBowl.setGameType("listA");
+                        if (profileBowl!=null) profileBowl.setGameType("ListA");
                         profileBowlings.add(profileBowl);
                     }
                     if (bowlingObject.has("twenty20")) {
                         ProfileBowling profileBowl = processProfileBowling(bowlingObject.getJSONObject("twenty20"));
-                        if (profileBowl!=null) profileBowl.setGameType("twenty20");
+                        if (profileBowl!=null) profileBowl.setGameType("Twenty20");
                         profileBowlings.add(profileBowl);
                     }
 

@@ -25,7 +25,6 @@ import com.tigersapp.bdcricket.adapter.SlideShowViewPagerAdapter;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -259,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         trollPosts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TrollPostListActivity.class);
+                Intent intent = new Intent(MainActivity.this, GalleryOfMatchActivity.class);
                 startActivity(intent);
             }
         });
