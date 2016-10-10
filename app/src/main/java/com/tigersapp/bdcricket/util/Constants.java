@@ -13,7 +13,8 @@ public class Constants {
     public static final String SOLAIMAN_LIPI_FONT = "fonts/solaimanlipi.ttf";
     public static final String TIMES_NEW_ROMAN_FONT = "fonts/timesnewroman.ttf";
     public static final String ONE_PLUS_TEST_DEVICE = "7D3F3DF2A7214E839DBE70BE2132D5B9";
-    public static final String XIAOMI_TEST_DEVICE = "EE613118FFB77F457D6DBDAC46C3658C";
+    //public static final String XIAOMI_TEST_DEVICE = "EE613118FFB77F457D6DBDAC46C3658C";
+    public static final String XIAOMI_TEST_DEVICE = "F5C90B562D482744906FD29363CF595C";
     public static final String NEWS_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.news(0,50)%20where%20region=%22IN%22&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
     public static final String FIXTURE_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.upcoming_matches(0,50)&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
     public static final String COMMENTARY_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id=193958%20limit%205&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
@@ -28,7 +29,7 @@ public class Constants {
 
     public static String SHOW_PLAYER_IMAGE = "false";
 
-    public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v3/accessChecker.php";
+    public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v4/accessChecker.php";
 
     public static final String AUS_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/1_l-11-2-2012-975ee512e59ffc420e26dee2813daa27.png";
     public static final String BD_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/2_l-11-2-2012-a853bb5b43497e2b3a38791dc389adc0.png";
@@ -48,6 +49,9 @@ public class Constants {
     public static final String SCO_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/16_l-11-2-2012-c7bedaa78b23b63de75b4cfc7533e0ae.png";
 
     public static final String CRICBUZZ_LIVE_MATCHES = "http://mapps.cricbuzz.com/cbzandroid/2.0/currentmatches.json";
+
+    public static final String INSERT_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v4/insertnewscomment.php";
+    public static final String FETCH_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchnewscomments.php";
 
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
