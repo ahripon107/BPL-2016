@@ -121,7 +121,6 @@ public class FrontPage extends AppCompatActivity
         adView.loadAd(adRequest1);
 
 
-
     }
 
     public final void setupViewPage(ViewPager viewPager) {
@@ -307,6 +306,9 @@ public class FrontPage extends AppCompatActivity
             });
 
 
+        } else if (id == R.id.nav_series_stats) {
+            Intent intent = new Intent(FrontPage.this, SeriesStatsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_ranking) {
             Intent intent = new Intent(FrontPage.this, RankingActivity.class);
             startActivity(intent);
@@ -372,9 +374,6 @@ public class FrontPage extends AppCompatActivity
     }
 
 
-
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -401,7 +400,6 @@ public class FrontPage extends AppCompatActivity
 
         super.onNewIntent(intent);
     }
-
 
 
 }

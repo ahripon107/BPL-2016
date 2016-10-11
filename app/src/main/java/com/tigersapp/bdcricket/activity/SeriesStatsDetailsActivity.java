@@ -40,24 +40,29 @@ import dmax.dialog.SpotsDialog;
 /**
  * @author Ripon
  */
-public class RecordDetailsActivity extends AppCompatActivity {
+
+public class SeriesStatsDetailsActivity extends AppCompatActivity{
 
     TabLayout tabLayout;
     ViewPager viewPager;
     Spinner spinner;
     AdView adView;
     MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
-    String recordType, url;
+    String seriesId, url;
+    List<String> currentSeries, seriesIds;
 
     RecordsDetailsFragment testFragment, odiFragment, t20Fragment;
+    ArrayAdapter<String> dataAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
         setTitle(getIntent().getStringExtra("title"));
-        recordType = getIntent().getStringExtra("recordtype");
+        seriesId = getIntent().getStringExtra("seriesId");
         url = getIntent().getStringExtra("url");
+        currentSeries = new ArrayList<>();
+        seriesIds = new ArrayList<>();
 
         tabLayout = (TabLayout) findViewById(R.id.tab_ranking);
         viewPager = (ViewPager) findViewById(R.id.view_pager_ranking);
@@ -72,61 +77,23 @@ public class RecordDetailsActivity extends AppCompatActivity {
         odiFragment = new RecordsDetailsFragment();
         t20Fragment = new RecordsDetailsFragment();
 
-        List<String> categories = new ArrayList<String>();
-        if (recordType.equals("batting") || recordType.equals("bowling")) {
-            categories.add("All Seasons");
-            categories.add("Season 2016");
-            categories.add("Season 2015");
-            categories.add("Season 2014");
-            categories.add("Season 2013");
-            categories.add("Season 2012");
-            categories.add("Season 2011");
-            categories.add("Season 2010");
-            categories.add("Season 2009");
-            categories.add("Season 2008");
-            categories.add("Season 2007");
-        } else {
-            categories.add("All Seasons");
-        }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //setupViewPager(viewPager);
+        viewPager.setOffscreenPageLimit(2);
 
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        dataAdapter = new ArrayAdapter<String>(SeriesStatsDetailsActivity.this, android.R.layout.simple_spinner_item, currentSeries);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setupViewPager(viewPager);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
-
-        fetchData(url + "/overallseasons/all");
+        fetchData(url+"/"+seriesId);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    fetchData(url + "/overallseasons/all");
-                } else if (position == 1) {
-                    fetchData(url + "/2016");
-                } else if (position == 2) {
-                    fetchData(url + "/2015");
-                } else if (position == 3) {
-                    fetchData(url + "/2014");
-                } else if (position == 4) {
-                    fetchData(url + "/2013");
-                } else if (position == 5) {
-                    fetchData(url + "/2012");
-                } else if (position == 6) {
-                    fetchData(url + "/2011");
-                } else if (position == 7) {
-                    fetchData(url + "/2010");
-                } else if (position == 8) {
-                    fetchData(url + "/2009");
-                } else if (position == 9) {
-                    fetchData(url + "/2008");
-                } else if (position == 10) {
-                    fetchData(url + "/2007");
-                }
+                Log.d(Constants.TAG, "onItemSelected: called");
+                fetchData(url+"/"+seriesIds.get(position));
             }
 
             @Override
@@ -134,8 +101,6 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     public final void setupViewPager(ViewPager viewPager) {
@@ -147,7 +112,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
     }
 
     public void fetchData(String url) {
-        final AlertDialog progressDialog = new SpotsDialog(RecordDetailsActivity.this, R.style.Custom);
+        final AlertDialog progressDialog = new SpotsDialog(SeriesStatsDetailsActivity.this, R.style.Custom);
         progressDialog.show();
         progressDialog.setCancelable(true);
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
@@ -155,6 +120,26 @@ public class RecordDetailsActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progressDialog.dismiss();
                 try {
+                    currentSeries.clear();
+                    seriesIds.clear();
+                    JSONArray jsonArray1 = response.getJSONObject("series-stats").getJSONArray("relatedSeries");
+                    for (int i = 0; i < jsonArray1.length(); i++) {
+                        JSONObject jsonObject = jsonArray1.getJSONObject(i);
+                        currentSeries.add(jsonObject.getString("seriesName"));
+                        seriesIds.add(jsonObject.getString("seriesId"));
+                    }
+                    dataAdapter.notifyDataSetChanged();
+                    matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
+                    if (response.getJSONObject("series-stats").getJSONArray("Test").length() > 0)
+                        matchDetailsViewPagerAdapter.addFragment(testFragment, "Test");
+                    if (response.getJSONObject("series-stats").getJSONArray("Odi").length() > 0)
+                        matchDetailsViewPagerAdapter.addFragment(odiFragment, "ODI");
+                    if (response.getJSONObject("series-stats").getJSONArray("T20").length() > 0)
+                        matchDetailsViewPagerAdapter.addFragment(t20Fragment, "T20I");
+
+                    viewPager.setAdapter(matchDetailsViewPagerAdapter);
+                    tabLayout.setupWithViewPager(viewPager);
+
                     if (testFragment.isAdded()) {
                         ArrayList<RecordDetailsModel1> sixElementModels = new ArrayList<RecordDetailsModel1>();
                         ArrayList<RecordDetailsModel2> fourElementModel = new ArrayList<RecordDetailsModel2>();

@@ -22,6 +22,7 @@ public class Constants {
     public static final String RANKING_URL = "http://webclient.cricbuzz.com/statistics/android/rankings/json";
     public static final String POINT_TABLE_URL = "http://mapps.cricbuzz.com/cricbuzz-android/series/points_table";
     public static final String RECORDS_URL = "http://opera.m.cricbuzz.com/cbzandroid/top-stats";
+    public static final String SERIES_STATS_URL = "http://opera.m.cricbuzz.com/cbzandroid/series-stats";
     public static final String FACE_IMAGE = "http://mapps.cricbuzz.com/stats/img/faceImages/";
     public static final String TEAM_IMAGE_FIRST_PART = "http://sng.mapps.cricbuzz.com/cbzandroid/2.0/flags/team_";
     public static final String TEAM_IMAGE_LAST_PART = "_50.png";
