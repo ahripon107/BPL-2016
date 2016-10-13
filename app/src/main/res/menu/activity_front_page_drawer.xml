@@ -23,6 +23,9 @@
             android:id="@+id/nav_gallery"
             android:title="গ্যালারী" />
         <item
+            android:id="@+id/nav_series_stats"
+            android:title="সিরিজ পরিসংখ্যান" />
+        <item
             android:id="@+id/nav_ranking"
             android:title="রাঙ্কিং" />
         <item

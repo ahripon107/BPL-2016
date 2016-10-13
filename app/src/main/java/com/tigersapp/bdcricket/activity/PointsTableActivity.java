@@ -35,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -169,28 +170,16 @@ public class PointsTableActivity extends AppCompatActivity {
     }
 
     public void processData(JSONObject jsonObject) {
+
         pointTableElements.clear();
         pointTableElements.add(new PointsTableElement("Team","Played","Wins","Loss","NR","Pts","NRR"));
         try {
-            if (jsonObject.getJSONObject("group").has("Teams")) {
-                JSONArray jsonArray = jsonObject.getJSONObject("group").getJSONArray("Teams");
-                for (int i=0;i<jsonArray.length();i++) {
-                    pointTableElements.add(gson.fromJson(String.valueOf(jsonArray.get(i)),PointsTableElement.class));
-                }
-            } else if (jsonObject.getJSONObject("group").has("North Group")) {
-                JSONArray jsonArray = jsonObject.getJSONObject("group").getJSONArray("North Group");
-                for (int i=0;i<jsonArray.length();i++) {
-                    pointTableElements.add(gson.fromJson(String.valueOf(jsonArray.get(i)),PointsTableElement.class));
-                }
-                if (jsonObject.getJSONObject("group").has("South Group")) {
-                    JSONArray jsonArray1 = jsonObject.getJSONObject("group").getJSONArray("South Group");
-                    for (int i=0;i<jsonArray1.length();i++) {
-                        pointTableElements.add(gson.fromJson(String.valueOf(jsonArray.get(i)),PointsTableElement.class));
-                    }
+            jsonObject = jsonObject.getJSONObject("group");
+            Iterator<?> keys = jsonObject.keys();
 
-                }
-            } else if (jsonObject.getJSONObject("group").has("Test")) {
-                JSONArray jsonArray = jsonObject.getJSONObject("group").getJSONArray("Test");
+            while( keys.hasNext() ) {
+                String key = (String)keys.next();
+                JSONArray jsonArray = jsonObject.getJSONArray(key);
                 for (int i=0;i<jsonArray.length();i++) {
                     pointTableElements.add(gson.fromJson(String.valueOf(jsonArray.get(i)),PointsTableElement.class));
                 }

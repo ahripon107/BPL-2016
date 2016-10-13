@@ -22,6 +22,7 @@ public class Constants {
     public static final String RANKING_URL = "http://webclient.cricbuzz.com/statistics/android/rankings/json";
     public static final String POINT_TABLE_URL = "http://mapps.cricbuzz.com/cricbuzz-android/series/points_table";
     public static final String RECORDS_URL = "http://opera.m.cricbuzz.com/cbzandroid/top-stats";
+    public static final String SERIES_STATS_URL = "http://opera.m.cricbuzz.com/cbzandroid/series-stats";
     public static final String FACE_IMAGE = "http://mapps.cricbuzz.com/stats/img/faceImages/";
     public static final String TEAM_IMAGE_FIRST_PART = "http://sng.mapps.cricbuzz.com/cbzandroid/2.0/flags/team_";
     public static final String TEAM_IMAGE_LAST_PART = "_50.png";
@@ -30,6 +31,7 @@ public class Constants {
     public static String SHOW_PLAYER_IMAGE = "false";
 
     public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v4/accessChecker.php";
+    public static final String OPINION_QUES_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchOpinionQuestions.php";
 
     public static final String AUS_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/1_l-11-2-2012-975ee512e59ffc420e26dee2813daa27.png";
     public static final String BD_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/2_l-11-2-2012-a853bb5b43497e2b3a38791dc389adc0.png";
