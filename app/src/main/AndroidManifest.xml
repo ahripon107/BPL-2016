@@ -137,6 +137,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".activity.InsertOpinionActivity"
+            android:label="মতামত"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".activity.ImageViewerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"

@@ -48,6 +48,7 @@ import com.tigersapp.bdcricket.fragment.ChattingFragment;
 import com.tigersapp.bdcricket.fragment.FragmentMatchSummary;
 import com.tigersapp.bdcricket.fragment.FragmentScoreBoard;
 import com.tigersapp.bdcricket.fragment.LiveScoreFragment;
+import com.tigersapp.bdcricket.fragment.OpinionFragment;
 import com.tigersapp.bdcricket.fragment.PlayingXIFragment;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
@@ -127,6 +128,7 @@ public class FrontPage extends AppCompatActivity
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(new LiveScoreFragment(), "লাইভ স্কোর");
         this.matchDetailsViewPagerAdapter.addFragment(new ChattingFragment(), "চ্যাটিং");
+        this.matchDetailsViewPagerAdapter.addFragment(new OpinionFragment(),"মতামত");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
