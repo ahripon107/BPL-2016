@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "115406524067",
+    "firebase_url": "https://bpl-2016.firebaseio.com",
+    "project_id": "bpl-2016",
+    "storage_bucket": "bpl-2016.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115406524067:android:4b37acef582f4307",
+        "android_client_info": {
+          "package_name": "com.tigersapp.bdcricket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115406524067-els28bsmtdl5v3ljpjuh7tqnr33g6avb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByAFW5YdftFhpqTzveJObsaMACb43q0Ek"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
