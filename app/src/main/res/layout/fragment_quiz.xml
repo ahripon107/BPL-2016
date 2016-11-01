@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Participate in quiz and win attractive prizes !!!"
+        android:textSize="20sp"
+        android:textColor="@color/Black"
+        android:layout_margin="10dp"/>
+
+    <com.dd.ShadowLayout
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:sl_cornerRadius="2dp"
+        app:sl_dx="5dp"
+        app:sl_dy="5dp"
+        app:sl_shadowColor="#AA000000"
+        android:layout_gravity="right">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="88dp"
+            android:minHeight="36dp"
+            android:padding="4dp"
+            android:id="@+id/btnParticipate"
+            android:textColor="@android:color/white"
+            android:background="@drawable/raised_selector"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:text="Participate"/>
+
+    </com.dd.ShadowLayout>
+
+    <LinearLayout
+        android:id="@+id/credential_container"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name_credential"
+            android:text="Name"
+            android:textSize="20sp"
+            android:layout_margin="5dp"
+            android:textColor="@color/Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/phone_credential"
+            android:text="Phone"
+            android:textSize="20sp"
+            android:layout_margin="5dp"
+            android:textColor="@color/Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.dd.ShadowLayout
+                android:layout_margin="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                app:sl_cornerRadius="2dp"
+                app:sl_dx="5dp"
+                app:sl_dy="5dp"
+                app:sl_shadowColor="#AA000000"
+                android:layout_gravity="center">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minWidth="88dp"
+                    android:minHeight="36dp"
+                    android:padding="4dp"
+                    android:id="@+id/btnStartQuiz"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/raised_selector"
+                    android:layout_gravity="center_horizontal"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:text="ok, start quiz"/>
+
+            </com.dd.ShadowLayout>
+
+            <com.dd.ShadowLayout
+                android:layout_margin="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                app:sl_cornerRadius="2dp"
+                app:sl_dx="5dp"
+                app:sl_dy="5dp"
+                app:sl_shadowColor="#AA000000"
+                android:layout_gravity="center">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minWidth="88dp"
+                    android:minHeight="36dp"
+                    android:padding="4dp"
+                    android:id="@+id/btnChangeCredentials"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/raised_selector"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:text="change"/>
+
+            </com.dd.ShadowLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

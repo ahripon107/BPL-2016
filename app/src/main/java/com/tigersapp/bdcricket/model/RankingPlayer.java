@@ -17,9 +17,9 @@ public class RankingPlayer {
         this.id = id;
         this.name = name;
         this.country = country;
-        this.country_id = country_id;
         this.rank = rank;
         this.rating = rating;
+        this.country_id = country_id;
         this.avg = avg;
     }
 
