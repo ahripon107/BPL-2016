@@ -33,6 +33,8 @@ public class Constants {
     public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v4/accessChecker.php";
     public static final String OPINION_QUES_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchOpinionQuestions.php";
 
+    public static final String WELCOME_TEXT_URL = "http://apisea.xyz/BPL2016/apis/v4/welcometext.php?key=bl905577";
+
     public static final String AUS_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/1_l-11-2-2012-975ee512e59ffc420e26dee2813daa27.png";
     public static final String BD_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/2_l-11-2-2012-a853bb5b43497e2b3a38791dc389adc0.png";
     public static final String ENG_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/3_l-11-2-2012-5593f23256a4c5327fda1729a771f8ff.png";

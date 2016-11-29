@@ -26,6 +26,7 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
@@ -58,11 +59,14 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
     @InjectView(R.id.adViewFixture)
     AdView adView;
 
+    Dialogs dialogs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        dialogs = new Dialogs(this);
 
         recyclerView.setAdapter(new BasicListAdapter<Match, PastMatchesViewHolder>(data) {
             @Override
@@ -103,9 +107,7 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
                         String idMatcherURL = "http://apisea.xyz/Cricket/apis/v1/fetxchCrictinfoMatchID.php";
                         Log.d(Constants.TAG, idMatcherURL);
 
-                        final AlertDialog progressDialog = new SpotsDialog(PastMatchesActivity.this, R.style.Custom);
-                        progressDialog.show();
-                        progressDialog.setCancelable(true);
+                        dialogs.showDialog();
                         RequestParams params = new RequestParams();
                         params.add("key", "bl905577");
                         params.add("yahoo", data.get(position).getMatchId());
@@ -113,7 +115,7 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
                         FetchFromWeb.get(idMatcherURL, params, new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                progressDialog.dismiss();
+                                dialogs.dismissDialog();
                                 try {
                                     if (response.getString("msg").equals("Successful")) {
                                         String cricinfoID = response.getJSONArray("content").getJSONObject(0).getString("cricinfoID");
@@ -132,7 +134,7 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
 
                             @Override
                             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                progressDialog.dismiss();
+                                dialogs.dismissDialog();
                                 Toast.makeText(PastMatchesActivity.this, "Failed", Toast.LENGTH_LONG).show();
                             }
                         });
@@ -144,14 +146,12 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
         Log.d(Constants.TAG, url);
 
 
-        final AlertDialog progressDialog = new SpotsDialog(PastMatchesActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
 
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     String team1, team2, venue, time="", seriesName, matcNo,matchID;
                     response = response.getJSONObject("query").getJSONObject("results");
@@ -190,13 +190,13 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(PastMatchesActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(PastMatchesActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });

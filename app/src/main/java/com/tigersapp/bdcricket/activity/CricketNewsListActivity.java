@@ -26,6 +26,7 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
@@ -64,6 +65,8 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
     Typeface typeface;
 
+    Dialogs dialogs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +74,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
         setTitle("স্পোর্টস নিউজ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         typeface = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
+        dialogs = new Dialogs(this);
 
         recyclerView.setAdapter(new BasicListAdapter<CricketNews,NewsViewHolder>(cricketNewses) {
             @Override
@@ -111,13 +115,11 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
         String url = "http://www.banglanews24.com/api/category/5";
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(CricketNewsListActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
@@ -136,13 +138,13 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(CricketNewsListActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(CricketNewsListActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });

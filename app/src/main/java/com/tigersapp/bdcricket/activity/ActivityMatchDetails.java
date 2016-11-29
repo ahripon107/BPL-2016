@@ -24,6 +24,7 @@ import com.tigersapp.bdcricket.fragment.PlayingXIFragment;
 import com.tigersapp.bdcricket.model.Commentry;
 import com.tigersapp.bdcricket.model.Summary;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 
 import org.json.JSONArray;
@@ -46,6 +47,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
     ArrayList<Commentry> commentry = new ArrayList<>();
 
     AdView adView;
+    Dialogs dialogs;
 
     public int numberOfInnings;
 
@@ -56,7 +58,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
         numberOfInnings = 0;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        dialogs = new Dialogs(this);
         this.viewPager = (ViewPager) findViewById(R.id.viewPager);
         adView = (AdView) findViewById(R.id.adViewMatchDetails);
         this.viewPager.setOffscreenPageLimit(3);
@@ -83,14 +85,12 @@ public class ActivityMatchDetails extends AppCompatActivity {
         String url = "http://37.187.95.220:8080/cricket-api/api/match/" + this.liveMatchID;
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(ActivityMatchDetails.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
 
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     JSONObject sumry = response.getJSONObject("summary");
                     Summary summary = gson.fromJson(String.valueOf(sumry), Summary.class);
@@ -172,13 +172,13 @@ public class ActivityMatchDetails extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(ActivityMatchDetails.this, "Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(ActivityMatchDetails.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });

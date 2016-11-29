@@ -24,6 +24,7 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -55,11 +56,14 @@ public class FixtureActivity extends RoboAppCompatActivity {
     @InjectView(R.id.adViewFixture)
     AdView adView;
 
+    Dialogs dialogs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        dialogs = new Dialogs(this);
         recyclerView.setAdapter(new BasicListAdapter<Match, FixtureViewHolder>(data) {
             @Override
             public FixtureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -94,16 +98,12 @@ public class FixtureActivity extends RoboAppCompatActivity {
 
         String url = Constants.FIXTURE_URL;
         Log.d(Constants.TAG, url);
-
-
-        final AlertDialog progressDialog = new SpotsDialog(FixtureActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
 
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     String team1, team2, venue, time, seriesName, matcNo;
                     response = response.getJSONObject("query").getJSONObject("results");
@@ -131,7 +131,7 @@ public class FixtureActivity extends RoboAppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(FixtureActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });

@@ -1,6 +1,7 @@
 package com.tigersapp.bdcricket.fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ import com.tigersapp.bdcricket.adapter.SlideShowViewPagerAdapter;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -72,6 +75,8 @@ public class LiveScoreFragment extends Fragment {
 
     ArrayList<Match> datas;
     ImageView imageView;
+    Dialogs dialogs;
+
 
     @Nullable
     @Override
@@ -92,6 +97,8 @@ public class LiveScoreFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.live_matches);
         imageView = (ImageView) view.findViewById(R.id.tour_image);
 
+        dialogs = new Dialogs(getContext());
+
         imageUrls = new ArrayList<>();
         texts = new ArrayList<>();
 
@@ -99,7 +106,7 @@ public class LiveScoreFragment extends Fragment {
         viewPager.setAdapter(viewPagerAdapter);
 
 
-        String welcomeTextUrl = "http://apisea.xyz/BPL2016/apis/v4/welcometext.php?key=bl905577";
+        String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
         Log.d(Constants.TAG, welcomeTextUrl);
 
         FetchFromWeb.get(welcomeTextUrl, null, new JsonHttpResponseHandler() {
@@ -185,17 +192,15 @@ public class LiveScoreFragment extends Fragment {
 
         String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v4/livescoresource.php";
         Log.d(Constants.TAG, idMatcherURL);
+        dialogs.showDialog();
 
-        final AlertDialog progressDialog = new SpotsDialog(getContext(), R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
         RequestParams params = new RequestParams();
         params.add("key", "bl905577");
 
         FetchFromWeb.get(idMatcherURL, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     if (response.getString("msg").equals("Successful")) {
                         final String source = response.getJSONArray("content").getJSONObject(0).getString("scoresource");
@@ -250,13 +255,12 @@ public class LiveScoreFragment extends Fragment {
                                 //String url = "http://cricinfo-mukki.rhcloud.com/api/match/live";
                                 Log.d(Constants.TAG, url);
 
-                                final AlertDialog progressDialog = new SpotsDialog(getContext(), R.style.Custom);
-                                progressDialog.show();
-                                progressDialog.setCancelable(true);
+                                dialogs.showDialog();
+
                                 FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                         try {
                                             Log.d(Constants.TAG, response.toString());
                                             JSONArray jsonArray = response.getJSONArray("items");
@@ -274,13 +278,13 @@ public class LiveScoreFragment extends Fragment {
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                         Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
                                     }
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                         Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -289,13 +293,11 @@ public class LiveScoreFragment extends Fragment {
                                 //String url = "http://apisea.xyz/Cricket/apis/v1/fetchMyLiveScores.php?key=bl905577";
                                 Log.d(Constants.TAG, url);
 
-                                final AlertDialog progressDialog = new SpotsDialog(getContext(), R.style.Custom);
-                                progressDialog.show();
-                                progressDialog.setCancelable(true);
+                                dialogs.showDialog();
                                 FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                         try {
                                             Log.d(Constants.TAG, response.toString());
                                             if (response.getString("msg").equals("Successful")) {
@@ -314,13 +316,13 @@ public class LiveScoreFragment extends Fragment {
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                         Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
                                     }
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                         Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -329,15 +331,13 @@ public class LiveScoreFragment extends Fragment {
                                 //String url = "http://www.criconly.com/ipl/2013/html/iphone_home_json.json";
                                 Log.d(Constants.TAG, url);
 
-                                final AlertDialog progressDialog = new SpotsDialog(getContext(), R.style.Custom);
-                                progressDialog.show();
-                                progressDialog.setCancelable(true);
+                                dialogs.showDialog();
 
                                 FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
 
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                         try {
 
                                             JSONArray jsonArray = response.getJSONArray("live");
@@ -356,17 +356,17 @@ public class LiveScoreFragment extends Fragment {
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                     }
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                     }
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                        progressDialog.dismiss();
+                                        dialogs.dismissDialog();
                                     }
                                 });
                             }
@@ -383,7 +383,7 @@ public class LiveScoreFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
             }
         });

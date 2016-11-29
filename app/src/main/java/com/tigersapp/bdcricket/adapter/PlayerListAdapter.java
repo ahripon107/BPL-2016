@@ -19,6 +19,7 @@ import com.tigersapp.bdcricket.activity.PlayerProfileActivity;
 import com.tigersapp.bdcricket.model.Player;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -38,11 +39,13 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
     Context context;
     ArrayList<Player> players;
     Gson gson;
+    Dialogs dialogs;
 
     public PlayerListAdapter(Context context, ArrayList<Player> players) {
         this.context = context;
         this.players = players;
         gson = new Gson();
+        dialogs = new Dialogs(context);
     }
 
     @Override
@@ -59,14 +62,12 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
             public void onClick(View v) {
 
                 String url = "http://apisea.xyz/Cricket/apis/v1/YahooToCricAPI.php?key=bl905577&yahoo="+players.get(position).getPersonid();
-                final AlertDialog progressDialog = new SpotsDialog(context, R.style.Custom);
-                progressDialog.show();
-                progressDialog.setCancelable(true);
+                dialogs.showDialog();
 
                 FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        progressDialog.dismiss();
+                        dialogs.dismissDialog();
                         try {
                             if (response.getString("msg").equals("Successful")) {
                                 String playerID = (response.getJSONArray("content").getJSONObject(0).getString("cricapiID"));
@@ -84,7 +85,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        progressDialog.dismiss();
+                        dialogs.dismissDialog();
                         Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
                     }
                 });

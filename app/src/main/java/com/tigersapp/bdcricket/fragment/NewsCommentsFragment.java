@@ -31,6 +31,7 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Comment;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.Validator;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -57,6 +58,7 @@ public class NewsCommentsFragment extends Fragment {
     RecyclerView recyclerView;
     Typeface tf;
     CricketNews cricketNews;
+    Dialogs dialogs;
 
     @Nullable
     @Override
@@ -72,6 +74,7 @@ public class NewsCommentsFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.rvComments);
         recyclerView.setHasFixedSize(true);
         cricketNews = (CricketNews) getActivity().getIntent().getSerializableExtra(EXTRA_NEWS_OBJECT);
+        dialogs = new Dialogs(getContext());
 
         tf = Typeface.createFromAsset(getActivity().getAssets(), Constants.SOLAIMAN_LIPI_FONT);
 
@@ -156,9 +159,7 @@ public class NewsCommentsFragment extends Fragment {
                             final String comment = writeComment.getText().toString().trim();
                             final String name = yourName.getText().toString().trim();
 
-                            final AlertDialog progressDialog = new SpotsDialog(getContext(), R.style.Custom);
-                            progressDialog.show();
-                            progressDialog.setCancelable(true);
+                            dialogs.showDialog();
                             RequestParams params = new RequestParams();
 
                             params.put("key", "bl905577");
@@ -172,7 +173,7 @@ public class NewsCommentsFragment extends Fragment {
                             FetchFromWeb.post(url, params, new JsonHttpResponseHandler() {
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                    progressDialog.dismiss();
+                                    dialogs.dismissDialog();
                                     try {
                                         if (response.getString("msg").equals("Successful")) {
                                             Toast.makeText(getContext(), "Comment successfully posted", Toast.LENGTH_LONG).show();
@@ -191,7 +192,7 @@ public class NewsCommentsFragment extends Fragment {
 
                                 @Override
                                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                    progressDialog.dismiss();
+                                    dialogs.dismissDialog();
                                     Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
                                 }
                             });

@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ import com.tigersapp.bdcricket.fragment.PlayingXIFragment;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -73,6 +75,7 @@ public class FrontPage extends AppCompatActivity
     private ViewPager viewPager;
     AdView adView;
     InterstitialAd mInterstitialAd;
+    Dialogs dialogs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,8 @@ public class FrontPage extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         adView = (AdView) findViewById(R.id.adViewFontPage);
         setSupportActionBar(toolbar);
+
+        dialogs = new Dialogs(this);
 
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-9201945236996508/3198106475");
@@ -152,16 +157,15 @@ public class FrontPage extends AppCompatActivity
             String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
-            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
-            progressDialog.show();
-            progressDialog.setCancelable(true);
+            dialogs.showDialog();
+
             RequestParams params = new RequestParams();
             params.add("key", "bl905577");
 
             FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     try {
                         if (response.getString("msg").equals("Successful")) {
                             String source = response.getJSONArray("content").getJSONObject(0).getString("livestream");
@@ -182,7 +186,7 @@ public class FrontPage extends AppCompatActivity
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
                 }
             });
@@ -191,16 +195,14 @@ public class FrontPage extends AppCompatActivity
             String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
-            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
-            progressDialog.show();
-            progressDialog.setCancelable(true);
+            dialogs.showDialog();
             RequestParams params = new RequestParams();
             params.add("key", "bl905577");
 
             FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     try {
                         if (response.getString("msg").equals("Successful")) {
                             String source = response.getJSONArray("content").getJSONObject(0).getString("news");
@@ -220,7 +222,7 @@ public class FrontPage extends AppCompatActivity
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
                 }
             });
@@ -228,16 +230,14 @@ public class FrontPage extends AppCompatActivity
             String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
-            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
-            progressDialog.show();
-            progressDialog.setCancelable(true);
+            dialogs.showDialog();
             RequestParams params = new RequestParams();
             params.add("key", "bl905577");
 
             FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     try {
                         if (response.getString("msg").equals("Successful")) {
                             String source = response.getJSONArray("content").getJSONObject(0).getString("highlights");
@@ -258,7 +258,7 @@ public class FrontPage extends AppCompatActivity
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
                 }
             });
@@ -273,16 +273,14 @@ public class FrontPage extends AppCompatActivity
             String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
-            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
-            progressDialog.show();
-            progressDialog.setCancelable(true);
+            dialogs.showDialog();
             RequestParams params = new RequestParams();
             params.add("key", "bl905577");
 
             FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     try {
                         if (response.getString("msg").equals("Successful")) {
                             String source = response.getJSONArray("content").getJSONObject(0).getString("gallery");
@@ -302,7 +300,7 @@ public class FrontPage extends AppCompatActivity
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
                 }
             });
@@ -324,16 +322,14 @@ public class FrontPage extends AppCompatActivity
             String isAllowedUrl = Constants.ACCESS_CHECKER_URL;
             Log.d(Constants.TAG, isAllowedUrl);
 
-            final AlertDialog progressDialog = new SpotsDialog(FrontPage.this, R.style.Custom);
-            progressDialog.show();
-            progressDialog.setCancelable(true);
+            dialogs.showDialog();
             RequestParams params = new RequestParams();
             params.add("key", "bl905577");
 
             FetchFromWeb.get(isAllowedUrl, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     try {
                         if (response.getString("msg").equals("Successful")) {
                             String source = response.getJSONArray("content").getJSONObject(0).getString("quotes");
@@ -353,7 +349,7 @@ public class FrontPage extends AppCompatActivity
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    progressDialog.dismiss();
+                    dialogs.dismissDialog();
                     Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_LONG).show();
                 }
             });

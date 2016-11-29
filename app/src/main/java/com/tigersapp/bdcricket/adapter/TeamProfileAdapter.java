@@ -18,6 +18,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.TeamDetailsActivity;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
 import com.squareup.picasso.Picasso;
@@ -38,11 +39,13 @@ public class TeamProfileAdapter extends RecyclerView.Adapter<TeamProfileAdapter.
     ArrayList<String> teamname;
     ArrayList<String> teamImage;
     Typeface typeface;
+    Dialogs dialogs;
 
     public TeamProfileAdapter(Context context, ArrayList<String> teamName, ArrayList<String> teamImage) {
         this.context = context;
         this.teamname = teamName;
         this.teamImage = teamImage;
+        this.dialogs = new Dialogs(context);
         typeface = Typeface.createFromAsset(context.getAssets(),Constants.SOLAIMAN_LIPI_FONT);
     }
 
@@ -65,14 +68,12 @@ public class TeamProfileAdapter extends RecyclerView.Adapter<TeamProfileAdapter.
             public void onClick(View v) {
                 String url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.team.profile%20where%20team_id=" + (position + 1) + "&format=json&diagnostics=true&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
 
-                final AlertDialog progressDialog = new SpotsDialog(context, R.style.Custom);
-                progressDialog.show();
-                progressDialog.setCancelable(true);
+                dialogs.showDialog();
 
                 FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        progressDialog.dismiss();
+                        dialogs.dismissDialog();
                         Intent intent = new Intent(context, TeamDetailsActivity.class);
                         intent.putExtra("data", response.toString());
                         context.startActivity(intent);
@@ -81,7 +82,7 @@ public class TeamProfileAdapter extends RecyclerView.Adapter<TeamProfileAdapter.
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        progressDialog.dismiss();
+                        dialogs.dismissDialog();
                         Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
                     }
                 });

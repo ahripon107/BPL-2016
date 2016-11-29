@@ -25,6 +25,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.RecordModel;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -49,6 +50,7 @@ public class SeriesStatsActivity extends AppCompatActivity {
     List<String> currentSeries, seriesIds;
     ArrayList<RecordModel> seriesStatsModels;
     Gson gson;
+    Dialogs dialogs;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,19 +65,18 @@ public class SeriesStatsActivity extends AppCompatActivity {
         seriesIds = new ArrayList<>();
         seriesStatsModels = new ArrayList<>();
         gson = new Gson();
+        dialogs = new Dialogs(this);
 
         fetchData(Constants.SERIES_STATS_URL);
 
     }
 
     public void fetchData(String url) {
-        final AlertDialog progressDialog = new SpotsDialog(SeriesStatsActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     response = response.getJSONObject("series-stats");
                     JSONArray jsonArray = response.getJSONArray("seriesDetails");
@@ -125,12 +126,12 @@ public class SeriesStatsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
         });
     }

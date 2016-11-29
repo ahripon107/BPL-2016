@@ -19,6 +19,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.RecordsFragment;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 
 import org.json.JSONArray;
@@ -39,12 +40,14 @@ public class RecordsActivity extends AppCompatActivity {
     TabLayout tabLayout;
     AdView adView;
     RecordsFragment battingRecordsFragment, bowlingRecordsFragment, fastestRecordsFragment;
+    Dialogs dialogs;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        dialogs = new Dialogs(this);
 
         battingRecordsFragment = new RecordsFragment();
         bowlingRecordsFragment = new RecordsFragment();
@@ -64,13 +67,11 @@ public class RecordsActivity extends AppCompatActivity {
         String url = Constants.RECORDS_URL;
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(RecordsActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     if (battingRecordsFragment.isAdded()) {
                         battingRecordsFragment.populateFragment(response.getJSONObject("top-stats").getJSONArray("battingStats"));
@@ -90,12 +91,12 @@ public class RecordsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
         });
     }

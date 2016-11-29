@@ -25,6 +25,7 @@ import com.tigersapp.bdcricket.model.RecordDetailsModel1;
 import com.tigersapp.bdcricket.model.RecordDetailsModel2;
 import com.tigersapp.bdcricket.model.RecordDetailsModel3;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 
 import org.json.JSONArray;
@@ -48,6 +49,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
     AdView adView;
     MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
     String recordType, url;
+    Dialogs dialogs;
 
     RecordsDetailsFragment testFragment, odiFragment, t20Fragment;
 
@@ -58,6 +60,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         setTitle(getIntent().getStringExtra("title"));
         recordType = getIntent().getStringExtra("recordtype");
         url = getIntent().getStringExtra("url");
+        dialogs = new Dialogs(this);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_ranking);
         viewPager = (ViewPager) findViewById(R.id.view_pager_ranking);
@@ -99,7 +102,7 @@ public class RecordDetailsActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
-        fetchData(url + "/overallseasons/all");
+        //fetchData(url + "/overallseasons/all");
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -147,13 +150,11 @@ public class RecordDetailsActivity extends AppCompatActivity {
     }
 
     public void fetchData(String url) {
-        final AlertDialog progressDialog = new SpotsDialog(RecordDetailsActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     if (testFragment.isAdded()) {
                         ArrayList<RecordDetailsModel1> sixElementModels = new ArrayList<RecordDetailsModel1>();
@@ -267,12 +268,12 @@ public class RecordDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
         });
     }

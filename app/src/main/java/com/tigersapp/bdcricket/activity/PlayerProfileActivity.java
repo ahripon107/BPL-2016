@@ -27,6 +27,7 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.ProfileBatting;
 import com.tigersapp.bdcricket.model.ProfileBowling;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -91,12 +92,15 @@ public class PlayerProfileActivity extends RoboAppCompatActivity {
 
     @Inject
     ArrayList<ProfileBowling> profileBowlings;
+
+    Dialogs dialogs;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         battingRecord.setNestedScrollingEnabled(false);
         bowlingRecord.setNestedScrollingEnabled(false);
+        dialogs = new Dialogs(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String playerID = getIntent().getStringExtra("playerID");
@@ -104,13 +108,11 @@ public class PlayerProfileActivity extends RoboAppCompatActivity {
         String url = "http://cricapi.com/api/playerStats?pid="+playerID+"&apikey=MScPVINvZoYtOmeNSY7aDVtaa4H2";
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(PlayerProfileActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     playerName.setText(response.getString("name"));
 
@@ -266,7 +268,7 @@ public class PlayerProfileActivity extends RoboAppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(PlayerProfileActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
