@@ -87,11 +87,11 @@ public class RankingActivity extends AppCompatActivity {
 
                 try {
                     if (testFragment.isAdded())
-                        testFragment.populateTeamList(response.getJSONObject("Team").getJSONObject("TEST"));
+                        testFragment.populateTeamList(response.getJSONObject("Team").getJSONArray("TEST"));
                     if (odiFragment.isAdded())
-                        odiFragment.populateTeamList(response.getJSONObject("Team").getJSONObject("ODI"));
+                        odiFragment.populateTeamList(response.getJSONObject("Team").getJSONArray("ODI"));
                     if (T20Fragment.isAdded())
-                        T20Fragment.populateTeamList(response.getJSONObject("Team").getJSONObject("T20"));
+                        T20Fragment.populateTeamList(response.getJSONObject("Team").getJSONArray("T20"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -101,33 +101,33 @@ public class RankingActivity extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position == 0) {
                             try {
-                                testFragment.populateTeamList(response.getJSONObject("Team").getJSONObject("TEST"));
-                                odiFragment.populateTeamList(response.getJSONObject("Team").getJSONObject("ODI"));
-                                T20Fragment.populateTeamList(response.getJSONObject("Team").getJSONObject("T20"));
+                                testFragment.populateTeamList(response.getJSONObject("Team").getJSONArray("TEST"));
+                                odiFragment.populateTeamList(response.getJSONObject("Team").getJSONArray("ODI"));
+                                T20Fragment.populateTeamList(response.getJSONObject("Team").getJSONArray("T20"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         } else if (position == 1) {
                             try {
-                                testFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("TEST").getJSONObject("batting"));
-                                odiFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("ODI").getJSONObject("batting"));
-                                T20Fragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("T20").getJSONObject("batting"));
+                                testFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("TEST").getJSONArray("batting"));
+                                odiFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("ODI").getJSONArray("batting"));
+                                T20Fragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("T20").getJSONArray("batting"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         } else if (position == 2) {
                             try {
-                                testFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("TEST").getJSONObject("bowling"));
-                                odiFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("ODI").getJSONObject("bowling"));
-                                T20Fragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("T20").getJSONObject("bowling"));
+                                testFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("TEST").getJSONArray("bowling"));
+                                odiFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("ODI").getJSONArray("bowling"));
+                                T20Fragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("T20").getJSONArray("bowling"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         } else if (position == 3) {
                             try {
-                                testFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("TEST").getJSONObject("allrounder"));
-                                odiFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("ODI").getJSONObject("allrounder"));
-                                T20Fragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("T20").getJSONObject("allrounder"));
+                                testFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("TEST").getJSONArray("allrounder"));
+                                odiFragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("ODI").getJSONArray("allrounder"));
+                                T20Fragment.populatePlayerList(response.getJSONObject("Player").getJSONObject("T20").getJSONArray("allrounder"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

@@ -19,7 +19,7 @@ public class Constants {
     public static final String FIXTURE_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.upcoming_matches(0,50)&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
     public static final String COMMENTARY_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id=193958%20limit%205&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
     public static final String PAST_MATCHES_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.past_matches%20(0,30)&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
-    public static final String RANKING_URL = "http://webclient.cricbuzz.com/statistics/android/rankings/json";
+    public static final String RANKING_URL = "http://mapps.cricbuzz.com/cbzvernacular/bengali/stats/rankings";
     public static final String POINT_TABLE_URL = "http://mapps.cricbuzz.com/cricbuzz-android/series/points_table";
     public static final String RECORDS_URL = "http://opera.m.cricbuzz.com/cbzandroid/top-stats";
     public static final String SERIES_STATS_URL = "http://opera.m.cricbuzz.com/cbzandroid/series-stats";
