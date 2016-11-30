@@ -25,6 +25,7 @@ import com.tigersapp.bdcricket.model.RecordDetailsModel1;
 import com.tigersapp.bdcricket.model.RecordDetailsModel2;
 import com.tigersapp.bdcricket.model.RecordDetailsModel3;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 
 import org.json.JSONArray;
@@ -50,6 +51,7 @@ public class SeriesStatsDetailsActivity extends AppCompatActivity{
     MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
     String seriesId, url;
     List<String> currentSeries, seriesIds;
+    Dialogs dialogs;
 
     RecordsDetailsFragment testFragment, odiFragment, t20Fragment;
     ArrayAdapter<String> dataAdapter;
@@ -63,6 +65,7 @@ public class SeriesStatsDetailsActivity extends AppCompatActivity{
         url = getIntent().getStringExtra("url");
         currentSeries = new ArrayList<>();
         seriesIds = new ArrayList<>();
+        dialogs = new Dialogs(this);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_ranking);
         viewPager = (ViewPager) findViewById(R.id.view_pager_ranking);
@@ -112,13 +115,11 @@ public class SeriesStatsDetailsActivity extends AppCompatActivity{
     }
 
     public void fetchData(String url) {
-        final AlertDialog progressDialog = new SpotsDialog(SeriesStatsDetailsActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     currentSeries.clear();
                     seriesIds.clear();
@@ -252,12 +253,12 @@ public class SeriesStatsDetailsActivity extends AppCompatActivity{
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
         });
     }

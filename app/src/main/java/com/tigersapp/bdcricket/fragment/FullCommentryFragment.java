@@ -20,6 +20,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Commentry;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.DividerItemDecoration;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -45,6 +46,8 @@ public class FullCommentryFragment extends RoboFragment {
 
     ArrayList<Commentry> commentries;
 
+    Dialogs dialogs;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class FullCommentryFragment extends RoboFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         commentries = new ArrayList<>();
+        dialogs = new Dialogs(getContext());
         recyclerView.setAdapter(new BasicListAdapter<Commentry, CommentryViewHolder>(commentries) {
             @Override
             public CommentryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -101,14 +105,12 @@ public class FullCommentryFragment extends RoboFragment {
     public void fetchCommentries() {
 
         String url = getArguments().getString("url");
-        final AlertDialog progressDialog = new SpotsDialog(getContext(), R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 commentries.clear();
 
                 try {
@@ -187,7 +189,7 @@ public class FullCommentryFragment extends RoboFragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
             }
         });

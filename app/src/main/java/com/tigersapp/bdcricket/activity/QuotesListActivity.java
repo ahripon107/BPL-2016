@@ -25,6 +25,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
 import com.squareup.picasso.Picasso;
@@ -47,12 +48,14 @@ public class QuotesListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     AdView adView;
     ArrayList<CricketNews> quotes;
+    Dialogs dialogs;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        dialogs = new Dialogs(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         adView = (AdView) findViewById(R.id.adViewNews);
@@ -87,13 +90,11 @@ public class QuotesListActivity extends AppCompatActivity {
         String url = "http://m.cricbuzz.com/cricbuzz-android/quotes";
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(QuotesListActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     JSONArray jsonArray = response.getJSONArray("quotes");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -112,13 +113,13 @@ public class QuotesListActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(QuotesListActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(QuotesListActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });

@@ -29,6 +29,7 @@ import com.tigersapp.bdcricket.model.Gallery;
 import com.tigersapp.bdcricket.model.ImageHolder;
 import com.tigersapp.bdcricket.model.TrollPost;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -67,6 +68,8 @@ public class GalleryOfMatchActivity extends RoboAppCompatActivity {
     @Inject
     private ImageHolder imageHolder;
 
+    Dialogs dialogs;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +77,7 @@ public class GalleryOfMatchActivity extends RoboAppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
+        dialogs = new Dialogs(this);
         recyclerView.setAdapter(new BasicListAdapter<Gallery, GalleryMatchViewHolder>(galleries) {
             @Override
             public GalleryMatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -116,14 +119,12 @@ public class GalleryOfMatchActivity extends RoboAppCompatActivity {
         String url = getIntent().getStringExtra("url");
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(GalleryOfMatchActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
 
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     JSONArray jsonArray = response.getJSONArray("Image Details");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -140,7 +141,7 @@ public class GalleryOfMatchActivity extends RoboAppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(GalleryOfMatchActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });

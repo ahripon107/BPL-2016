@@ -22,6 +22,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.RankingFragment;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 
 import org.json.JSONException;
@@ -47,6 +48,7 @@ public class RankingActivity extends AppCompatActivity {
     RankingFragment odiFragment;
     RankingFragment T20Fragment;
     JSONObject response;
+    Dialogs dialogs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class RankingActivity extends AppCompatActivity {
         testFragment = new RankingFragment();
         odiFragment = new RankingFragment();
         T20Fragment = new RankingFragment();
+        dialogs = new Dialogs(this);
 
         List<String> categories = new ArrayList<String>();
         categories.add("Top Teams");
@@ -78,13 +81,11 @@ public class RankingActivity extends AppCompatActivity {
         String url = Constants.RANKING_URL;
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(RankingActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, final JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
 
                 try {
                     if (testFragment.isAdded())
@@ -145,13 +146,13 @@ public class RankingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(RankingActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(RankingActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });

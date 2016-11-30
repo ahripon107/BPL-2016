@@ -30,6 +30,7 @@ import com.tigersapp.bdcricket.fragment.NewsCommentsFragment;
 import com.tigersapp.bdcricket.model.Comment;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.Validator;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -55,6 +56,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
     Typeface tf;
     String id;
     AdView adView;
+    Dialogs dialogs;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
         recyclerView.setHasFixedSize(true);
         id =  getIntent().getStringExtra("opinionid");
         adView = (AdView) findViewById(R.id.adViewOpinions);
+        dialogs = new Dialogs(this);
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
@@ -94,9 +97,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final AlertDialog progressDialog = new SpotsDialog(InsertOpinionActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         RequestParams requestParams = new RequestParams();
 
         requestParams.add("key", "bl905577");
@@ -106,7 +107,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
         FetchFromWeb.get(url, requestParams, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     if (response.getString("msg").equals("Successful")) {
                         JSONArray jsonArray = response.getJSONArray("content");
@@ -128,7 +129,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(InsertOpinionActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
@@ -162,9 +163,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
                             final String comment = writeComment.getText().toString().trim();
                             final String name = yourName.getText().toString().trim();
 
-                            final AlertDialog progressDialog = new SpotsDialog(InsertOpinionActivity.this, R.style.Custom);
-                            progressDialog.show();
-                            progressDialog.setCancelable(true);
+                            dialogs.showDialog();
                             RequestParams params = new RequestParams();
 
                             params.put("key", "bl905577");
@@ -178,7 +177,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
                             FetchFromWeb.post(url, params, new JsonHttpResponseHandler() {
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                    progressDialog.dismiss();
+                                    dialogs.dismissDialog();
                                     try {
                                         if (response.getString("msg").equals("Successful")) {
                                             Toast.makeText(InsertOpinionActivity.this, "Comment successfully posted", Toast.LENGTH_LONG).show();
@@ -197,7 +196,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
 
                                 @Override
                                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                    progressDialog.dismiss();
+                                    dialogs.dismissDialog();
                                     Toast.makeText(InsertOpinionActivity.this, "Failed", Toast.LENGTH_LONG).show();
                                 }
                             });

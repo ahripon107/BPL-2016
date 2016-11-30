@@ -21,6 +21,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.NewsDetailsActivity;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 
 import org.json.JSONArray;
@@ -47,6 +48,7 @@ public class NewsDetailsFragment extends Fragment {
     CricketNews cricketNews;
 
     Typeface typeface;
+    Dialogs dialogs;
 
     @Nullable
     @Override
@@ -64,6 +66,8 @@ public class NewsDetailsFragment extends Fragment {
         date = (TextView) view.findViewById(R.id.text_view_date);
         author = (TextView) view.findViewById(R.id.text_view_author);
         details = (TextView) view.findViewById(R.id.text_view_details);
+
+        dialogs = new Dialogs(getContext());
 
         cricketNews = (CricketNews) getActivity().getIntent().getSerializableExtra(EXTRA_NEWS_OBJECT);
 
@@ -84,13 +88,11 @@ public class NewsDetailsFragment extends Fragment {
                 .into(imageView);
         detailsNews.setVisibility(View.GONE);
 
-        final AlertDialog progressDialog = new SpotsDialog(getContext(), R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(cricketNews.getDetailNewsUrl(), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
 
                     JSONObject jsonObject = response.getJSONObject(0);
@@ -110,7 +112,7 @@ public class NewsDetailsFragment extends Fragment {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     if (response.has("getnewsby_id")) {
                         JSONObject jsonObject = response.getJSONObject("getnewsby_id");
@@ -130,13 +132,13 @@ public class NewsDetailsFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
             }
         });

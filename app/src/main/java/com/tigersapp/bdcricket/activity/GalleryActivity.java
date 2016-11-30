@@ -22,6 +22,7 @@ import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Gallery;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -42,6 +43,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ArrayList<Gallery> galleries;
+    Dialogs dialogs;
 
 
     @Override
@@ -51,20 +53,19 @@ public class GalleryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setContentView(R.layout.playersfragment);
         galleries = new ArrayList<>();
+        dialogs = new Dialogs(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         String galleryUrl = "http://mapps.cricbuzz.com/cricbuzz-android/gallery/";
         Log.d(Constants.TAG, galleryUrl);
 
-        final AlertDialog progressDialog = new SpotsDialog(GalleryActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
 
         FetchFromWeb.get(galleryUrl,null,new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     JSONArray jsonArray = response.getJSONArray("Match Details");
                     for (int i=0;i<jsonArray.length();i++) {
@@ -80,17 +81,17 @@ public class GalleryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
         });
 

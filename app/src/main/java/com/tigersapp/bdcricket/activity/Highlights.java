@@ -26,6 +26,7 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.LivestreamAndHighlights;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -64,6 +65,8 @@ public class Highlights extends RoboAppCompatActivity {
     Gson gson;
     String cause,url;
 
+    Dialogs dialogs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +75,7 @@ public class Highlights extends RoboAppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         objects = new ArrayList<>();
         cause = getIntent().getStringExtra("cause");
+        dialogs = new Dialogs(this);
 
         recyclerView.setAdapter(new BasicListAdapter<LivestreamAndHighlights,HighlightsViewHolder>(objects) {
             @Override
@@ -163,14 +167,12 @@ public class Highlights extends RoboAppCompatActivity {
 
     public void fetchFromWeb(String url) {
 
-        final AlertDialog progressDialog = new SpotsDialog(Highlights.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
 
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 objects.clear();
 
                 try {
@@ -190,13 +192,13 @@ public class Highlights extends RoboAppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(Highlights.this, "Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 Toast.makeText(Highlights.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });

@@ -27,6 +27,7 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.PointsTable;
 import com.tigersapp.bdcricket.model.PointsTableElement;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -52,6 +53,7 @@ public class PointsTableActivity extends AppCompatActivity {
     ArrayList<PointsTable> pointTables;
     ArrayList<PointsTableElement> pointTableElements;
     Gson gson;
+    Dialogs dialogs;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class PointsTableActivity extends AppCompatActivity {
         pointTables = new ArrayList<>();
         pointTableElements = new ArrayList<>();
         gson = new Gson();
+        dialogs = new Dialogs(this);
 
         adView = (AdView) findViewById(R.id.adViewpointsTable);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -78,24 +81,22 @@ public class PointsTableActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final AlertDialog progressDialog = new SpotsDialog(PointsTableActivity.this, R.style.Custom);
-                progressDialog.show();
-                progressDialog.setCancelable(true);
+                dialogs.showDialog();
                 FetchFromWeb.get(pointTables.get(position).getUrl(), null, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        progressDialog.dismiss();
+                        dialogs.dismissDialog();
                         processData(response);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        progressDialog.dismiss();
+                        dialogs.dismissDialog();
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        progressDialog.dismiss();
+                        dialogs.dismissDialog();
                     }
                 });
             }
@@ -109,14 +110,12 @@ public class PointsTableActivity extends AppCompatActivity {
         String url = Constants.POINT_TABLE_URL;
         Log.d(Constants.TAG, url);
 
-        final AlertDialog progressDialog = new SpotsDialog(PointsTableActivity.this, R.style.Custom);
-        progressDialog.show();
-        progressDialog.setCancelable(true);
+        dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
                 try {
                     JSONArray jsonArray = response.getJSONArray("pointsTable");
                     for (int i=0;i<jsonArray.length();i++) {
@@ -158,12 +157,12 @@ public class PointsTableActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                progressDialog.dismiss();
+                dialogs.dismissDialog();
             }
         });
 
