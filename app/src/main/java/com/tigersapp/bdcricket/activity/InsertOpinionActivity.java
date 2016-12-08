@@ -2,6 +2,7 @@ package com.tigersapp.bdcricket.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,9 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -57,10 +61,16 @@ public class InsertOpinionActivity extends AppCompatActivity{
     String id;
     AdView adView;
     Dialogs dialogs;
+    ImageButton sendComment;
+    TextView question;
+    EditText commentBody;
+    Profile profile;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_opinions);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,6 +78,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
         recyclerView.setHasFixedSize(true);
         id =  getIntent().getStringExtra("opinionid");
         adView = (AdView) findViewById(R.id.adViewOpinions);
+        commentBody = (EditText) findViewById(R.id.commentBody);
         dialogs = new Dialogs(this);
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
@@ -135,76 +146,67 @@ public class InsertOpinionActivity extends AppCompatActivity{
         });
 
 
-        Button sendComment = (Button) findViewById(R.id.btnSubmitComment);
-        sendComment.setText("মতামত দিন");
-        TextView question = (TextView) findViewById(R.id.opinion_question);
+        sendComment = (ImageButton) findViewById(R.id.btnSubmitComment);
+
+        question = (TextView) findViewById(R.id.opinion_question);
         question.setTypeface(tf);
         question.setText(getIntent().getStringExtra("question"));
 
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                profile = Profile.getCurrentProfile();
+                if (profile != null) {
+                    String comment = commentBody.getText().toString().trim();
+                    if (!comment.equals("")) {
+                        publishComment(comment);
+                        commentBody.getText().clear();
+                    }
+                }
+                else {
+                    Intent intent = new Intent(InsertOpinionActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
 
-                View promptsView = LayoutInflater.from(InsertOpinionActivity.this).inflate(R.layout.addnewcomment, null, false);
-                final EditText writeComment = (EditText) promptsView.findViewById(R.id.etYourComment);
-                final EditText yourName = (EditText) promptsView.findViewById(R.id.etYourName);
-                AlertDialog.Builder builder = new AlertDialog.Builder(InsertOpinionActivity.this);
-                builder.setView(promptsView);
-                builder.setTitle("মতামত").setPositiveButton("SUBMIT", null).setNegativeButton("CANCEL", null);
+    public void publishComment(final String comment) {
+        dialogs.showDialog();
+        RequestParams params = new RequestParams();
 
-                final AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+        params.put("key", "bl905577");
+        params.put("newsid", "opinion"+id);
+        params.put("name", profile.getName());
+        params.put("comment", comment);
+        params.put("timestamp", System.currentTimeMillis() + "");
 
-                Button okButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (Validator.validateNotEmpty(yourName, "Required") && Validator.validateNotEmpty(writeComment, "Required")) {
-                            final String comment = writeComment.getText().toString().trim();
-                            final String name = yourName.getText().toString().trim();
+        url = Constants.INSERT_NEWS_COMMENT_URL;
 
-                            dialogs.showDialog();
-                            RequestParams params = new RequestParams();
-
-                            params.put("key", "bl905577");
-                            params.put("newsid", "opinion"+id);
-                            params.put("name", name);
-                            params.put("comment", comment);
-                            params.put("timestamp", System.currentTimeMillis() + "");
-
-                            url = Constants.INSERT_NEWS_COMMENT_URL;
-
-                            FetchFromWeb.post(url, params, new JsonHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                    dialogs.dismissDialog();
-                                    try {
-                                        if (response.getString("msg").equals("Successful")) {
-                                            Toast.makeText(InsertOpinionActivity.this, "Comment successfully posted", Toast.LENGTH_LONG).show();
-                                            comments.add(new Comment(name, comment, System.currentTimeMillis() + ""));
-                                            recyclerView.getAdapter().notifyDataSetChanged();
-                                            if (comments.size() != 0) {
-                                                recyclerView.smoothScrollToPosition(comments.size() - 1);
-                                            }
-                                        }
-
-                                        Log.d(Constants.TAG, response.toString());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                    dialogs.dismissDialog();
-                                    Toast.makeText(InsertOpinionActivity.this, "Failed", Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                            alertDialog.dismiss();
+        FetchFromWeb.post(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                dialogs.dismissDialog();
+                try {
+                    if (response.getString("msg").equals("Successful")) {
+                        Toast.makeText(InsertOpinionActivity.this, "Comment successfully posted", Toast.LENGTH_LONG).show();
+                        comments.add(new Comment(profile.getName(), comment, System.currentTimeMillis() + ""));
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                        if (comments.size() != 0) {
+                            recyclerView.smoothScrollToPosition(comments.size() - 1);
                         }
                     }
-                });
+
+                    Log.d(Constants.TAG, response.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                dialogs.dismissDialog();
+                Toast.makeText(InsertOpinionActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
     }
