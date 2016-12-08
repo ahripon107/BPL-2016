@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.tigersapp.bdcricket.ParseApplication;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.SmackListener;
@@ -102,7 +103,7 @@ public class ChattingFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        FacebookSdk.sdkInitialize(getContext());
         setHasOptionsMenu(true);
     }
 

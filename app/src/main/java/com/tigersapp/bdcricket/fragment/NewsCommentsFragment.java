@@ -19,13 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.CricketNewsListActivity;
+import com.tigersapp.bdcricket.activity.InsertOpinionActivity;
+import com.tigersapp.bdcricket.activity.LoginActivity;
 import com.tigersapp.bdcricket.activity.MainActivity;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Comment;
@@ -59,6 +63,9 @@ public class NewsCommentsFragment extends Fragment {
     Typeface tf;
     CricketNews cricketNews;
     Dialogs dialogs;
+    ImageButton sendComment;
+    EditText commentBody;
+    Profile profile;
 
     @Nullable
     @Override
@@ -135,72 +142,64 @@ public class NewsCommentsFragment extends Fragment {
         });
 
 
-        Button sendComment = (Button) view.findViewById(R.id.btnSubmitComment);
+        sendComment = (ImageButton) view.findViewById(R.id.btnSubmitComment);
+        commentBody = (EditText) view.findViewById(R.id.commentBody);
 
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                profile = Profile.getCurrentProfile();
+                if (profile != null) {
+                    String comment = commentBody.getText().toString().trim();
+                    if (!comment.equals("")) {
+                        publishComment(comment);
+                        commentBody.getText().clear();
+                    }
+                }
+                else {
+                    Intent intent = new Intent(getActivity(),LoginActivity.class);
+                    getActivity().startActivity(intent);
+                }
+            }
+        });
+    }
 
-                View promptsView = LayoutInflater.from(getContext()).inflate(R.layout.addnewcomment, null, false);
-                final EditText writeComment = (EditText) promptsView.findViewById(R.id.etYourComment);
-                final EditText yourName = (EditText) promptsView.findViewById(R.id.etYourName);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setView(promptsView);
-                builder.setTitle("মন্তব্য").setPositiveButton("SUBMIT", null).setNegativeButton("CANCEL", null);
+    public void publishComment(final String comment) {
+        dialogs.showDialog();
+        RequestParams params = new RequestParams();
 
-                final AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+        params.put("key", "bl905577");
+        params.put("newsid", "opinion"+cricketNews.getSource()+cricketNews.getId());
+        params.put("name", profile.getName());
+        params.put("comment", comment);
+        params.put("timestamp", System.currentTimeMillis() + "");
 
-                Button okButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (Validator.validateNotEmpty(yourName, "Required") && Validator.validateNotEmpty(writeComment, "Required")) {
-                            final String comment = writeComment.getText().toString().trim();
-                            final String name = yourName.getText().toString().trim();
+        url = Constants.INSERT_NEWS_COMMENT_URL;
 
-                            dialogs.showDialog();
-                            RequestParams params = new RequestParams();
-
-                            params.put("key", "bl905577");
-                            params.put("newsid", cricketNews.getSource()+cricketNews.getId());
-                            params.put("name", name);
-                            params.put("comment", comment);
-                            params.put("timestamp", System.currentTimeMillis() + "");
-
-                            url = Constants.INSERT_NEWS_COMMENT_URL;
-
-                            FetchFromWeb.post(url, params, new JsonHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                    dialogs.dismissDialog();
-                                    try {
-                                        if (response.getString("msg").equals("Successful")) {
-                                            Toast.makeText(getContext(), "Comment successfully posted", Toast.LENGTH_LONG).show();
-                                            comments.add(new Comment(name, comment, System.currentTimeMillis() + ""));
-                                            recyclerView.getAdapter().notifyDataSetChanged();
-                                            if (comments.size() != 0) {
-                                                recyclerView.smoothScrollToPosition(comments.size() - 1);
-                                            }
-                                        }
-
-                                        Log.d(Constants.TAG, response.toString());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                    dialogs.dismissDialog();
-                                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                            alertDialog.dismiss();
+        FetchFromWeb.post(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                dialogs.dismissDialog();
+                try {
+                    if (response.getString("msg").equals("Successful")) {
+                        Toast.makeText(getContext(), "Comment successfully posted", Toast.LENGTH_LONG).show();
+                        comments.add(new Comment(profile.getName(), comment, System.currentTimeMillis() + ""));
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                        if (comments.size() != 0) {
+                            recyclerView.smoothScrollToPosition(comments.size() - 1);
                         }
                     }
-                });
+
+                    Log.d(Constants.TAG, response.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                dialogs.dismissDialog();
+                Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
             }
         });
     }

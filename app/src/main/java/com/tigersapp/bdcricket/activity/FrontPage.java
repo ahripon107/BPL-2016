@@ -1,36 +1,19 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.batch.android.Batch;
@@ -40,33 +23,19 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
-import com.tigersapp.bdcricket.adapter.SlideShowViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.ChattingFragment;
-import com.tigersapp.bdcricket.fragment.FragmentMatchSummary;
-import com.tigersapp.bdcricket.fragment.FragmentScoreBoard;
 import com.tigersapp.bdcricket.fragment.LiveScoreFragment;
 import com.tigersapp.bdcricket.fragment.OpinionFragment;
-import com.tigersapp.bdcricket.fragment.PlayingXIFragment;
-import com.tigersapp.bdcricket.model.Match;
-import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
-import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
-import com.tigersapp.bdcricket.util.ViewHolder;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 public class FrontPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
