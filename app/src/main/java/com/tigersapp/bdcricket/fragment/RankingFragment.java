@@ -1,5 +1,6 @@
 package com.tigersapp.bdcricket.fragment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,8 @@ public class RankingFragment extends Fragment {
 
     Gson gson = new Gson();
 
+    Typeface tf;
+
     public RankingFragment() {
 
     }
@@ -53,6 +56,7 @@ public class RankingFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         teamLayout = (LinearLayout) view.findViewById(R.id.team_layout);
         playerLayout = (LinearLayout) view.findViewById(R.id.player_layout);
+        tf = Typeface.createFromAsset(getContext().getAssets(),Constants.SOLAIMAN_LIPI_FONT);
         return view;
     }
 
@@ -97,12 +101,11 @@ public class RankingFragment extends Fragment {
         }
     }
 
-    public void populatePlayerList(JSONObject jsonObject) {
+    public void populatePlayerList(JSONArray jsonArray) {
         playerLayout.setVisibility(View.VISIBLE);
         teamLayout.setVisibility(View.GONE);
         rankingPlayers.clear();
         try {
-            JSONArray jsonArray = jsonObject.getJSONArray("playerCurrentRanks");
             for (int i=0;i<jsonArray.length();i++) {
                 rankingPlayers.add(gson.fromJson(String.valueOf(jsonArray.get(i)),RankingPlayer.class));
             }
@@ -116,10 +119,12 @@ public class RankingFragment extends Fragment {
 
                 @Override
                 public void onBindViewHolder(PlayerViewHolder holder, int position) {
-                    holder.rank.setText(rankingPlayers.get(position).getCurrentRank());
+                    holder.rank.setText(rankingPlayers.get(position).getRank());
                     holder.playerName.setText(rankingPlayers.get(position).getName());
-                    holder.playerAverage.setText("Average: "+rankingPlayers.get(position).getAvg());
-                    holder.playerRating.setText(rankingPlayers.get(position).getCurrentRating());
+                    holder.playerName.setTypeface(tf);
+                    holder.playerAverage.setTypeface(tf);
+                    holder.playerAverage.setText("গড়: "+rankingPlayers.get(position).getAvg());
+                    holder.playerRating.setText(rankingPlayers.get(position).getRating());
 
                     Picasso.with(getContext())
                             .load(Constants.FACE_IMAGE+rankingPlayers.get(position).getId()+".jpg")
@@ -127,7 +132,7 @@ public class RankingFragment extends Fragment {
                             .into(holder.playerImage);
 
                     Picasso.with(getContext())
-                            .load(Constants.TEAM_IMAGE_FIRST_PART+rankingPlayers.get(position).getCountryId()+Constants.TEAM_IMAGE_LAST_PART)
+                            .load(Constants.TEAM_IMAGE_FIRST_PART+rankingPlayers.get(position).getCountry_id()+Constants.TEAM_IMAGE_LAST_PART)
                             .placeholder(R.drawable.default_image)
                             .into(holder.countryImage);
                 }
@@ -139,12 +144,11 @@ public class RankingFragment extends Fragment {
 
     }
 
-    public void populateTeamList(JSONObject jsonObject) {
+    public void populateTeamList(JSONArray jsonArray) {
         playerLayout.setVisibility(View.GONE);
         teamLayout.setVisibility(View.VISIBLE);
         rankingTeams.clear();
         try {
-            JSONArray jsonArray = jsonObject.getJSONArray("teamCurrentRanks");
             for (int i=0;i<jsonArray.length();i++) {
                 rankingTeams.add(gson.fromJson(String.valueOf(jsonArray.get(i)),RankingTeam.class));
             }
@@ -158,11 +162,12 @@ public class RankingFragment extends Fragment {
 
                 @Override
                 public void onBindViewHolder(TeamViewHolder holder, int position) {
-                    holder.teamRank.setText(rankingTeams.get(position).getCurrentRank());
+                    holder.teamRank.setText(rankingTeams.get(position).getRank());
                     holder.teamName.setText(rankingTeams.get(position).getName());
+                    holder.teamName.setTypeface(tf);
                     holder.teamMatches.setText("Matches: "+rankingTeams.get(position).getMatches());
-                    holder.teamPoint.setText(rankingTeams.get(position).getCurrentPoints());
-                    holder.teamRating.setText(rankingTeams.get(position).getCurrentRating());
+                    holder.teamPoint.setText(rankingTeams.get(position).getPoints());
+                    holder.teamRating.setText(rankingTeams.get(position).getRating());
 
                     Picasso.with(getContext())
                             .load(Constants.TEAM_IMAGE_FIRST_PART+rankingTeams.get(position).getId()+Constants.TEAM_IMAGE_LAST_PART)

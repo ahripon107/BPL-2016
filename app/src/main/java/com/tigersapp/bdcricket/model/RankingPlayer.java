@@ -8,18 +8,18 @@ public class RankingPlayer {
     private String id;
     private String name;
     private String country;
-    private String countryId;
-    private String currentRank;
-    private String currentRating;
+    private String country_id;
+    private String rank;
+    private String rating;
     private String avg;
 
-    public RankingPlayer(String id, String name, String country, String countryId, String currentRank, String currentRating, String avg) {
+    public RankingPlayer(String id, String name, String country, String country_id, String rank, String rating, String avg) {
         this.id = id;
         this.name = name;
         this.country = country;
-        this.countryId = countryId;
-        this.currentRank = currentRank;
-        this.currentRating = currentRating;
+        this.country_id = country_id;
+        this.rank = rank;
+        this.rating = rating;
         this.avg = avg;
     }
 
@@ -47,28 +47,28 @@ public class RankingPlayer {
         this.country = country;
     }
 
-    public String getCountryId() {
-        return countryId;
+    public String getCountry_id() {
+        return country_id;
     }
 
-    public void setCountryId(String countryId) {
-        this.countryId = countryId;
+    public void setCountry_id(String country_id) {
+        this.country_id = country_id;
     }
 
-    public String getCurrentRank() {
-        return currentRank;
+    public String getRank() {
+        return rank;
     }
 
-    public void setCurrentRank(String currentRank) {
-        this.currentRank = currentRank;
+    public void setRank(String rank) {
+        this.rank = rank;
     }
 
-    public String getCurrentRating() {
-        return currentRating;
+    public String getRating() {
+        return rating;
     }
 
-    public void setCurrentRating(String currentRating) {
-        this.currentRating = currentRating;
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public String getAvg() {
@@ -85,9 +85,9 @@ public class RankingPlayer {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", country='" + country + '\'' +
-                ", countryId='" + countryId + '\'' +
-                ", currentRank='" + currentRank + '\'' +
-                ", currentRating='" + currentRating + '\'' +
+                ", country_id='" + country_id + '\'' +
+                ", rank='" + rank + '\'' +
+                ", rating='" + rating + '\'' +
                 ", avg='" + avg + '\'' +
                 '}';
     }

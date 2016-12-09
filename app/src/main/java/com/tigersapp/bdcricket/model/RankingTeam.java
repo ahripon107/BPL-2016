@@ -5,28 +5,28 @@ package com.tigersapp.bdcricket.model;
  */
 public class RankingTeam {
 
-    private String currentRank;
+    private String rank;
     private String name;
     private String id;
-    private String currentPoints;
-    private String currentRating;
+    private String points;
+    private String rating;
     private String matches;
 
-    public RankingTeam(String currentRank, String name, String id, String currentPoints, String currentRating, String matches) {
-        this.currentRank = currentRank;
+    public RankingTeam(String rank, String name, String id, String points, String rating, String matches) {
+        this.rank = rank;
         this.name = name;
         this.id = id;
-        this.currentPoints = currentPoints;
-        this.currentRating = currentRating;
+        this.points = points;
+        this.rating = rating;
         this.matches = matches;
     }
 
-    public String getCurrentRank() {
-        return currentRank;
+    public String getRank() {
+        return rank;
     }
 
-    public void setCurrentRank(String currentRank) {
-        this.currentRank = currentRank;
+    public void setRank(String rank) {
+        this.rank = rank;
     }
 
     public String getName() {
@@ -45,20 +45,20 @@ public class RankingTeam {
         this.id = id;
     }
 
-    public String getCurrentPoints() {
-        return currentPoints;
+    public String getPoints() {
+        return points;
     }
 
-    public void setCurrentPoints(String currentPoints) {
-        this.currentPoints = currentPoints;
+    public void setPoints(String points) {
+        this.points = points;
     }
 
-    public String getCurrentRating() {
-        return currentRating;
+    public String getRating() {
+        return rating;
     }
 
-    public void setCurrentRating(String currentRating) {
-        this.currentRating = currentRating;
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public String getMatches() {
@@ -72,11 +72,11 @@ public class RankingTeam {
     @Override
     public String toString() {
         return "RankingTeam{" +
-                "currentRank='" + currentRank + '\'' +
+                "rank='" + rank + '\'' +
                 ", name='" + name + '\'' +
                 ", id='" + id + '\'' +
-                ", currentPoints='" + currentPoints + '\'' +
-                ", currentRating='" + currentRating + '\'' +
+                ", points='" + points + '\'' +
+                ", rating='" + rating + '\'' +
                 ", matches='" + matches + '\'' +
                 '}';
     }
