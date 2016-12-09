@@ -122,7 +122,8 @@ public class RankingFragment extends Fragment {
                     holder.rank.setText(rankingPlayers.get(position).getRank());
                     holder.playerName.setText(rankingPlayers.get(position).getName());
                     holder.playerName.setTypeface(tf);
-                    holder.playerAverage.setText("Average: "+rankingPlayers.get(position).getAvg());
+                    holder.playerAverage.setTypeface(tf);
+                    holder.playerAverage.setText("গড়: "+rankingPlayers.get(position).getAvg());
                     holder.playerRating.setText(rankingPlayers.get(position).getRating());
 
                     Picasso.with(getContext())

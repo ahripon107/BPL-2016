@@ -25,7 +25,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
-                android:text="Rank"
+                android:text="রাঙ্ক"
                 android:gravity="center_horizontal"
                 android:textColor="@color/Black"
                 android:textSize="14sp"/>
@@ -33,7 +33,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:layout_height="wrap_content"
-                android:text="Country"
+                android:text="দেশ"
                 android:gravity="center_horizontal"
                 android:textColor="@color/Black"
                 android:textSize="14sp"/>
@@ -41,7 +41,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.7"
                 android:layout_height="wrap_content"
-                android:text="Point"
+                android:text="পয়েন্ট"
                 android:gravity="center_horizontal"
                 android:textColor="@color/Black"
                 android:textSize="14sp"/>
@@ -49,7 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.7"
                 android:layout_height="wrap_content"
-                android:text="Rating"
+                android:text="রেটিং"
                 android:gravity="center_horizontal"
                 android:textColor="@color/Black"
                 android:textSize="14sp"/>
@@ -66,7 +66,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
-                android:text="Rank"
+                android:text="রাঙ্ক"
                 android:gravity="center_horizontal"
                 android:textColor="@color/Black"
                 android:textSize="14sp"/>
@@ -74,7 +74,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:text="Player"
+                android:text="খেলোয়াড়"
                 android:gravity="center_horizontal"
                 android:textColor="@color/Black"
                 android:textSize="14sp"/>
@@ -82,7 +82,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.7"
                 android:layout_height="wrap_content"
-                android:text="Country"
+                android:text="দেশ"
                 android:gravity="center_horizontal"
                 android:textColor="@color/Black"
                 android:textSize="14sp"/>
@@ -90,7 +90,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.7"
                 android:layout_height="wrap_content"
-                android:text="Point"
+                android:text="পয়েন্ট"
                 android:gravity="center_horizontal"
                 android:textColor="@color/Black"
                 android:textSize="14sp"/>
