@@ -16,8 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -60,6 +62,7 @@ public class Highlights extends RoboAppCompatActivity {
     AdView adView;
 
     ArrayList<LivestreamAndHighlights> objects;
+    InterstitialAd mInterstitialAd;
 
     @Inject
     Gson gson;
@@ -76,6 +79,23 @@ public class Highlights extends RoboAppCompatActivity {
         objects = new ArrayList<>();
         cause = getIntent().getStringExtra("cause");
         dialogs = new Dialogs(this);
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-9201945236996508/3198106475");
+
+        AdRequest adRequestInterstitial = new AdRequest.Builder()
+                .addTestDevice(Constants.ONE_PLUS_TEST_DEVICE).addTestDevice(Constants.XIAOMI_TEST_DEVICE)
+                .build();
+        mInterstitialAd.loadAd(adRequestInterstitial);
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+            }
+        });
 
         recyclerView.setAdapter(new BasicListAdapter<LivestreamAndHighlights,HighlightsViewHolder>(objects) {
             @Override

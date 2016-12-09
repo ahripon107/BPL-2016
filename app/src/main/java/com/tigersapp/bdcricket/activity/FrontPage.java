@@ -43,7 +43,7 @@ public class FrontPage extends AppCompatActivity
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
     private ViewPager viewPager;
     AdView adView;
-    InterstitialAd mInterstitialAd;
+
     Dialogs dialogs;
 
     @Override
@@ -55,25 +55,6 @@ public class FrontPage extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         dialogs = new Dialogs(this);
-
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-9201945236996508/3198106475");
-
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(Constants.ONE_PLUS_TEST_DEVICE).addTestDevice(Constants.XIAOMI_TEST_DEVICE)
-                .build();
-
-        mInterstitialAd.loadAd(adRequest);
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                }
-            }
-        });
 
         this.viewPager = (ViewPager) findViewById(R.id.viewPager);
 
