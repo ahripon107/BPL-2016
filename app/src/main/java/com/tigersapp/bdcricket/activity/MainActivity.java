@@ -7,10 +7,8 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -21,14 +19,11 @@ import com.batch.android.Batch;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.adapter.SlideShowViewPagerAdapter;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import dmax.dialog.SpotsDialog;
@@ -38,17 +33,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout cricketLive, cricketLiveScore, cricketHighlights, cricketFixture, cricketNews, trollPosts, teamProfile, pastMatches, rate, ranking, records, pointsTable, quotes;
 
     TextView liveStreaming, liveScore, news, highlights, fixture, pastMatch, rankings, record, pointSTable, trolls, quote, profile, update;
-    TextView[] dots1;
 
     TextView welcomeText;
-
-    ArrayList<String> imageUrls, texts;
-    ViewPager viewPager;
-
-    SlideShowViewPagerAdapter viewPagerAdapter;
-
-    LinearLayout placeImageDotsLayout, cardContainer;
-
     Typeface typeface;
 
     @Override
@@ -102,15 +88,6 @@ public class MainActivity extends AppCompatActivity {
 
         welcomeText = (TextView) findViewById(R.id.tv_welcome_text);
 
-        viewPager = (ViewPager) findViewById(R.id.placeViewPagerImageSlideShow);
-        placeImageDotsLayout = (LinearLayout) findViewById(R.id.placeImageDots);
-        cardContainer = (LinearLayout) findViewById(R.id.placecardcontainer);
-
-        imageUrls = new ArrayList<>();
-        texts = new ArrayList<>();
-
-        viewPagerAdapter = new SlideShowViewPagerAdapter(this, imageUrls, texts);
-        viewPager.setAdapter(viewPagerAdapter);
 
         String welcomeTextUrl = "http://apisea.xyz/BPL2016/apis/v1/welcometext.php?key=bl905577";
         Log.d(Constants.TAG, welcomeTextUrl);
@@ -322,44 +299,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-        cardContainer.setVisibility(View.GONE);
-
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position1) {
-                addBottomDots(position1);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
     }
 
-    private void addBottomDots(int currentPage) {
-        dots1 = new TextView[imageUrls.size()];
-
-        int colorsActive = getResources().getColor(R.color.DarkGreen);
-        int colorsInactive = getResources().getColor(R.color.MediumSpringGreen);
-
-        placeImageDotsLayout.removeAllViews();
-        for (int i = 0; i < dots1.length; i++) {
-            dots1[i] = new TextView(this);
-            dots1[i].setText(Html.fromHtml("&#8226;"));
-            dots1[i].setTextSize(35);
-            dots1[i].setTextColor(colorsInactive);
-            placeImageDotsLayout.addView(dots1[i]);
-        }
-        if (dots1.length > 0)
-            dots1[currentPage].setTextColor(colorsActive);
-    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager

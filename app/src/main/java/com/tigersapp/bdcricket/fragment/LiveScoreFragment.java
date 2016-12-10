@@ -1,9 +1,10 @@
 package com.tigersapp.bdcricket.fragment;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,7 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -20,21 +21,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.ActivityMatchDetails;
-import com.tigersapp.bdcricket.activity.FrontPage;
 import com.tigersapp.bdcricket.activity.LiveScore;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
-import com.tigersapp.bdcricket.adapter.SlideShowViewPagerAdapter;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
@@ -50,7 +46,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
@@ -58,16 +53,7 @@ import dmax.dialog.SpotsDialog;
 
 public class LiveScoreFragment extends Fragment {
 
-    TextView[] dots1;
-
     TextView welcomeText;
-
-    ArrayList<String> imageUrls, texts;
-    ViewPager viewPager;
-
-    SlideShowViewPagerAdapter viewPagerAdapter;
-
-    LinearLayout placeImageDotsLayout, cardContainer;
 
     RecyclerView recyclerView;
 
@@ -76,6 +62,7 @@ public class LiveScoreFragment extends Fragment {
     ArrayList<Match> datas;
     ImageView imageView;
     Dialogs dialogs;
+    PackageInfo pInfo;
 
 
     @Nullable
@@ -91,20 +78,15 @@ public class LiveScoreFragment extends Fragment {
         datas = new ArrayList<>();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), Constants.SOLAIMAN_LIPI_FONT);
         welcomeText = (TextView) view.findViewById(R.id.tv_welcome_text);
-        viewPager = (ViewPager) view.findViewById(R.id.placeViewPagerImageSlideShow);
-        placeImageDotsLayout = (LinearLayout) view.findViewById(R.id.placeImageDots);
-        cardContainer = (LinearLayout) view.findViewById(R.id.placecardcontainer);
         recyclerView = (RecyclerView) view.findViewById(R.id.live_matches);
         imageView = (ImageView) view.findViewById(R.id.tour_image);
 
         dialogs = new Dialogs(getContext());
-
-        imageUrls = new ArrayList<>();
-        texts = new ArrayList<>();
-
-        viewPagerAdapter = new SlideShowViewPagerAdapter(getContext(), imageUrls, texts);
-        viewPager.setAdapter(viewPagerAdapter);
-
+        try {
+            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
         Log.d(Constants.TAG, welcomeTextUrl);
@@ -115,7 +97,7 @@ public class LiveScoreFragment extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, final JSONObject response) {
                 try {
                     Constants.SHOW_PLAYER_IMAGE = response.getJSONArray("content").getJSONObject(0).getString("playerimage");
-                    welcomeText.setText(response.getJSONArray("content").getJSONObject(0).getString("description"));
+                    welcomeText.setText(Html.fromHtml(response.getJSONArray("content").getJSONObject(0).getString("description")));
                     if (response.getJSONArray("content").getJSONObject(0).getString("clickable").equals("true")) {
                         welcomeText.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -131,39 +113,6 @@ public class LiveScoreFragment extends Fragment {
                         });
                     }
 
-                    String url = "https://skysportsapi.herokuapp.com/sky/getnews/cricket/v1.0/";
-                    Log.d(Constants.TAG, url);
-
-                    if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("image").equals("true")) {
-                        cardContainer.setVisibility(View.VISIBLE);
-                        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-
-                                try {
-
-                                    for (int i = 0; i < response.length(); i++) {
-                                        JSONObject jsonObject = response.getJSONObject(i);
-                                        imageUrls.add(jsonObject.getString("imgsrc"));
-                                        texts.add(jsonObject.getString("title"));
-
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                viewPagerAdapter.notifyDataSetChanged();
-                                addBottomDots(0);
-                                Log.d(Constants.TAG, response.toString());
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-
-                            }
-                        });
-                    } else {
-                        cardContainer.setVisibility(View.GONE);
-                    }
                     if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("appimage").equals("true")) {
                         Picasso.with(getContext())
                                 .load(response.getJSONArray("content").getJSONObject(0).getString("appimageurl"))
@@ -181,6 +130,33 @@ public class LiveScoreFragment extends Fragment {
                         });
                     } else {
                         imageView.setVisibility(View.GONE);
+                    }
+
+                    if (!response.getJSONArray("content").getJSONObject(0).getString("checkversion").contains(pInfo.versionName)) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                        alertDialogBuilder.setMessage(response.getJSONArray("content").getJSONObject(0).getString("popupmessage"));
+                        alertDialogBuilder.setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        try {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("popuplink"))));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+
+                        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -388,25 +364,6 @@ public class LiveScoreFragment extends Fragment {
             }
         });
 
-
-        //cardContainer.setVisibility(View.GONE);
-
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position1) {
-                addBottomDots(position1);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-
         recyclerView.setNestedScrollingEnabled(false);
 
     }
@@ -418,23 +375,6 @@ public class LiveScoreFragment extends Fragment {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void addBottomDots(int currentPage) {
-        dots1 = new TextView[imageUrls.size()];
-
-        int colorsActive = getResources().getColor(R.color.DarkGreen);
-        int colorsInactive = getResources().getColor(R.color.MediumSpringGreen);
-
-        placeImageDotsLayout.removeAllViews();
-        for (int i = 0; i < dots1.length; i++) {
-            dots1[i] = new TextView(getContext());
-            dots1[i].setText(Html.fromHtml("&#8226;"));
-            dots1[i].setTextSize(35);
-            dots1[i].setTextColor(colorsInactive);
-            placeImageDotsLayout.addView(dots1[i]);
-        }
-        if (dots1.length > 0)
-            dots1[currentPage].setTextColor(colorsActive);
-    }
 
     private static class LiveScoreViewHolder extends RecyclerView.ViewHolder {
         protected CircleImageView imgteam1;
