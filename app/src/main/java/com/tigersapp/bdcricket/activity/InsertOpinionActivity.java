@@ -161,6 +161,8 @@ public class InsertOpinionActivity extends AppCompatActivity{
                     if (!comment.equals("")) {
                         publishComment(comment);
                         commentBody.getText().clear();
+                    } else {
+                        Toast.makeText(getApplicationContext(),"Please write something",Toast.LENGTH_LONG).show();
                     }
                 }
                 else {

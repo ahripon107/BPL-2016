@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +39,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
@@ -125,25 +123,23 @@ public class PointsTableActivity extends AppCompatActivity {
                     dataAdapter.notifyDataSetChanged();
 
                     if (pointTables.size()>0) {
-                        final AlertDialog progressDialog = new SpotsDialog(PointsTableActivity.this, R.style.Custom);
-                        progressDialog.show();
-                        progressDialog.setCancelable(true);
+
 
                         FetchFromWeb.get(pointTables.get(0).getUrl(), null, new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                progressDialog.dismiss();
+
                                 processData(response);
                             }
 
                             @Override
                             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                progressDialog.dismiss();
+
                             }
 
                             @Override
                             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                                progressDialog.dismiss();
+
                             }
                         });
                     }
