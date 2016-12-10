@@ -163,7 +163,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-=======
+
+        <activity
             android:name=".activity.QuizActivity"
             android:label="Quiz"
             android:screenOrientation="portrait" />
@@ -172,7 +173,7 @@
             android:name=".activity.QuizResultActivity"
             android:label="Quiz Result"
             android:screenOrientation="portrait" />
->>>>>>> Implement quiz fragment only
+
 
         <activity
             android:name=".activity.ImageViewerActivity"
