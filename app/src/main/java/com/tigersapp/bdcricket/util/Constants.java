@@ -29,6 +29,7 @@ public class Constants {
     public static final String TAG = "ripons";
 
     public static String SHOW_PLAYER_IMAGE = "false";
+    public static String QUIZ_ID = "1";
 
     public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v4/accessChecker.php";
     public static final String OPINION_QUES_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchOpinionQuestions.php";
@@ -56,6 +57,8 @@ public class Constants {
 
     public static final String INSERT_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v4/insertnewscomment.php";
     public static final String FETCH_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchnewscomments.php";
+    public static final String FETCH_QUIZ_QUESTIONS = "http://apisea.xyz/BPL2016/apis/v4/fetchQuizQuestions.php";
+    public static final String INSERT_QUIZ_MARKS = "http://apisea.xyz/BPL2016/apis/v4/insertQuizNumber.php";
 
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;

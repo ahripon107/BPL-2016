@@ -28,6 +28,7 @@ import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.ChattingFragment;
 import com.tigersapp.bdcricket.fragment.LiveScoreFragment;
 import com.tigersapp.bdcricket.fragment.OpinionFragment;
+import com.tigersapp.bdcricket.fragment.QuizFragment;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
@@ -58,7 +59,7 @@ public class FrontPage extends AppCompatActivity
 
         this.viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        this.viewPager.setOffscreenPageLimit(3);
+        this.viewPager.setOffscreenPageLimit(2);
         setupViewPage(this.viewPager);
         ((TabLayout) findViewById(R.id.tabLayout)).setupWithViewPager(this.viewPager);
 
@@ -84,6 +85,7 @@ public class FrontPage extends AppCompatActivity
         this.matchDetailsViewPagerAdapter.addFragment(new LiveScoreFragment(), "লাইভ স্কোর");
         this.matchDetailsViewPagerAdapter.addFragment(new ChattingFragment(), "চ্যাটিং");
         this.matchDetailsViewPagerAdapter.addFragment(new OpinionFragment(),"মতামত");
+        //this.matchDetailsViewPagerAdapter.addFragment(new QuizFragment(),"Quiz");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
