@@ -307,6 +307,9 @@ public class FrontPage extends AppCompatActivity
         } else if (id == R.id.nav_team_profile) {
             Intent intent = new Intent(FrontPage.this, TeamProfile.class);
             startActivity(intent);
+        } else if (id == R.id.nav_login_logout) {
+            Intent intent = new Intent(FrontPage.this, LoginActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_update_app) {
             String appPackageName = getPackageName();
             try {
