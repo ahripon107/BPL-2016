@@ -12,6 +12,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
+import com.instabug.library.Instabug;
+import com.instabug.library.invocation.InstabugInvocationEvent;
 import com.tigersapp.bdcricket.util.SharedPrefData;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -62,6 +64,9 @@ public class ParseApplication extends Application {
     public void onCreate()
     {
         super.onCreate();
+        new Instabug.Builder(this, "a68d697feef1a58b241417bc237f71a3")
+                .setInvocationEvent(InstabugInvocationEvent.SHAKE)
+                .build();
         Batch.Push.setGCMSenderId("115406524067");
 
         // TODO : switch to live Batch Api Key before shipping

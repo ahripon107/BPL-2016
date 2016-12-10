@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.instabug.library.InstabugTrackingDelegate;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.util.Constants;
 
@@ -67,5 +69,12 @@ public class LiveStreamView extends AppCompatActivity {
     protected void onStop() {
         videoView1.stopPlayback();
         super.onStop();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        InstabugTrackingDelegate
+                .notifyActivityGotTouchEvent(ev,this);
+        return super.dispatchTouchEvent(ev);
     }
 }

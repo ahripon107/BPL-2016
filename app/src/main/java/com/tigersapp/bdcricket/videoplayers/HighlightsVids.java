@@ -2,6 +2,7 @@ package com.tigersapp.bdcricket.videoplayers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.instabug.library.InstabugTrackingDelegate;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.util.Constants;
 
@@ -89,4 +91,12 @@ public class HighlightsVids extends YouTubeBaseActivity implements
     private YouTubePlayer.Provider getYouTubePlayerProvider() {
         return (YouTubePlayerView) findViewById(R.id.youtube_viewhighlights);
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        InstabugTrackingDelegate
+                .notifyActivityGotTouchEvent(ev,this);
+        return super.dispatchTouchEvent(ev);
+    }
+
 }

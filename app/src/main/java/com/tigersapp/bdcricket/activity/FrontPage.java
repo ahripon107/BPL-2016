@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.batch.android.Batch;
@@ -21,6 +22,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.instabug.library.InstabugTrackingDelegate;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
@@ -347,6 +349,13 @@ public class FrontPage extends AppCompatActivity
         Batch.onNewIntent(this, intent);
 
         super.onNewIntent(intent);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        InstabugTrackingDelegate
+                .notifyActivityGotTouchEvent(ev,this);
+        return super.dispatchTouchEvent(ev);
     }
 
 
