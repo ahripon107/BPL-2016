@@ -169,7 +169,7 @@ public class NewsCommentsFragment extends Fragment {
         RequestParams params = new RequestParams();
 
         params.put("key", "bl905577");
-        params.put("newsid", "opinion"+cricketNews.getSource()+cricketNews.getId());
+        params.put("newsid", cricketNews.getSource()+cricketNews.getId());
         params.put("name", profile.getName());
         params.put("comment", comment);
         params.put("timestamp", System.currentTimeMillis() + "");
