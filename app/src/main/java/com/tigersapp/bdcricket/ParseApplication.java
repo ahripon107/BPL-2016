@@ -8,12 +8,14 @@ import android.util.Log;
 
 import com.batch.android.Batch;
 import com.batch.android.Config;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
 import com.tigersapp.bdcricket.util.SharedPrefData;
 
+import io.fabric.sdk.android.Fabric;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackException;
@@ -62,6 +64,7 @@ public class ParseApplication extends Application {
     public void onCreate()
     {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         Batch.Push.setGCMSenderId("115406524067");
 
         // TODO : switch to live Batch Api Key before shipping
