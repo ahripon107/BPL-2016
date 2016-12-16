@@ -31,7 +31,7 @@ public class Constants {
     public static String SHOW_PLAYER_IMAGE = "false";
     public static String QUIZ_ID = "1";
 
-    public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v4/accessChecker.php";
+    public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v5/accessChecker.php";
     public static final String OPINION_QUES_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchOpinionQuestions.php";
 
     public static final String WELCOME_TEXT_URL = "http://apisea.xyz/BPL2016/apis/v5/welcometext.php?key=bl905577";
