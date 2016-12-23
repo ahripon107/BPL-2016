@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.batch.android.Batch;
@@ -42,7 +43,7 @@ import org.jivesoftware.smackx.xdata.packet.DataForm;
 /**
  * @author Ripon
  */
-public class ParseApplication extends Application {
+public class ParseApplication extends MultiDexApplication {
 
     public static final String DEFAULT_HOST = "45.55.30.137";
     public static final String HOST = "45.55.30.137";
@@ -68,8 +69,8 @@ public class ParseApplication extends Application {
         Batch.Push.setGCMSenderId("115406524067");
 
         // TODO : switch to live Batch Api Key before shipping
-        Batch.setConfig(new Config("DEV57E37B3B16984AF3E02BFED16D2")); // devloppement
-        //Batch.setConfig(new Config("57E37B3B165FCB2CDC07E64724BB5C")); // live
+        //Batch.setConfig(new Config("DEV57E37B3B16984AF3E02BFED16D2")); // devloppement
+        Batch.setConfig(new Config("57E37B3B165FCB2CDC07E64724BB5C")); // live
 
         mInstance = this;
 
