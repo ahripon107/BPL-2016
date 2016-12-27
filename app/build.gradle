@@ -23,8 +23,13 @@ android {
         multiDexEnabled true
     }
     buildTypes {
+        debug {
+            debuggable true
+            buildConfigField("boolean", "ENABLE_BATCH", "false")
+        }
         release {
             minifyEnabled false
+            buildConfigField("boolean", "ENABLE_BATCH", "true")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
