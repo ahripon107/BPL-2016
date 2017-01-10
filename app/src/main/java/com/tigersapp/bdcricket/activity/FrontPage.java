@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.batch.android.Batch;
+import com.digits.sdk.android.Digits;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -32,11 +33,14 @@ import com.tigersapp.bdcricket.fragment.QuizFragment;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import io.fabric.sdk.android.Fabric;
 
 public class FrontPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,6 +54,10 @@ public class FrontPage extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig("XLqZoHW9prDxIsXqiWpGvGqiN", "krKKUFmAjMj6pTK5k3GUpJAs5u9SIGr4JRRFS2fgyVkyZ1WupE");
+        Fabric.with(this, new TwitterCore(authConfig), new Digits.Builder().build());
+
         setContentView(R.layout.activity_front_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         adView = (AdView) findViewById(R.id.adViewFontPage);

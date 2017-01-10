@@ -10,12 +10,15 @@ import android.util.Log;
 import com.batch.android.Batch;
 import com.batch.android.Config;
 import com.crashlytics.android.Crashlytics;
+import com.digits.sdk.android.Digits;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
 import com.tigersapp.bdcricket.util.SharedPrefData;
 
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 import io.fabric.sdk.android.Fabric;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
@@ -45,6 +48,11 @@ import org.jivesoftware.smackx.xdata.packet.DataForm;
  */
 public class ParseApplication extends MultiDexApplication {
 
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "XLqZoHW9prDxIsXqiWpGvGqiN";
+    private static final String TWITTER_SECRET = "krKKUFmAjMj6pTK5k3GUpJAs5u9SIGr4JRRFS2fgyVkyZ1WupE";
+
+
     public static final String DEFAULT_HOST = "45.55.30.137";
     public static final String HOST = "45.55.30.137";
     public static final int PORT = 5222;
@@ -65,7 +73,8 @@ public class ParseApplication extends MultiDexApplication {
     public void onCreate()
     {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Crashlytics(), new TwitterCore(authConfig), new Digits.Builder().build());
         Batch.Push.setGCMSenderId("115406524067");
 
         if (BuildConfig.ENABLE_BATCH) {
