@@ -29,7 +29,7 @@ import roboguice.inject.RoboInjector;
 import roboguice.util.RoboContext;
 
 /**
- * Created by Ripon on 8/12/16.
+ * @author Ripon
  */
 public class RoboAppCompatActivity extends AppCompatActivity implements RoboContext {
 

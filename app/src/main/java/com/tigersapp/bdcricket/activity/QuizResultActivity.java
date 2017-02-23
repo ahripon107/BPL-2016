@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.model.Comment;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.SharedPrefData;

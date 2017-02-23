@@ -52,20 +52,20 @@ import roboguice.inject.InjectView;
 public class CricketNewsListActivity extends RoboAppCompatActivity {
 
     @InjectView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @InjectView(R.id.adViewNews)
-    AdView adView;
+    private AdView adView;
 
     @Inject
-    ArrayList<CricketNews> cricketNewses;
+    private ArrayList<CricketNews> cricketNewses;
 
     @Inject
-    Gson gson;
+    private Gson gson;
 
-    Typeface typeface;
+    private Typeface typeface;
 
-    Dialogs dialogs;
+    private Dialogs dialogs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
