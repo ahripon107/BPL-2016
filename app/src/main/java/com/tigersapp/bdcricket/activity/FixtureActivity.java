@@ -48,15 +48,15 @@ import roboguice.inject.InjectView;
 public class FixtureActivity extends RoboAppCompatActivity {
 
     @InjectView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Inject
-    ArrayList<Match> data;
+    private ArrayList<Match> data;
 
     @InjectView(R.id.adViewFixture)
-    AdView adView;
+    private AdView adView;
 
-    Dialogs dialogs;
+    private Dialogs dialogs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

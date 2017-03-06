@@ -20,7 +20,7 @@ public class Dialogs {
     public void showDialog() {
         progressDialog = new ProgressDialog(context, R.style.Theme_Cricket_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
         progressDialog.show();
         //progressDialog.setContentView must be called after progressDialog.show()
         progressDialog.setContentView(R.layout.loading_spinner);
