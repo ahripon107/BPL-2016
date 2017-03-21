@@ -1,14 +1,8 @@
 package com.tigersapp.bdcricket.fragment;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,17 +21,13 @@ import com.facebook.Profile;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.CricketNewsListActivity;
-import com.tigersapp.bdcricket.activity.InsertOpinionActivity;
 import com.tigersapp.bdcricket.activity.LoginActivity;
-import com.tigersapp.bdcricket.activity.MainActivity;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Comment;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
-import com.tigersapp.bdcricket.util.Validator;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
 import org.json.JSONArray;
@@ -47,7 +37,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 import static com.tigersapp.bdcricket.activity.NewsDetailsActivity.EXTRA_NEWS_OBJECT;
 

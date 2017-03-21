@@ -105,63 +105,29 @@ public class ActivityMatchDetails extends AppCompatActivity {
 
                         if (response.getJSONObject("innings1").has("summary")) {
                             numberOfInnings = 1;
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsBattingList(response.getJSONObject("innings1").getJSONArray("batting"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsBowlingList(response.getJSONObject("innings1").getJSONArray("bowling"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsSummary(response.getJSONObject("innings1").getJSONObject("summary"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsFOW(response.getJSONObject("innings1").getJSONArray("fow"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFirstInningsDNB(response.getJSONObject("innings1").getJSONArray("dnb"));
-
                         } else {
                             ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideFirstInnings();
                         }
-
                     } else {
                         ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideFirstInnings();
                     }
                     if (response.has("innings2")) {
                         if (response.getJSONObject("innings2").has("summary")) {
                             numberOfInnings = 2;
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setSecondInningsBattingList(response.getJSONObject("innings2").getJSONArray("batting"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setSecondInningsBowlingList(response.getJSONObject("innings2").getJSONArray("bowling"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setSecondInningsSummary(response.getJSONObject("innings2").getJSONObject("summary"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setSecondInningsFOW(response.getJSONObject("innings2").getJSONArray("fow"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setSecondInningsDNB(response.getJSONObject("innings2").getJSONArray("dnb"));
-
-                        } else {
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideSecondInnings();
-                        }
-
-                    } else {
-                        ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideSecondInnings();
+                            }
                     }
                     if (response.has("innings3")) {
                         if (response.getJSONObject("innings3").has("summary")) {
                             numberOfInnings = 3;
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setThirdInningsBattingList(response.getJSONObject("innings3").getJSONArray("batting"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setThirdInningsBowlingList(response.getJSONObject("innings3").getJSONArray("bowling"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setThirdInningsSummary(response.getJSONObject("innings3").getJSONObject("summary"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setThirdInningsFOW(response.getJSONObject("innings3").getJSONArray("fow"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setThirdInningsDNB(response.getJSONObject("innings3").getJSONArray("dnb"));
-                        } else {
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideThirdInnings();
-                        }
-                    } else {
-                        ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideThirdInnings();
+                            }
                     }
                     if (response.has("innings4")) {
                         if (response.getJSONObject("innings4").has("summary")) {
                             numberOfInnings = 4;
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFourthInningsBattingList(response.getJSONObject("innings4").getJSONArray("batting"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFourthInningsBowlingList(response.getJSONObject("innings4").getJSONArray("bowling"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFourthInningsSummary(response.getJSONObject("innings4").getJSONObject("summary"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFourthInningsFOW(response.getJSONObject("innings4").getJSONArray("fow"));
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setFourthInningsDNB(response.getJSONObject("innings4").getJSONArray("dnb"));
-                        } else {
-                            ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideFourthInnings();
                         }
-                    } else {
-                        ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).hideFourthInnings();
                     }
+
+                    ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setResponse(response, numberOfInnings);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

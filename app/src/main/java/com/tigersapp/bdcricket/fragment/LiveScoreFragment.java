@@ -53,16 +53,14 @@ import cz.msebera.android.httpclient.Header;
 
 public class LiveScoreFragment extends Fragment {
 
-    TextView welcomeText;
+    private TextView welcomeText;
+    private RecyclerView recyclerView;
+    private ImageView imageView;
+    private TextView emptyView;
 
-    RecyclerView recyclerView;
-
-    Typeface typeface;
-
-    ArrayList<Match> datas;
-    ImageView imageView;
-    Dialogs dialogs;
-    PackageInfo pInfo;
+    private ArrayList<Match> datas;
+    private Dialogs dialogs;
+    private PackageInfo pInfo;
 
 
     @Nullable
@@ -76,10 +74,10 @@ public class LiveScoreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         datas = new ArrayList<>();
-        typeface = Typeface.createFromAsset(getActivity().getAssets(), Constants.SOLAIMAN_LIPI_FONT);
         welcomeText = (TextView) view.findViewById(R.id.tv_welcome_text);
         recyclerView = (RecyclerView) view.findViewById(R.id.live_matches);
         imageView = (ImageView) view.findViewById(R.id.tour_image);
+        emptyView =(TextView) view.findViewById(R.id.tv_empty_view);
 
         dialogs = new Dialogs(getContext());
         try {
@@ -114,6 +112,7 @@ public class LiveScoreFragment extends Fragment {
                     }
 
                     if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("appimage").equals("true")) {
+                        imageView.setVisibility(View.VISIBLE);
                         Picasso.with(getContext())
                                 .load(response.getJSONArray("content").getJSONObject(0).getString("appimageurl"))
                                 .placeholder(R.drawable.default_image)
@@ -228,7 +227,6 @@ public class LiveScoreFragment extends Fragment {
                             );
 
                             if (source.equals("cricinfo")) {
-                                //String url = "http://cricinfo-mukki.rhcloud.com/api/match/live";
                                 Log.d(Constants.TAG, url);
 
                                 dialogs.showDialog();
@@ -247,6 +245,11 @@ public class LiveScoreFragment extends Fragment {
                                                         obj.getString("matchDescription"), "", "", "", obj.getString("matchId")));
                                             }
                                             recyclerView.getAdapter().notifyDataSetChanged();
+
+                                            emptyView.setVisibility(View.GONE);
+                                            if (datas.size() == 0) {
+                                                emptyView.setVisibility(View.VISIBLE);
+                                            }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -285,6 +288,10 @@ public class LiveScoreFragment extends Fragment {
                                                 }
                                             }
                                             recyclerView.getAdapter().notifyDataSetChanged();
+                                            emptyView.setVisibility(View.GONE);
+                                            if (datas.size() == 0) {
+                                                emptyView.setVisibility(View.VISIBLE);
+                                            }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -304,7 +311,6 @@ public class LiveScoreFragment extends Fragment {
                                 });
 
                             } else if (source.equals("webview")) {
-                                //String url = "http://www.criconly.com/ipl/2013/html/iphone_home_json.json";
                                 Log.d(Constants.TAG, url);
 
                                 dialogs.showDialog();
@@ -324,6 +330,10 @@ public class LiveScoreFragment extends Fragment {
                                             }
 
                                             recyclerView.getAdapter().notifyDataSetChanged();
+                                            emptyView.setVisibility(View.GONE);
+                                            if (datas.size() == 0) {
+                                                emptyView.setVisibility(View.VISIBLE);
+                                            }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }

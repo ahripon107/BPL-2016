@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,20 +38,13 @@ import cz.msebera.android.httpclient.Header;
 public class FragmentScoreBoard extends Fragment {
 
     RecyclerView battingInnings1;
-    RecyclerView battingInnings2;
-    RecyclerView battingInnings3;
-    RecyclerView battingInnings4;
+
     RecyclerView bowlingInnings1;
-    RecyclerView bowlingInnings2;
-    RecyclerView bowlingInnings3;
-    RecyclerView bowlingInnings4;
+
 
     TextView innings1extra,innings1total,innings1fallofwickets,innings1dnb;
-    TextView innings2extra,innings2total,innings2fallofwickets,innings2dnb;
-    TextView innings3extra,innings3total,innings3fallofwickets,innings3dnb;
-    TextView innings4extra,innings4total,innings4fallofwickets,innings4dnb;
 
-    LinearLayout firstInningsContainer,secondInningsContainer,thirdInningsContainer,fourthInningsContainer;
+    LinearLayout firstInningsContainer;
 
     private TextView labelGround;
     private TextView labelInfo;
@@ -58,6 +52,10 @@ public class FragmentScoreBoard extends Fragment {
     private TextView labelTeam1;
     private TextView labelTeam2;
     private TextView labelTournament;
+    private JSONObject response;
+    private int numberOfInnings;
+
+    private Button firstInnings, secondInnings, thirdInnings, fourthInnings;
 
     @Nullable
     @Override
@@ -70,48 +68,18 @@ public class FragmentScoreBoard extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         battingInnings1 = (RecyclerView) view.findViewById(R.id.lvBattingInnings1);
-        battingInnings2 = (RecyclerView) view.findViewById(R.id.lvBattingInnings2);
-        battingInnings3 = (RecyclerView) view.findViewById(R.id.lvBattingInnings3);
-        battingInnings4 = (RecyclerView) view.findViewById(R.id.lvBattingInnings4);
 
         bowlingInnings1 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings1);
-        bowlingInnings2 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings2);
-        bowlingInnings3 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings3);
-        bowlingInnings4 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings4);
 
         battingInnings1.setNestedScrollingEnabled(false);
-        battingInnings2.setNestedScrollingEnabled(false);
-        battingInnings3.setNestedScrollingEnabled(false);
-        battingInnings4.setNestedScrollingEnabled(false);
 
         bowlingInnings1.setNestedScrollingEnabled(false);
-        bowlingInnings2.setNestedScrollingEnabled(false);
-        bowlingInnings3.setNestedScrollingEnabled(false);
-        bowlingInnings4.setNestedScrollingEnabled(false);
 
         innings1extra = (TextView) view.findViewById(R.id.innings1extra);
         innings1total = (TextView) view.findViewById(R.id.innings1total);
         innings1fallofwickets = (TextView) view.findViewById(R.id.innings1fow);
         innings1dnb = (TextView) view.findViewById(R.id.innings1DNB);
 
-        innings2extra = (TextView) view.findViewById(R.id.innings2extra);
-        innings2total = (TextView) view.findViewById(R.id.innings2total);
-        innings2fallofwickets = (TextView) view.findViewById(R.id.innings2fow);
-        innings2dnb = (TextView) view.findViewById(R.id.innings2DNB);
-
-        innings3extra = (TextView) view.findViewById(R.id.innings3extra);
-        innings3total = (TextView) view.findViewById(R.id.innings3total);
-        innings3fallofwickets = (TextView) view.findViewById(R.id.innings3fow);
-        innings3dnb = (TextView) view.findViewById(R.id.innings3DNB);
-
-        innings4extra = (TextView) view.findViewById(R.id.innings4extra);
-        innings4total = (TextView) view.findViewById(R.id.innings4total);
-        innings4fallofwickets = (TextView) view.findViewById(R.id.innings4fow);
-        innings4dnb = (TextView) view.findViewById(R.id.innings4DNB);
-
-        fourthInningsContainer = (LinearLayout) view.findViewById(R.id.fourthinningscontainer);
-        thirdInningsContainer = (LinearLayout) view.findViewById(R.id.thirdinningscontainer);
-        secondInningsContainer = (LinearLayout) view.findViewById(R.id.secondInningsContainer);
         firstInningsContainer = (LinearLayout) view.findViewById(R.id.firstinningscontainer);
 
         this.labelTournament = (TextView) view.findViewById(R.id.labelTournament);
@@ -120,6 +88,63 @@ public class FragmentScoreBoard extends Fragment {
         this.labelGround = (TextView) view.findViewById(R.id.labelGround);
         this.labelInfo = (TextView) view.findViewById(R.id.labelInfo);
         this.labelMatchStatus = (TextView) view.findViewById(R.id.labelMatchStatus);
+
+        firstInnings = (Button) view.findViewById(R.id.btn_first_inns);
+        secondInnings = (Button) view.findViewById(R.id.btn_second_inns);
+        thirdInnings = (Button) view.findViewById(R.id.btn_third_inns);
+        fourthInnings = (Button) view.findViewById(R.id.btn_fourth_inns);
+
+        firstInnings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    JSONObject jsonObject = response.getJSONObject("innings1");
+                    populateScorecard(jsonObject.getJSONArray("batting"), jsonObject.getJSONArray("bowling"),
+                            jsonObject.getJSONObject("summary"), jsonObject.getJSONArray("fow"), jsonObject.getJSONArray("dnb"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        secondInnings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    JSONObject jsonObject = response.getJSONObject("innings2");
+                    populateScorecard(jsonObject.getJSONArray("batting"), jsonObject.getJSONArray("bowling"),
+                            jsonObject.getJSONObject("summary"), jsonObject.getJSONArray("fow"), jsonObject.getJSONArray("dnb"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thirdInnings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    JSONObject jsonObject = response.getJSONObject("innings3");
+                    populateScorecard(jsonObject.getJSONArray("batting"), jsonObject.getJSONArray("bowling"),
+                            jsonObject.getJSONObject("summary"), jsonObject.getJSONArray("fow"), jsonObject.getJSONArray("dnb"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        fourthInnings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    JSONObject jsonObject = response.getJSONObject("innings4");
+                    populateScorecard(jsonObject.getJSONArray("batting"), jsonObject.getJSONArray("bowling"),
+                            jsonObject.getJSONObject("summary"), jsonObject.getJSONArray("fow"), jsonObject.getJSONArray("dnb"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void setMatchSummary(Summary matchSummary) {
@@ -133,28 +158,87 @@ public class FragmentScoreBoard extends Fragment {
         }
     }
 
+    private void populateScorecard(JSONArray battingList, JSONArray bowlingList, JSONObject summary, JSONArray fallOfWickets, JSONArray didNotBat) {
+        setFirstInningsBattingList(battingList);
+        setFirstInningsBowlingList(bowlingList);
+        setFirstInningsSummary(summary);
+        setFirstInningsFOW(fallOfWickets);
+        setFirstInningsDNB(didNotBat);
+    }
+
+    public void setResponse(JSONObject response, int numberOfInnings) {
+        this.response = response;
+        this.numberOfInnings = numberOfInnings;
+
+        if (numberOfInnings == 0) {
+            firstInnings.setVisibility(View.GONE);
+            secondInnings.setVisibility(View.GONE);
+            thirdInnings.setVisibility(View.GONE);
+            fourthInnings.setVisibility(View.GONE);
+        } else if (numberOfInnings == 1) {
+            firstInnings.setVisibility(View.VISIBLE);
+            secondInnings.setVisibility(View.GONE);
+            thirdInnings.setVisibility(View.GONE);
+            fourthInnings.setVisibility(View.GONE);
+
+            try {
+                JSONObject jsonObject = response.getJSONObject("innings1");
+                populateScorecard(jsonObject.getJSONArray("batting"), jsonObject.getJSONArray("bowling"),
+                        jsonObject.getJSONObject("summary"), jsonObject.getJSONArray("fow"), jsonObject.getJSONArray("dnb"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else if (numberOfInnings == 2) {
+            firstInnings.setVisibility(View.VISIBLE);
+            secondInnings.setVisibility(View.VISIBLE);
+            thirdInnings.setVisibility(View.GONE);
+            fourthInnings.setVisibility(View.GONE);
+
+            try {
+                JSONObject jsonObject = response.getJSONObject("innings2");
+                populateScorecard(jsonObject.getJSONArray("batting"), jsonObject.getJSONArray("bowling"),
+                        jsonObject.getJSONObject("summary"), jsonObject.getJSONArray("fow"), jsonObject.getJSONArray("dnb"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else if (numberOfInnings == 3) {
+            firstInnings.setVisibility(View.VISIBLE);
+            secondInnings.setVisibility(View.VISIBLE);
+            thirdInnings.setVisibility(View.VISIBLE);
+            fourthInnings.setVisibility(View.GONE);
+
+            try {
+                JSONObject jsonObject = response.getJSONObject("innings3");
+                populateScorecard(jsonObject.getJSONArray("batting"), jsonObject.getJSONArray("bowling"),
+                        jsonObject.getJSONObject("summary"), jsonObject.getJSONArray("fow"), jsonObject.getJSONArray("dnb"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else if (numberOfInnings == 4) {
+            firstInnings.setVisibility(View.VISIBLE);
+            secondInnings.setVisibility(View.VISIBLE);
+            thirdInnings.setVisibility(View.VISIBLE);
+            fourthInnings.setVisibility(View.VISIBLE);
+
+            try {
+                JSONObject jsonObject = response.getJSONObject("innings4");
+                populateScorecard(jsonObject.getJSONArray("batting"), jsonObject.getJSONArray("bowling"),
+                        jsonObject.getJSONObject("summary"), jsonObject.getJSONArray("fow"), jsonObject.getJSONArray("dnb"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+
     public void setFirstInningsBattingList(JSONArray jsonArray) {
         BatsmanAdapter batsmanAdapter = new BatsmanAdapter(getContext(),preocessBattingList(jsonArray));
         battingInnings1.setAdapter(batsmanAdapter);
         battingInnings1.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    public void setSecondInningsBattingList(JSONArray jsonArray) {
-        BatsmanAdapter batsmanAdapter = new BatsmanAdapter(getContext(),preocessBattingList(jsonArray));
-        battingInnings2.setAdapter(batsmanAdapter);
-        battingInnings2.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    public void setThirdInningsBattingList(JSONArray jsonArray) {
-        BatsmanAdapter batsmanAdapter = new BatsmanAdapter(getContext(),preocessBattingList(jsonArray));
-        battingInnings3.setAdapter(batsmanAdapter);
-        battingInnings3.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    public void setFourthInningsBattingList(JSONArray jsonArray) {
-        BatsmanAdapter batsmanAdapter = new BatsmanAdapter(getContext(),preocessBattingList(jsonArray));
-        battingInnings4.setAdapter(batsmanAdapter);
-        battingInnings4.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     public void setFirstInningsBowlingList(JSONArray jsonArray) {
@@ -163,23 +247,6 @@ public class FragmentScoreBoard extends Fragment {
         bowlingInnings1.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    public void setSecondInningsBowlingList(JSONArray jsonArray) {
-        BowlerAdapter bowlerAdapter = new BowlerAdapter(getContext(),processBowlingList(jsonArray));
-        bowlingInnings2.setAdapter(bowlerAdapter);
-        bowlingInnings2.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    public void setThirdInningsBowlingList(JSONArray jsonArray) {
-        BowlerAdapter bowlerAdapter = new BowlerAdapter(getContext(),processBowlingList(jsonArray));
-        bowlingInnings3.setAdapter(bowlerAdapter);
-        bowlingInnings3.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    public void setFourthInningsBowlingList(JSONArray jsonArray) {
-        BowlerAdapter bowlerAdapter = new BowlerAdapter(getContext(),processBowlingList(jsonArray));
-        bowlingInnings4.setAdapter(bowlerAdapter);
-        bowlingInnings4.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
 
     public void setFirstInningsSummary(JSONObject jsonObject) {
         try {
@@ -224,150 +291,9 @@ public class FragmentScoreBoard extends Fragment {
         innings1dnb.setText(Html.fromHtml(string));
     }
 
-    public void setSecondInningsSummary(JSONObject jsonObject) {
-        try {
-            if (jsonObject.getJSONObject("extra").has("details")) {
-                innings2extra.setText(jsonObject.getJSONObject("extra").getString("details")+" --- "+jsonObject.getJSONObject("extra").getString("total"));
-            } else {
-                innings2extra.setText("0");
-            }
-
-            if (jsonObject.getJSONObject("total").has("wickets")) {
-                innings2total.setText("("+jsonObject.getJSONObject("total").getString("overs") +" overs)   "+jsonObject.getJSONObject("total").getString("score") +" for "+jsonObject.getJSONObject("total").getString("wickets"));
-            } else {
-                innings2total.setText("("+jsonObject.getJSONObject("total").getString("overs") +" overs)   "+jsonObject.getJSONObject("total").getString("score"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setSecondInningsFOW(JSONArray jsonArray) {
-        String string = "<b>Fall of wickets:</b> ";
-        for (int i=0;i<jsonArray.length();i++) {
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                string += jsonObject.getString("score")+" ( "+jsonObject.getString("player")+" , "+jsonObject.getString("over")+" ), ";
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        innings2fallofwickets.setText(Html.fromHtml(string));
-    }
-
-    public void setSecondInningsDNB(JSONArray jsonArray) {
-        String string = "<b>Did not bat:</b> ";
-        for (int i=0;i<jsonArray.length();i++) {
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                string += jsonObject.getString("playerName")+", ";
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        innings2dnb.setText(Html.fromHtml(string));
-    }
-
-    public void setThirdInningsSummary(JSONObject jsonObject) {
-        try {
-            if (jsonObject.getJSONObject("extra").has("details")) {
-                innings3extra.setText(jsonObject.getJSONObject("extra").getString("details")+" --- "+jsonObject.getJSONObject("extra").getString("total"));
-            } else {
-                innings3extra.setText("0");
-            }
-
-            if (jsonObject.getJSONObject("total").has("wickets")) {
-                innings3total.setText("("+jsonObject.getJSONObject("total").getString("overs") +" overs)   "+jsonObject.getJSONObject("total").getString("score") +" for "+jsonObject.getJSONObject("total").getString("wickets"));
-            } else {
-                innings3total.setText("("+jsonObject.getJSONObject("total").getString("overs") +" overs)   "+jsonObject.getJSONObject("total").getString("score"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setThirdInningsFOW(JSONArray jsonArray) {
-        String string = "<b>Fall of wickets:</b> ";
-        for (int i=0;i<jsonArray.length();i++) {
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                string += jsonObject.getString("score")+" ( "+jsonObject.getString("player")+" , "+jsonObject.getString("over")+" ), ";
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        innings3fallofwickets.setText(Html.fromHtml(string));
-    }
-
-    public void setThirdInningsDNB(JSONArray jsonArray) {
-        String string = "<b>Did not bat:</b> ";
-        for (int i=0;i<jsonArray.length();i++) {
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                string += jsonObject.getString("playerName")+", ";
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        innings3dnb.setText(Html.fromHtml(string));
-    }
-
-    public void setFourthInningsSummary(JSONObject jsonObject) {
-        try {
-            if (jsonObject.getJSONObject("extra").has("details")) {
-                innings4extra.setText(jsonObject.getJSONObject("extra").getString("details")+" --- "+jsonObject.getJSONObject("extra").getString("total"));
-            } else {
-                innings4extra.setText("0");
-            }
-
-            if (jsonObject.getJSONObject("total").has("wickets")) {
-                innings4total.setText("("+jsonObject.getJSONObject("total").getString("overs") +" overs)   "+jsonObject.getJSONObject("total").getString("score") +" for "+jsonObject.getJSONObject("total").getString("wickets"));
-            } else {
-                innings4total.setText("("+jsonObject.getJSONObject("total").getString("overs") +" overs)   "+jsonObject.getJSONObject("total").getString("score"));
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setFourthInningsFOW(JSONArray jsonArray) {
-        String string = "<b>Fall of wickets:</b> ";
-        for (int i=0;i<jsonArray.length();i++) {
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                string += jsonObject.getString("score")+" ( "+jsonObject.getString("player")+" , "+jsonObject.getString("over")+" ), ";
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        innings4fallofwickets.setText(Html.fromHtml(string));
-    }
-
-    public void setFourthInningsDNB(JSONArray jsonArray) {
-        String string = "<b>Did not bat:</b> ";
-        for (int i=0;i<jsonArray.length();i++) {
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                string += jsonObject.getString("playerName")+", ";
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        innings4dnb.setText(Html.fromHtml(string));
-    }
 
     public void hideFirstInnings() {
         firstInningsContainer.setVisibility(View.GONE);
-    }
-    public void hideSecondInnings() {
-        secondInningsContainer.setVisibility(View.GONE);
-    }
-    public void hideThirdInnings() {
-        thirdInningsContainer.setVisibility(View.GONE);
-    }
-    public void hideFourthInnings() {
-        fourthInningsContainer.setVisibility(View.GONE);
     }
 
     public ArrayList<Batsman> preocessBattingList(JSONArray jsonArray) {

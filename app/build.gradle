@@ -74,8 +74,8 @@ dependencies {
     compile 'org.igniterealtime.smack:smack-im:4.1.0'
     compile 'org.igniterealtime.smack:smack-extensions:4.1.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.firebase:firebase-core:9.6.1'
-    compile 'com.google.firebase:firebase-messaging:9.6.1'
+    compile 'com.google.firebase:firebase-core:10.0.1'
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.android.support:multidex:1.0.1'
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
