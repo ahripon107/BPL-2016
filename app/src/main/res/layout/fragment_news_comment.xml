@@ -20,6 +20,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
                 android:layout_toLeftOf="@+id/btnSubmitComment"
+                android:background="@drawable/edit_text_background"
+                android:minHeight="40dp"
+                android:layout_margin="5dp"
+                android:paddingLeft="3dp"
+                android:hint="Write Comment"
                 android:textColor="@color/Black"
                 android:id="@+id/commentBody"/>
 

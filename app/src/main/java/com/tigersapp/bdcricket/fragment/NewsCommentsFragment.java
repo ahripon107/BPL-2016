@@ -110,7 +110,7 @@ public class NewsCommentsFragment extends Fragment {
                         JSONArray jsonArray = response.getJSONArray("content");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            comments.add(new Comment(jsonObject.getString("name"), jsonObject.getString("comment"), jsonObject.getString("timestamp")));
+                            comments.add(new Comment(jsonObject.getString("name"), jsonObject.getString("comment"),jsonObject.getString("profileimage"), jsonObject.getString("timestamp")));
                         }
                     }
 
@@ -161,6 +161,7 @@ public class NewsCommentsFragment extends Fragment {
         params.put("newsid", cricketNews.getSource()+cricketNews.getId());
         params.put("name", profile.getName());
         params.put("comment", comment);
+        params.put("profileimage", profile.getProfilePictureUri(50,50).toString());
         params.put("timestamp", System.currentTimeMillis() + "");
 
         url = Constants.INSERT_NEWS_COMMENT_URL;
@@ -172,7 +173,7 @@ public class NewsCommentsFragment extends Fragment {
                 try {
                     if (response.getString("msg").equals("Successful")) {
                         Toast.makeText(getContext(), "Comment successfully posted", Toast.LENGTH_LONG).show();
-                        comments.add(new Comment(profile.getName(), comment, System.currentTimeMillis() + ""));
+                        comments.add(new Comment(profile.getName(), comment,profile.getProfilePictureUri(50,50).toString(), System.currentTimeMillis() + ""));
                         recyclerView.getAdapter().notifyDataSetChanged();
                         if (comments.size() != 0) {
                             recyclerView.smoothScrollToPosition(comments.size() - 1);

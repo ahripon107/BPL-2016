@@ -146,6 +146,11 @@
             android:label="Login"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.BlogDetailsActivity"
+            android:label="Details"
+            android:screenOrientation="portrait" />
+
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=

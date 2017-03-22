@@ -31,6 +31,11 @@ public abstract class BasicListAdapter<T,X extends RecyclerView.ViewHolder> exte
         return itemList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public T getItem(int position){
         return itemList.get(position);
     }

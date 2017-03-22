@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.fragment.NewsCommentsFragment;
@@ -102,6 +104,9 @@ public class InsertOpinionActivity extends AppCompatActivity{
                 holder.commenter.setTypeface(tf);
                 holder.commenter.setText("কমেন্ট করেছেন:  " + comments.get(position).getName());
                 holder.comment.setText(comments.get(position).getComment());
+                if (!comments.get(position).getProfileimage().equals("")) {
+                    Picasso.with(InsertOpinionActivity.this).load(comments.get(position).getProfileimage()).into(holder.imageView);
+                }
                 holder.timestamp.setText(Constants.getTimeAgo(Long.parseLong(comments.get(position).getTimestamp())));
             }
 
@@ -114,6 +119,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
         requestParams.add("key", "bl905577");
         requestParams.add("newsid", "opinion"+id);
         url = Constants.FETCH_NEWS_COMMENT_URL;
+        Log.d(Constants.TAG, url);
 
         FetchFromWeb.get(url, requestParams, new JsonHttpResponseHandler() {
             @Override
@@ -124,7 +130,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
                         JSONArray jsonArray = response.getJSONArray("content");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            comments.add(new Comment(jsonObject.getString("name"), jsonObject.getString("comment"), jsonObject.getString("timestamp")));
+                            comments.add(new Comment(jsonObject.getString("name"), jsonObject.getString("comment"),jsonObject.getString("profileimage"), jsonObject.getString("timestamp")));
                         }
                     }
 
@@ -181,6 +187,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
         params.put("newsid", "opinion"+id);
         params.put("name", profile.getName());
         params.put("comment", comment);
+        params.put("profileimage", profile.getProfilePictureUri(50,50).toString());
         params.put("timestamp", System.currentTimeMillis() + "");
 
         url = Constants.INSERT_NEWS_COMMENT_URL;
@@ -192,7 +199,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
                 try {
                     if (response.getString("msg").equals("Successful")) {
                         Toast.makeText(InsertOpinionActivity.this, "Comment successfully posted", Toast.LENGTH_LONG).show();
-                        comments.add(new Comment(profile.getName(), comment, System.currentTimeMillis() + ""));
+                        comments.add(new Comment(profile.getName(), comment, profile.getProfilePictureUri(50,50).toString(), System.currentTimeMillis() + ""));
                         recyclerView.getAdapter().notifyDataSetChanged();
                         if (comments.size() != 0) {
                             recyclerView.smoothScrollToPosition(comments.size() - 1);
@@ -217,12 +224,14 @@ public class InsertOpinionActivity extends AppCompatActivity{
         protected TextView commenter;
         protected TextView comment;
         protected TextView timestamp;
+        protected ImageView imageView;
 
         public OpinionViewHolder(View v) {
             super(v);
             commenter = ViewHolder.get(v, R.id.tvName);
             comment = ViewHolder.get(v, R.id.tvComment);
-            timestamp = ViewHolder.get(itemView, R.id.tv_time_stamp);
+            timestamp = ViewHolder.get(v, R.id.tv_time_stamp);
+            imageView = ViewHolder.get(v, R.id.profile_image);
         }
     }
 

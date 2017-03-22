@@ -10,6 +10,8 @@ import java.util.Date;
  */
 public class Constants {
 
+    public static final String KEY = "key";
+    public static final String KEY_VALUE = "bl905577";
     public static final String SOLAIMAN_LIPI_FONT = "fonts/solaimanlipi.ttf";
     public static final String TIMES_NEW_ROMAN_FONT = "fonts/timesnewroman.ttf";
     public static final String ONE_PLUS_TEST_DEVICE = "7D3F3DF2A7214E839DBE70BE2132D5B9";
@@ -55,8 +57,8 @@ public class Constants {
 
     public static final String CRICBUZZ_LIVE_MATCHES = "http://mapps.cricbuzz.com/cbzandroid/2.0/currentmatches.json";
 
-    public static final String INSERT_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v4/insertnewscomment.php";
-    public static final String FETCH_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchnewscomments.php";
+    public static final String INSERT_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v6/insertnewscomment.php";
+    public static final String FETCH_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v6/fetchnewscomments.php";
     public static final String FETCH_QUIZ_QUESTIONS = "http://apisea.xyz/BPL2016/apis/v4/fetchQuizQuestions.php";
     public static final String INSERT_QUIZ_MARKS = "http://apisea.xyz/BPL2016/apis/v4/insertQuizNumber.php";
 
