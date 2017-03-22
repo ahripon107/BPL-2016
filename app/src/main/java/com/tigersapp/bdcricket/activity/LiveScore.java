@@ -37,8 +37,6 @@ public class LiveScore extends RoboAppCompatActivity {
         setTitle("Details");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String url = getIntent().getStringExtra(EXTRA_URL);
-
-
         mWebview.getSettings().setJavaScriptEnabled(true);
 
         final Activity activity = this;
@@ -53,9 +51,7 @@ public class LiveScore extends RoboAppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);
-
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();

@@ -1,8 +1,10 @@
 package com.tigersapp.bdcricket.fragment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -104,6 +106,18 @@ public class FragmentScoreBoard extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                firstInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
+                secondInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                thirdInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                fourthInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
+                firstInnings.setTypeface(null, Typeface.BOLD);
+                secondInnings.setTypeface(null, Typeface.NORMAL);
+                thirdInnings.setTypeface(null, Typeface.NORMAL);
+                fourthInnings.setTypeface(null, Typeface.NORMAL);
+
+
             }
         });
 
@@ -117,6 +131,15 @@ public class FragmentScoreBoard extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                firstInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                secondInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
+                thirdInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                fourthInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
+                secondInnings.setTypeface(null, Typeface.BOLD);
+                firstInnings.setTypeface(null, Typeface.NORMAL);
+                thirdInnings.setTypeface(null, Typeface.NORMAL);
+                fourthInnings.setTypeface(null, Typeface.NORMAL);
             }
         });
 
@@ -130,6 +153,16 @@ public class FragmentScoreBoard extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                firstInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                secondInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                thirdInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
+                fourthInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
+                thirdInnings.setTypeface(null, Typeface.BOLD);
+                firstInnings.setTypeface(null, Typeface.NORMAL);
+                secondInnings.setTypeface(null, Typeface.NORMAL);
+                fourthInnings.setTypeface(null, Typeface.NORMAL);
             }
         });
 
@@ -143,6 +176,15 @@ public class FragmentScoreBoard extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                firstInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                secondInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                thirdInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                fourthInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
+
+                fourthInnings.setTypeface(null, Typeface.BOLD);
+                firstInnings.setTypeface(null, Typeface.NORMAL);
+                secondInnings.setTypeface(null, Typeface.NORMAL);
+                thirdInnings.setTypeface(null, Typeface.NORMAL);
             }
         });
     }
@@ -176,6 +218,13 @@ public class FragmentScoreBoard extends Fragment {
             thirdInnings.setVisibility(View.GONE);
             fourthInnings.setVisibility(View.GONE);
         } else if (numberOfInnings == 1) {
+            firstInnings.setTypeface(null, Typeface.BOLD);
+
+            firstInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
+            secondInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            thirdInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            fourthInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
             firstInnings.setVisibility(View.VISIBLE);
             secondInnings.setVisibility(View.GONE);
             thirdInnings.setVisibility(View.GONE);
@@ -190,6 +239,13 @@ public class FragmentScoreBoard extends Fragment {
             }
 
         } else if (numberOfInnings == 2) {
+            secondInnings.setTypeface(null, Typeface.BOLD);
+
+            firstInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            secondInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
+            thirdInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            fourthInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
             firstInnings.setVisibility(View.VISIBLE);
             secondInnings.setVisibility(View.VISIBLE);
             thirdInnings.setVisibility(View.GONE);
@@ -204,6 +260,13 @@ public class FragmentScoreBoard extends Fragment {
             }
 
         } else if (numberOfInnings == 3) {
+            thirdInnings.setTypeface(null, Typeface.BOLD);
+
+            firstInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            secondInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            thirdInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
+            fourthInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
             firstInnings.setVisibility(View.VISIBLE);
             secondInnings.setVisibility(View.VISIBLE);
             thirdInnings.setVisibility(View.VISIBLE);
@@ -218,6 +281,13 @@ public class FragmentScoreBoard extends Fragment {
             }
 
         } else if (numberOfInnings == 4) {
+            fourthInnings.setTypeface(null, Typeface.BOLD);
+
+            firstInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            secondInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            thirdInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            fourthInnings.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
+
             firstInnings.setVisibility(View.VISIBLE);
             secondInnings.setVisibility(View.VISIBLE);
             thirdInnings.setVisibility(View.VISIBLE);
