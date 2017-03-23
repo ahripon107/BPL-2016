@@ -146,11 +146,6 @@
             android:label="Login"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".activity.BlogDetailsActivity"
-            android:label="Details"
-            android:screenOrientation="portrait" />
-
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
@@ -168,16 +163,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".activity.QuizActivity"
-            android:label="Quiz"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.QuizResultActivity"
-            android:label="Quiz Result"
-            android:screenOrientation="portrait" />
 
 
         <activity

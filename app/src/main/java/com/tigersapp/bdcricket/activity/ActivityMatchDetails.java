@@ -1,6 +1,7 @@
 package com.tigersapp.bdcricket.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,18 +14,23 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
+import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.FragmentMatchSummary;
 import com.tigersapp.bdcricket.fragment.FragmentScoreBoard;
+import com.tigersapp.bdcricket.fragment.GossipFragment;
 import com.tigersapp.bdcricket.fragment.PlayingXIFragment;
 import com.tigersapp.bdcricket.model.Commentry;
 import com.tigersapp.bdcricket.model.Summary;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.NetworkService;
+import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,36 +39,49 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 
 /**
  * @author ripon
  */
-public class ActivityMatchDetails extends AppCompatActivity {
+@ContentView(R.layout.activity_match_details)
+public class ActivityMatchDetails extends RoboAppCompatActivity {
+
+    @InjectView(R.id.viewPager)
+    private ViewPager viewPager;
+
+    @InjectView(R.id.adViewMatchDetails)
+    private AdView adView;
+
+    @InjectView(R.id.tabLayout)
+    private TabLayout tabLayout;
+
+    @Inject
+    private Gson gson;
+
+    @Inject
+    private ArrayList<Commentry> commentry;
+
+    @Inject
+    private NetworkService networkService;
+
     private String liveMatchID;
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
-    private ViewPager viewPager;
-    private Gson gson;
-    ArrayList<Commentry> commentry = new ArrayList<>();
-
-    AdView adView;
-    Dialogs dialogs;
-
     public int numberOfInnings;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_match_details);
         this.liveMatchID = getIntent().getStringExtra("matchID");
+        GossipFragment.matchId = liveMatchID;
         numberOfInnings = 0;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        dialogs = new Dialogs(this);
-        this.viewPager = (ViewPager) findViewById(R.id.viewPager);
-        adView = (AdView) findViewById(R.id.adViewMatchDetails);
-        this.viewPager.setOffscreenPageLimit(3);
+
+        viewPager.setOffscreenPageLimit(4);
         setupViewPage(this.viewPager);
-        ((TabLayout) findViewById(R.id.tabLayout)).setupWithViewPager(this.viewPager);
-        gson = new Gson();
+        tabLayout.setupWithViewPager(viewPager);
+
         sendRequestForLiveMatchDetails();
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
@@ -73,23 +92,23 @@ public class ActivityMatchDetails extends AppCompatActivity {
 
     public final void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
-        this.matchDetailsViewPagerAdapter.addFragment(new FragmentScoreBoard(), "Score Board");
-        this.matchDetailsViewPagerAdapter.addFragment(new FragmentMatchSummary(), "Commentry");
-        this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(),"Playing XI");
+        this.matchDetailsViewPagerAdapter.addFragment(new FragmentScoreBoard(), "স্কোর বোর্ড");
+        this.matchDetailsViewPagerAdapter.addFragment(new FragmentMatchSummary(), "কমেন্ট্রি");
+        this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(),"একাদশ");
+        this.matchDetailsViewPagerAdapter.addFragment(new GossipFragment(), "আড্ডা");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
     private void sendRequestForLiveMatchDetails() {
-        String url = "http://37.187.95.220:8080/cricket-api/api/match/" + this.liveMatchID;
-        Log.d(Constants.TAG, url);
 
-        dialogs.showDialog();
-
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchMatchDetails(liveMatchID, new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
+
                 try {
+                    JSONObject response = new JSONObject(string);
+
                     JSONObject sumry = response.getJSONObject("summary");
                     Summary summary = gson.fromJson(String.valueOf(sumry), Summary.class);
 
@@ -114,12 +133,12 @@ public class ActivityMatchDetails extends AppCompatActivity {
                     if (response.has("innings2")) {
                         if (response.getJSONObject("innings2").has("summary")) {
                             numberOfInnings = 2;
-                            }
+                        }
                     }
                     if (response.has("innings3")) {
                         if (response.getJSONObject("innings3").has("summary")) {
                             numberOfInnings = 3;
-                            }
+                        }
                     }
                     if (response.has("innings4")) {
                         if (response.getJSONObject("innings4").has("summary")) {
@@ -128,35 +147,26 @@ public class ActivityMatchDetails extends AppCompatActivity {
                     }
 
                     ((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).setResponse(response, numberOfInnings);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(ActivityMatchDetails.this, "Failed", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-                Toast.makeText(ActivityMatchDetails.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
+        String url = "http://37.187.95.220:8080/cricket-api/api/match/" + this.liveMatchID;
+        Log.d(Constants.TAG, url);
+
 
         String idMatcherURL = "http://apisea.xyz/Cricket/apis/v1/fetchIDMatcher.php";
         Log.d(Constants.TAG, idMatcherURL);
 
-        RequestParams params = new RequestParams();
-        params.add("key", "bl905577");
-        params.add("cricinfo", liveMatchID);
-        FetchFromWeb.get(idMatcherURL, params, new JsonHttpResponseHandler() {
+        networkService.fetchMatchIdMatcher(liveMatchID, new DefaultMessageHandler(this, false){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
+
                     if (response.getString("msg").equals("Successful")) {
                         String yahooID = response.getJSONArray("content").getJSONObject(0).getString("yahooID");
                         ((FragmentMatchSummary) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(1)).setMatchID(yahooID);
@@ -170,26 +180,35 @@ public class ActivityMatchDetails extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        });
 
+        networkService.fetchComments("gossip"+liveMatchID, new DefaultMessageHandler(this, false){
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
 
+                try {
+                    JSONObject response = new JSONObject(string);
+                    ((GossipFragment) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(3)).populateList(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    public void loadCommentry(final String yahooID) {
+    public void loadCommentry(String yahooID) {
 
-        //String url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id="+yahooID+"%20and%20innings_id=1&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
-        String url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id="+yahooID+"%20limit%205&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
-        //11980
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
-
+        networkService.loadCommentryFromYahoo(yahooID, new DefaultMessageHandler(this, false){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onSuccess(Message msg) {
                 commentry.clear();
 
+                String string1 = (String) msg.obj;
+
                 try {
+                    JSONObject response = new JSONObject(string1);
+
                     Object object = response.getJSONObject("query").getJSONObject("results").get("Over");
                     if (object instanceof JSONArray) {
                         JSONArray jsonArray = (JSONArray) object;
@@ -262,12 +281,6 @@ public class ActivityMatchDetails extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(ActivityMatchDetails.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -283,6 +296,7 @@ public class ActivityMatchDetails extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_load:
+
                 sendRequestForLiveMatchDetails();
                 return true;
             case android.R.id.home:

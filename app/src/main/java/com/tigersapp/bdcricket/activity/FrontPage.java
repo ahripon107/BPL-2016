@@ -22,7 +22,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
-import com.tigersapp.bdcricket.fragment.BlogFragment;
 import com.tigersapp.bdcricket.fragment.LiveScoreFragment;
 import com.tigersapp.bdcricket.fragment.OpinionFragment;
 import com.tigersapp.bdcricket.util.Constants;
@@ -79,9 +78,7 @@ public class FrontPage extends AppCompatActivity
     public final void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(new LiveScoreFragment(), "লাইভ স্কোর");
-        this.matchDetailsViewPagerAdapter.addFragment(new BlogFragment(), "চ্যাটিং");
         this.matchDetailsViewPagerAdapter.addFragment(new OpinionFragment(),"মতামত");
-        //this.matchDetailsViewPagerAdapter.addFragment(new QuizFragment(),"Quiz");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 

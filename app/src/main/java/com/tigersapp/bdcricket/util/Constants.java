@@ -12,6 +12,10 @@ public class Constants {
 
     public static final String KEY = "key";
     public static final String KEY_VALUE = "bl905577";
+
+    public static final int SUCCESS = 1;
+    public static final int FAILURE = 2;
+
     public static final String SOLAIMAN_LIPI_FONT = "fonts/solaimanlipi.ttf";
     public static final String TIMES_NEW_ROMAN_FONT = "fonts/timesnewroman.ttf";
     public static final String ONE_PLUS_TEST_DEVICE = "7D3F3DF2A7214E839DBE70BE2132D5B9";
