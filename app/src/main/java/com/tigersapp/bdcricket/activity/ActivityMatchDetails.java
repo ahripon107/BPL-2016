@@ -73,7 +73,6 @@ public class ActivityMatchDetails extends RoboAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.liveMatchID = getIntent().getStringExtra("matchID");
-        GossipFragment.matchId = liveMatchID;
         numberOfInnings = 0;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -95,7 +94,11 @@ public class ActivityMatchDetails extends RoboAppCompatActivity {
         this.matchDetailsViewPagerAdapter.addFragment(new FragmentScoreBoard(), "স্কোর বোর্ড");
         this.matchDetailsViewPagerAdapter.addFragment(new FragmentMatchSummary(), "কমেন্ট্রি");
         this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(),"একাদশ");
-        this.matchDetailsViewPagerAdapter.addFragment(new GossipFragment(), "আড্ডা");
+        GossipFragment fragment = new GossipFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("matchid", liveMatchID);
+        fragment.setArguments(bundle);
+        this.matchDetailsViewPagerAdapter.addFragment(fragment, "আড্ডা");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
@@ -176,20 +179,6 @@ public class ActivityMatchDetails extends RoboAppCompatActivity {
                     }
 
                     Log.d(Constants.TAG, response.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        networkService.fetchComments("gossip"+liveMatchID, new DefaultMessageHandler(this, false){
-            @Override
-            public void onSuccess(Message msg) {
-                String string = (String) msg.obj;
-
-                try {
-                    JSONObject response = new JSONObject(string);
-                    ((GossipFragment) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(3)).populateList(response);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

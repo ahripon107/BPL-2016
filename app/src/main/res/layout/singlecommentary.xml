@@ -44,5 +44,5 @@
         android:layout_marginBottom="7dp"
         android:text="Commentary"
         android:textColor="@color/Black"
-        android:textSize="15sp"/>
+        android:textSize="16sp"/>
 </LinearLayout>

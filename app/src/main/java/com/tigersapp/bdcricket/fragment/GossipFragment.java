@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -48,7 +49,7 @@ import roboguice.inject.InjectView;
  * @author Ripon
  */
 
-public class GossipFragment extends RoboFragment{
+public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.OnRefreshListener{
 
     @InjectView(R.id.rvComments)
     private RecyclerView recyclerView;
@@ -59,6 +60,9 @@ public class GossipFragment extends RoboFragment{
     @InjectView(R.id.commentBody)
     private EditText commentBody;
 
+    @InjectView(R.id.refresh)
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Inject
     private NetworkService networkService;
 
@@ -67,9 +71,31 @@ public class GossipFragment extends RoboFragment{
 
     private Profile profile;
     private Typeface tf;
-    public static String matchId = "";
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
 
+        if (isVisibleToUser) {
+            fetchContents();
+        }
+    }
+
+    private void fetchContents() {
+        networkService.fetchComments("gossip"+getArguments().getString("matchid"), new DefaultMessageHandler(getContext(), false){
+            @Override
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
+                try {
+                    JSONObject response = new JSONObject(string);
+                    populateList(response);
+                    swipeRefreshLayout.setRefreshing(false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     @Nullable
     @Override
@@ -81,6 +107,8 @@ public class GossipFragment extends RoboFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setHasFixedSize(true);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         tf = Typeface.createFromAsset(getActivity().getAssets(), Constants.SOLAIMAN_LIPI_FONT);
         recyclerView.setAdapter(new BasicListAdapter<Comment, GossipViewHolder>(comments) {
@@ -126,7 +154,7 @@ public class GossipFragment extends RoboFragment{
 
     public void publishComment(final String comment) {
 
-        networkService.insertComment(comment, profile, "gossip"+matchId,new DefaultMessageHandler(getContext(), true){
+        networkService.insertComment(comment, profile, "gossip"+getArguments().getString("matchid"),new DefaultMessageHandler(getContext(), true){
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -165,10 +193,19 @@ public class GossipFragment extends RoboFragment{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         recyclerView.getAdapter().notifyDataSetChanged();
         if (comments.size() != 0) {
             recyclerView.smoothScrollToPosition(comments.size() - 1);
         }
+
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        fetchContents();
+
     }
 
     public static class GossipViewHolder extends RecyclerView.ViewHolder {
