@@ -2,9 +2,11 @@ package com.tigersapp.bdcricket.fragment;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -16,15 +18,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.tigersapp.bdcricket.R;
+import com.tigersapp.bdcricket.activity.ActivityMatchDetails;
 import com.tigersapp.bdcricket.adapter.BatsmanAdapter;
 import com.tigersapp.bdcricket.adapter.BowlerAdapter;
 import com.tigersapp.bdcricket.model.Batsman;
 import com.tigersapp.bdcricket.model.Bowler;
 import com.tigersapp.bdcricket.model.Summary;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.NetworkService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,11 +40,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import roboguice.fragment.RoboFragment;
+import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
-public class FragmentScoreBoard extends Fragment {
+public class FragmentScoreBoard extends RoboFragment {
 
     RecyclerView battingInnings1;
 
@@ -55,9 +64,20 @@ public class FragmentScoreBoard extends Fragment {
     private TextView labelTeam2;
     private TextView labelTournament;
     private JSONObject response;
-    private int numberOfInnings;
+    public static int numberOfInnings = 0;
 
     private Button firstInnings, secondInnings, thirdInnings, fourthInnings;
+
+    @Inject
+    private NetworkService networkService;
+
+    @InjectView(R.id.refresh)
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    @Inject
+    private Gson gson;
+
+    private String liveMatchID;
 
     @Nullable
     @Override
@@ -69,6 +89,7 @@ public class FragmentScoreBoard extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        liveMatchID = getArguments().getString("liveMatchID");
         battingInnings1 = (RecyclerView) view.findViewById(R.id.lvBattingInnings1);
 
         bowlingInnings1 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings1);
@@ -187,6 +208,75 @@ public class FragmentScoreBoard extends Fragment {
                 thirdInnings.setTypeface(null, Typeface.NORMAL);
             }
         });
+
+        sendRequestForLiveMatchDetails();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                sendRequestForLiveMatchDetails();
+            }
+        });
+    }
+
+    private void sendRequestForLiveMatchDetails() {
+
+        networkService.fetchMatchDetails(liveMatchID, new DefaultMessageHandler(getContext(), true) {
+            @Override
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
+                swipeRefreshLayout.setRefreshing(false);
+                try {
+                    JSONObject response = new JSONObject(string);
+
+                    JSONObject sumry = response.getJSONObject("summary");
+                    Summary summary = gson.fromJson(String.valueOf(sumry), Summary.class);
+
+
+                    setMatchSummary(summary);
+                    //((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).loadEachTeamScore(liveMatchID);
+
+                    if (response.has("innings1") && response.has("innings2")) {
+                        ((ActivityMatchDetails)getActivity()).setPlayingXI(response.getJSONObject("innings1").getJSONArray("batting"),response.getJSONObject("innings1").getJSONArray("dnb"),response.getJSONObject("innings2").getJSONArray("batting"),response.getJSONObject("innings2").getJSONArray("dnb"),summary.getTeam1(),summary.getTeam2());
+                    }
+
+                    if (response.has("innings1")) {
+
+                        if (response.getJSONObject("innings1").has("summary")) {
+                            numberOfInnings = 1;
+                        } else {
+                            hideFirstInnings();
+                        }
+                    } else {
+                        hideFirstInnings();
+                    }
+                    if (response.has("innings2")) {
+                        if (response.getJSONObject("innings2").has("summary")) {
+                            numberOfInnings = 2;
+                        }
+                    }
+                    if (response.has("innings3")) {
+                        if (response.getJSONObject("innings3").has("summary")) {
+                            numberOfInnings = 3;
+                        }
+                    }
+                    if (response.has("innings4")) {
+                        if (response.getJSONObject("innings4").has("summary")) {
+                            numberOfInnings = 4;
+                        }
+                    }
+
+                    setResponse(response, numberOfInnings);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        String url = "http://37.187.95.220:8080/cricket-api/api/match/" + this.liveMatchID;
+        Log.d(Constants.TAG, url);
+
     }
 
     public void setMatchSummary(Summary matchSummary) {

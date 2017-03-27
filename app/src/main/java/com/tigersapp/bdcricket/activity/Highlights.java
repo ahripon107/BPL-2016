@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.tigersapp.bdcricket.model.LivestreamAndHighlights;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
+import com.tigersapp.bdcricket.util.DividerItemDecoration;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -100,18 +102,21 @@ public class Highlights extends RoboAppCompatActivity {
         recyclerView.setAdapter(new BasicListAdapter<LivestreamAndHighlights,HighlightsViewHolder>(objects) {
             @Override
             public HighlightsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singleteam,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_livestream,parent,false);
                 return new HighlightsViewHolder(view);
             }
 
             @Override
             public void onBindViewHolder(HighlightsViewHolder holder, final int position) {
                 holder.teamName.setText(objects.get(position).getTitle());
-                Picasso.with(Highlights.this)
-                        .load("http://img.youtube.com/vi/" + objects.get(position).getUrl() + "/0.jpg")
-                        .placeholder(R.drawable.default_image)
-                        .into(holder.circleImageView);
-                holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+
+                if (cause.equals("highlights")) {
+                    holder.watchLive.setText("Watch");
+                } else {
+                    holder.watchLive.setText("Watch Live");
+                }
+
+                holder.watchLive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (objects.get(position).getType().equals("youtube")) {
@@ -137,6 +142,7 @@ public class Highlights extends RoboAppCompatActivity {
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this));
 
         if (cause.equals("livestream")) {
             url = "http://apisea.xyz/Cricket/apis/v1/fetchLiveStrams.php?key=bl905577";
@@ -153,14 +159,14 @@ public class Highlights extends RoboAppCompatActivity {
     }
 
     private static class HighlightsViewHolder extends RecyclerView.ViewHolder {
-        protected CircleImageView circleImageView;
         protected TextView teamName;
         protected LinearLayout linearLayout;
+        protected Button watchLive;
         public HighlightsViewHolder(View itemView) {
             super(itemView);
-            circleImageView = ViewHolder.get(itemView, R.id.civTeams);
-            teamName = ViewHolder.get(itemView, R.id.tvTeamName);
-            linearLayout = ViewHolder.get(itemView,R.id.team_name_flag_container);
+            teamName = ViewHolder.get(itemView, R.id.tv_link_title);
+            linearLayout = ViewHolder.get(itemView,R.id.linear_layout);
+            watchLive = ViewHolder.get(itemView, R.id.btn_watch);
         }
     }
 

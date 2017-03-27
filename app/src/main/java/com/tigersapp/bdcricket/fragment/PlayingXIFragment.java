@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.PlayerProfileActivity;
+import com.tigersapp.bdcricket.activity.PlayerCareerActivity;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Player;
 import com.tigersapp.bdcricket.util.Constants;
@@ -115,7 +115,7 @@ public class PlayingXIFragment extends Fragment {
                 holder.textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getContext(), PlayerProfileActivity.class);
+                        Intent intent = new Intent(getContext(), PlayerCareerActivity.class);
                         intent.putExtra("playerID", team1.get(position).getPersonid());
                         getActivity().startActivity(intent);
                     }
@@ -143,7 +143,7 @@ public class PlayingXIFragment extends Fragment {
                 holder.textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getContext(), PlayerProfileActivity.class);
+                        Intent intent = new Intent(getContext(), PlayerCareerActivity.class);
                         intent.putExtra("playerID", team2.get(position).getPersonid());
                         getActivity().startActivity(intent);
                     }

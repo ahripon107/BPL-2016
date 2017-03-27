@@ -4,9 +4,9 @@ package com.tigersapp.bdcricket.model;
  * @author Ripon
  */
 public class ProfileBowling {
-    String gameType,Mat,Inns,Balls,Runs,Wkts,BBI,BBM,Ave,Econ,SR,fourWkts,fiveWkts;
+    String gameType,Mat,Inns,Balls,Runs,Wkts,BBI,BBM,Ave,Econ,SR,fourWkts,fiveWkts, tenWkts;
 
-    public ProfileBowling(String gameType, String mat, String inns, String balls, String runs, String wkts, String BBI, String BBM, String ave, String econ, String SR, String fourWkts, String fiveWkts) {
+    public ProfileBowling(String gameType, String mat, String inns, String balls, String runs, String wkts, String BBI, String BBM, String ave, String econ, String SR, String fourWkts, String fiveWkts, String tenWkts) {
         this.gameType = gameType;
         Mat = mat;
         Inns = inns;
@@ -20,9 +20,10 @@ public class ProfileBowling {
         this.SR = SR;
         this.fourWkts = fourWkts;
         this.fiveWkts = fiveWkts;
+        this.tenWkts = tenWkts;
     }
 
-    public ProfileBowling(String mat, String inns, String balls, String runs, String wkts, String BBI, String BBM, String ave, String econ, String SR, String fourWkts, String fiveWkts) {
+    public ProfileBowling(String mat, String inns, String balls, String runs, String wkts, String BBI, String BBM, String ave, String econ, String SR, String fourWkts, String fiveWkts, String tenwkts) {
         Mat = mat;
         Inns = inns;
         Balls = balls;
@@ -35,6 +36,15 @@ public class ProfileBowling {
         this.SR = SR;
         this.fourWkts = fourWkts;
         this.fiveWkts = fiveWkts;
+        this.tenWkts = tenwkts;
+    }
+
+    public String getTenWkts() {
+        return tenWkts;
+    }
+
+    public void setTenWkts(String tenWkts) {
+        this.tenWkts = tenWkts;
     }
 
     public String getMat() {

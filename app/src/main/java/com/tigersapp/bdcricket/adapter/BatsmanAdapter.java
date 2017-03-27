@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.PlayerProfileActivity;
+import com.tigersapp.bdcricket.activity.PlayerCareerActivity;
 import com.tigersapp.bdcricket.model.Batsman;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -59,7 +59,7 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
         holder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, PlayerProfileActivity.class);
+                Intent intent = new Intent(context, PlayerCareerActivity.class);
                 intent.putExtra("playerID", batsmans.get(position).getPlayerId());
                 context.startActivity(intent);
             }

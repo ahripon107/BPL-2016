@@ -117,9 +117,11 @@ public class NewsDetailsFragment extends Fragment {
                     if (response.has("getnewsby_id")) {
                         JSONObject jsonObject = response.getJSONObject("getnewsby_id");
                         details.setText(Html.fromHtml(jsonObject.getString("summery")));
-                    } else {
+                    } else if (response.has("contents")){
                         response = response.getJSONArray("contents").getJSONObject(0);
                         details.setText(Html.fromHtml(response.getString("news_details")));
+                    } else {
+                        details.setText(Html.fromHtml(response.getString("ContentDetails")));
                     }
 
 

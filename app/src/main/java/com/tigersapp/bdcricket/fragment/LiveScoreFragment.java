@@ -5,11 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
@@ -34,8 +35,10 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.NetworkService;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -46,12 +49,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import roboguice.fragment.RoboFragment;
 
 /**
  * @author Ripon
  */
 
-public class LiveScoreFragment extends Fragment {
+public class LiveScoreFragment extends RoboFragment {
 
     private TextView welcomeText;
     private RecyclerView recyclerView;
@@ -61,6 +65,9 @@ public class LiveScoreFragment extends Fragment {
     private ArrayList<Match> datas;
     private Dialogs dialogs;
     private PackageInfo pInfo;
+
+    @Inject
+    private NetworkService networkService;
 
 
     @Nullable
@@ -89,11 +96,13 @@ public class LiveScoreFragment extends Fragment {
         String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
         Log.d(Constants.TAG, welcomeTextUrl);
 
-        FetchFromWeb.get(welcomeTextUrl, null, new JsonHttpResponseHandler() {
-
+        networkService.fetchWelcomeText(new DefaultMessageHandler(getContext(), true){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, final JSONObject response) {
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    final JSONObject response = new JSONObject(string);
+
                     Constants.SHOW_PLAYER_IMAGE = response.getJSONArray("content").getJSONObject(0).getString("playerimage");
                     welcomeText.setText(Html.fromHtml(response.getJSONArray("content").getJSONObject(0).getString("description")));
                     if (response.getJSONArray("content").getJSONObject(0).getString("clickable").equals("true")) {
@@ -160,23 +169,16 @@ public class LiveScoreFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(Constants.TAG, response.toString());
             }
         });
 
-
-        String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v4/livescoresource.php";
-        Log.d(Constants.TAG, idMatcherURL);
-        dialogs.showDialog();
-
-        RequestParams params = new RequestParams();
-        params.add("key", "bl905577");
-
-        FetchFromWeb.get(idMatcherURL, params, new JsonHttpResponseHandler() {
+        networkService.fetchLiveScoreSource(new DefaultMessageHandler(getContext(), true){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
+
                     if (response.getString("msg").equals("Successful")) {
                         final String source = response.getJSONArray("content").getJSONObject(0).getString("scoresource");
                         String url = response.getJSONArray("content").getJSONObject(0).getString("url");
@@ -366,13 +368,9 @@ public class LiveScoreFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
-            }
         });
+
+        Log.d(Constants.TAG, Constants.LIVE_SCORE_SOURCE_URL);
 
         recyclerView.setNestedScrollingEnabled(false);
 

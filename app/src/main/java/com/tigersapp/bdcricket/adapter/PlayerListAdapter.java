@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.PlayerProfileActivity;
+import com.tigersapp.bdcricket.activity.PlayerCareerActivity;
 import com.tigersapp.bdcricket.model.Player;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
@@ -57,7 +56,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
     @Override
     public void onBindViewHolder(PlayerListViewHolder holder, final int position) {
         holder.pname.setText(players.get(position).getName());
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+        holder.viewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -71,7 +70,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
                         try {
                             if (response.getString("msg").equals("Successful")) {
                                 String playerID = (response.getJSONArray("content").getJSONObject(0).getString("cricapiID"));
-                                Intent intent = new Intent(context, PlayerProfileActivity.class);
+                                Intent intent = new Intent(context, PlayerCareerActivity.class);
                                 intent.putExtra("playerID",playerID);
                                 context.startActivity(intent);
                             } else {
@@ -101,13 +100,13 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
     }
 
     static class PlayerListViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView circleImageView;
         TextView pname;
         LinearLayout linearLayout;
+        Button viewProfile;
 
         public PlayerListViewHolder(View itemView) {
             super(itemView);
-            circleImageView = ViewHolder.get(itemView, R.id.civSinglePlayer);
+            viewProfile = ViewHolder.get(itemView, R.id.btn_view_profile);
             pname = ViewHolder.get(itemView, R.id.tvPlayerName);
             linearLayout = ViewHolder.get(itemView, R.id.player_list_item_card);
         }

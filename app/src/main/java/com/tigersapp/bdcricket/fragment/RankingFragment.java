@@ -19,6 +19,7 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.RankingPlayer;
 import com.tigersapp.bdcricket.model.RankingTeam;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.DividerItemDecoration;
 import com.tigersapp.bdcricket.util.ViewHolder;
 import com.squareup.picasso.Picasso;
 
@@ -176,6 +177,7 @@ public class RankingFragment extends Fragment {
                 }
             });
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

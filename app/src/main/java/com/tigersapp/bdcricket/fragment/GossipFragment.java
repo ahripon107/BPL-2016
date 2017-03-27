@@ -82,7 +82,7 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
     }
 
     private void fetchContents() {
-        networkService.fetchComments("gossip"+getArguments().getString("matchid"), new DefaultMessageHandler(getContext(), false){
+        networkService.fetchComments("gossip"+getArguments().getString("liveMatchID"), new DefaultMessageHandler(getContext(), false){
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -154,7 +154,7 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
 
     public void publishComment(final String comment) {
 
-        networkService.insertComment(comment, profile, "gossip"+getArguments().getString("matchid"),new DefaultMessageHandler(getContext(), true){
+        networkService.insertComment(comment, profile, "gossip"+getArguments().getString("liveMatchID"),new DefaultMessageHandler(getContext(), true){
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;

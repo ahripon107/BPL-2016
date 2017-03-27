@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,7 +80,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
         recyclerView.setAdapter(new BasicListAdapter<CricketNews,NewsViewHolder>(cricketNewses) {
             @Override
             public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singlenews, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_quotes, parent, false);
                 return new NewsViewHolder(view);
             }
 
@@ -278,7 +279,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
         protected TextView headline;
         protected TextView author;
         protected TextView time;
-        protected CircleImageView circleImageView;
+        protected ImageView circleImageView;
 
         public NewsViewHolder(View itemView) {
             super(itemView);

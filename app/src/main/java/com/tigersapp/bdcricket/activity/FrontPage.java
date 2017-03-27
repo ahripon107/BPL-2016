@@ -27,13 +27,16 @@ import com.tigersapp.bdcricket.fragment.OpinionFragment;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import roboguice.inject.ContentView;
 
-public class FrontPage extends AppCompatActivity
+@ContentView(R.layout.activity_front_page)
+public class FrontPage extends RoboAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
@@ -45,7 +48,7 @@ public class FrontPage extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_front_page);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         adView = (AdView) findViewById(R.id.adViewFontPage);
         setSupportActionBar(toolbar);
