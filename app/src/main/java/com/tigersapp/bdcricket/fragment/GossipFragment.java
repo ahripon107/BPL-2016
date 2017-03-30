@@ -77,6 +77,7 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser) {
+            swipeRefreshLayout.setRefreshing(true);
             fetchContents();
         }
     }
@@ -86,13 +87,19 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
+                swipeRefreshLayout.setRefreshing(false);
                 try {
                     JSONObject response = new JSONObject(string);
                     populateList(response);
-                    swipeRefreshLayout.setRefreshing(false);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onFailure() {
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
