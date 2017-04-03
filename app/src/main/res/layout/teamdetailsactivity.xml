@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         app:tabGravity="fill"
         app:tabTextAppearance="@style/TextAppearance.Design.Tab"
-        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabSelectedTextColor="@color/colorPrimaryDark"
         app:tabMode="scrollable" />
 
     <com.google.android.gms.ads.AdView

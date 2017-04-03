@@ -2,6 +2,7 @@ package com.tigersapp.bdcricket.activity;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,8 +25,10 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.NetworkService;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
 import com.squareup.picasso.Picasso;
@@ -56,14 +59,14 @@ public class FixtureActivity extends RoboAppCompatActivity {
     @InjectView(R.id.adViewFixture)
     private AdView adView;
 
-    private Dialogs dialogs;
+    @Inject
+    private NetworkService networkService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        dialogs = new Dialogs(this);
         recyclerView.setAdapter(new BasicListAdapter<Match, FixtureViewHolder>(data) {
             @Override
             public FixtureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -98,13 +101,14 @@ public class FixtureActivity extends RoboAppCompatActivity {
 
         String url = Constants.FIXTURE_URL;
         Log.d(Constants.TAG, url);
-        dialogs.showDialog();
 
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchFixture(new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
+
                     String team1, team2, venue, time, seriesName, matcNo;
                     response = response.getJSONObject("query").getJSONObject("results");
                     JSONArray jsonArray = response.getJSONArray("Match");
@@ -122,17 +126,11 @@ public class FixtureActivity extends RoboAppCompatActivity {
                         Match match = new Match(team1, team2, venue, time, seriesName, matcNo, "");
                         data.add(match);
                     }
+
+                    recyclerView.getAdapter().notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(FixtureActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
 

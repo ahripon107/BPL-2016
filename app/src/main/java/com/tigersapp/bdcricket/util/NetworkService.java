@@ -78,4 +78,16 @@ public class NetworkService {
     public void fetchWelcomeText( Handler handler) {
         httpClient.get(Constants.WELCOME_TEXT_URL, new DefaultAsyncHttpResponseHandler(handler));
     }
+
+    public void fetchFixture(Handler handler) {
+        httpClient.get(Constants.FIXTURE_URL,new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchAllPointTables(String url, Handler handler) {
+        httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchSpecificPointTable(String url, Handler handler) {
+        httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
+    }
 }
