@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
-import com.tigersapp.bdcricket.model.ProfileBatting;
 import com.tigersapp.bdcricket.model.ProfileBattingBowlingRow;
 import com.tigersapp.bdcricket.model.ProfileBowling;
 import com.tigersapp.bdcricket.util.DividerItemDecoration;
@@ -32,7 +31,7 @@ import roboguice.inject.InjectView;
  * @author Ripon
  */
 
-public class PlayerBowlingFragment extends RoboFragment{
+public class PlayerBowlingFragment extends RoboFragment {
 
 
     @InjectView(R.id.recycler_view)
@@ -42,7 +41,7 @@ public class PlayerBowlingFragment extends RoboFragment{
     private ArrayList<ProfileBattingBowlingRow> profileBattingRows;
 
     private ProfileBattingBowlingRow matches, innings, wickets, runs, balls, economy, average, strikeRate,
-            bbi, bbm, fourWkts, fiveWkts,tenWkts, headline;
+            bbi, bbm, fourWkts, fiveWkts, tenWkts, headline;
 
     private JSONObject response;
     private String data;
@@ -305,7 +304,6 @@ public class PlayerBowlingFragment extends RoboFragment{
             profileBattingRows.add(tenWkts);
 
 
-
             recyclerView.setAdapter(new BasicListAdapter<ProfileBattingBowlingRow, ProfileBowlingViewHolder>(profileBattingRows) {
                 @Override
                 public ProfileBowlingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -376,7 +374,7 @@ public class PlayerBowlingFragment extends RoboFragment{
             String fourWkts = jsonObject.getString("4w");
             String fiveWkts = jsonObject.getString("5w");
             String tenWkts = jsonObject.getString("10");
-            profileBowling = new ProfileBowling(Mat,Inns,balls,Runs,wkts,BBI,BBM,Ave,Econ,SR,fourWkts,fiveWkts, tenWkts);
+            profileBowling = new ProfileBowling(Mat, Inns, balls, Runs, wkts, BBI, BBM, Ave, Econ, SR, fourWkts, fiveWkts, tenWkts);
         } catch (JSONException e) {
             e.printStackTrace();
         }

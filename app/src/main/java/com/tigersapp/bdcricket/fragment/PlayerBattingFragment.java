@@ -293,7 +293,6 @@ public class PlayerBattingFragment extends RoboFragment {
             profileBattingRows.add(hundreds);
 
 
-
             recyclerView.setAdapter(new BasicListAdapter<ProfileBattingBowlingRow, ProfileBowlingViewHolder>(profileBattingRows) {
                 @Override
                 public ProfileBowlingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

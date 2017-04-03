@@ -59,7 +59,7 @@ public class PlayerCareerActivity extends RoboAppCompatActivity {
             @Override
             public void onSuccess(Message msg) {
                 data = (String) msg.obj;
-                mAdapter = new PlayerCareerPagerAdapter(getSupportFragmentManager(), Titles,data);
+                mAdapter = new PlayerCareerPagerAdapter(getSupportFragmentManager(), Titles, data);
                 mPager.setAdapter(mAdapter);
                 mPager.setOffscreenPageLimit(3);
                 mTabLayout.setupWithViewPager(mPager);

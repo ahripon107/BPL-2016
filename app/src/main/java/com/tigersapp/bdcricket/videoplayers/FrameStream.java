@@ -7,7 +7,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.tigersapp.bdcricket.R;
@@ -18,10 +17,10 @@ import com.tigersapp.bdcricket.util.Constants;
  */
 public class FrameStream extends AppCompatActivity {
 
-    WebView webView;
-    String html;
-    AdView adView;
-    
+    private WebView webView;
+    private String html;
+    private AdView adView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +35,7 @@ public class FrameStream extends AppCompatActivity {
 
         html = "<html>\n" +
                 "    <head>\n" +
-                "     <meta name=\"viewport\" content=\"width=device-width, target-densitydpi=device-dpi, initial-scale=0, maximum-scale=1, user-scalable=yes\" />\n"+
+                "     <meta name=\"viewport\" content=\"width=device-width, target-densitydpi=device-dpi, initial-scale=0, maximum-scale=1, user-scalable=yes\" />\n" +
                 "        <script type=\"text/javascript\">\n" +
                 "            function changeIframeSize(height, width){\n" +
                 "                var iframe = document.getElementById(\"iframe1\");\n" +
@@ -47,7 +46,7 @@ public class FrameStream extends AppCompatActivity {
                 "    </head>\n" +
                 "    <body style=\"margin: 0; padding: 0\"> \n" +
                 "        \n" +
-                "       "+ str + "  \n" +
+                "       " + str + "  \n" +
                 "    </body>\n" +
                 "</html>";
         webView = (WebView) findViewById(R.id.wvframe);
@@ -57,9 +56,9 @@ public class FrameStream extends AppCompatActivity {
         webView.getSettings().setDisplayZoomControls(false);
 
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadDataWithBaseURL("", html , "text/html",  "UTF-8", "");
+        webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
 
-        Toast.makeText(getApplicationContext(),"Zoom in or out to adjust with device screen",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Zoom in or out to adjust with device screen", Toast.LENGTH_LONG).show();
 
 
     }

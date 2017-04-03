@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,6 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.ActivityMatchDetails;
@@ -50,6 +48,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import roboguice.fragment.RoboFragment;
+import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
@@ -57,18 +56,22 @@ import roboguice.fragment.RoboFragment;
 
 public class LiveScoreFragment extends RoboFragment {
 
+    @InjectView(R.id.tv_welcome_text)
     private TextView welcomeText;
+    @InjectView(R.id.live_matches)
     private RecyclerView recyclerView;
+    @InjectView(R.id.tour_image)
     private ImageView imageView;
+    @InjectView(R.id.tv_empty_view)
     private TextView emptyView;
 
+    @Inject
     private ArrayList<Match> datas;
-    private Dialogs dialogs;
-    private PackageInfo pInfo;
-
     @Inject
     private NetworkService networkService;
 
+    private Dialogs dialogs;
+    private PackageInfo pInfo;
 
     @Nullable
     @Override
@@ -80,12 +83,6 @@ public class LiveScoreFragment extends RoboFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        datas = new ArrayList<>();
-        welcomeText = (TextView) view.findViewById(R.id.tv_welcome_text);
-        recyclerView = (RecyclerView) view.findViewById(R.id.live_matches);
-        imageView = (ImageView) view.findViewById(R.id.tour_image);
-        emptyView =(TextView) view.findViewById(R.id.tv_empty_view);
-
         dialogs = new Dialogs(getContext());
         try {
             pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
@@ -96,7 +93,7 @@ public class LiveScoreFragment extends RoboFragment {
         String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
         Log.d(Constants.TAG, welcomeTextUrl);
 
-        networkService.fetchWelcomeText(new DefaultMessageHandler(getContext(), true){
+        networkService.fetchWelcomeText(new DefaultMessageHandler(getContext(), true) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -156,7 +153,7 @@ public class LiveScoreFragment extends RoboFragment {
                                     }
                                 });
 
-                        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -172,7 +169,7 @@ public class LiveScoreFragment extends RoboFragment {
             }
         });
 
-        networkService.fetchLiveScoreSource(new DefaultMessageHandler(getContext(), true){
+        networkService.fetchLiveScoreSource(new DefaultMessageHandler(getContext(), true) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;

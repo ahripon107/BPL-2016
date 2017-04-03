@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.RankingPlayer;
@@ -21,11 +22,9 @@ import com.tigersapp.bdcricket.model.RankingTeam;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.DividerItemDecoration;
 import com.tigersapp.bdcricket.util.ViewHolder;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -35,35 +34,26 @@ import java.util.ArrayList;
 public class RankingFragment extends Fragment {
 
     RecyclerView recyclerView;
-
     ArrayList<RankingPlayer> rankingPlayers = new ArrayList<>();
-
     ArrayList<RankingTeam> rankingTeams = new ArrayList<>();
-
-    LinearLayout teamLayout,playerLayout;
-
+    LinearLayout teamLayout, playerLayout;
     Gson gson = new Gson();
-
     Typeface tf;
-
-    public RankingFragment() {
-
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ranking,container,false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        teamLayout = (LinearLayout) view.findViewById(R.id.team_layout);
-        playerLayout = (LinearLayout) view.findViewById(R.id.player_layout);
-        tf = Typeface.createFromAsset(getContext().getAssets(),Constants.SOLAIMAN_LIPI_FONT);
-        return view;
+        return inflater.inflate(R.layout.fragment_ranking, container, false);
     }
 
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        teamLayout = (LinearLayout) view.findViewById(R.id.team_layout);
+        playerLayout = (LinearLayout) view.findViewById(R.id.player_layout);
+        tf = Typeface.createFromAsset(getContext().getAssets(), Constants.SOLAIMAN_LIPI_FONT);
     }
 
     private static class PlayerViewHolder extends RecyclerView.ViewHolder {
@@ -73,14 +63,15 @@ public class RankingFragment extends Fragment {
         protected TextView playerRating;
         protected ImageView playerImage;
         protected ImageView countryImage;
+
         public PlayerViewHolder(View itemView) {
             super(itemView);
             rank = ViewHolder.get(itemView, R.id.tv_player_rank);
-            playerName = ViewHolder.get(itemView,R.id.tv_player_name);
-            playerAverage = ViewHolder.get(itemView,R.id.tv_player_average);
-            playerRating = ViewHolder.get(itemView,R.id.tv_player_rating);
-            playerImage = ViewHolder.get(itemView,R.id.player_image);
-            countryImage = ViewHolder.get(itemView,R.id.player_country_image);
+            playerName = ViewHolder.get(itemView, R.id.tv_player_name);
+            playerAverage = ViewHolder.get(itemView, R.id.tv_player_average);
+            playerRating = ViewHolder.get(itemView, R.id.tv_player_rating);
+            playerImage = ViewHolder.get(itemView, R.id.player_image);
+            countryImage = ViewHolder.get(itemView, R.id.player_country_image);
         }
     }
 
@@ -91,14 +82,15 @@ public class RankingFragment extends Fragment {
         protected TextView teamPoint;
         protected TextView teamRating;
         protected ImageView teamImage;
+
         public TeamViewHolder(View itemView) {
             super(itemView);
-            teamRank = ViewHolder.get(itemView,R.id.iv_team_rank);
-            teamName = ViewHolder.get(itemView,R.id.tv_team_name);
-            teamMatches = ViewHolder.get(itemView,R.id.tv_team_matches);
-            teamPoint = ViewHolder.get(itemView,R.id.tv_team_point);
-            teamRating = ViewHolder.get(itemView,R.id.tv_team_rating);
-            teamImage = ViewHolder.get(itemView,R.id.team_image);
+            teamRank = ViewHolder.get(itemView, R.id.iv_team_rank);
+            teamName = ViewHolder.get(itemView, R.id.tv_team_name);
+            teamMatches = ViewHolder.get(itemView, R.id.tv_team_matches);
+            teamPoint = ViewHolder.get(itemView, R.id.tv_team_point);
+            teamRating = ViewHolder.get(itemView, R.id.tv_team_rating);
+            teamImage = ViewHolder.get(itemView, R.id.team_image);
         }
     }
 
@@ -107,14 +99,14 @@ public class RankingFragment extends Fragment {
         teamLayout.setVisibility(View.GONE);
         rankingPlayers.clear();
         try {
-            for (int i=0;i<jsonArray.length();i++) {
-                rankingPlayers.add(gson.fromJson(String.valueOf(jsonArray.get(i)),RankingPlayer.class));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                rankingPlayers.add(gson.fromJson(String.valueOf(jsonArray.get(i)), RankingPlayer.class));
             }
 
-            recyclerView.setAdapter(new BasicListAdapter<RankingPlayer,PlayerViewHolder>(rankingPlayers) {
+            recyclerView.setAdapter(new BasicListAdapter<RankingPlayer, PlayerViewHolder>(rankingPlayers) {
                 @Override
                 public PlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                    View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_player_ranking,parent,false);
+                    View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_player_ranking, parent, false);
                     return new PlayerViewHolder(view1);
                 }
 
@@ -124,16 +116,16 @@ public class RankingFragment extends Fragment {
                     holder.playerName.setText(rankingPlayers.get(position).getName());
                     holder.playerName.setTypeface(tf);
                     holder.playerAverage.setTypeface(tf);
-                    holder.playerAverage.setText("গড়: "+rankingPlayers.get(position).getAvg());
+                    holder.playerAverage.setText("গড়: " + rankingPlayers.get(position).getAvg());
                     holder.playerRating.setText(rankingPlayers.get(position).getRating());
 
                     Picasso.with(getContext())
-                            .load(Constants.FACE_IMAGE+rankingPlayers.get(position).getId()+".jpg")
+                            .load(Constants.FACE_IMAGE + rankingPlayers.get(position).getId() + ".jpg")
                             .placeholder(R.drawable.default_image)
                             .into(holder.playerImage);
 
                     Picasso.with(getContext())
-                            .load(Constants.TEAM_IMAGE_FIRST_PART+rankingPlayers.get(position).getCountry_id()+Constants.TEAM_IMAGE_LAST_PART)
+                            .load(Constants.TEAM_IMAGE_FIRST_PART + rankingPlayers.get(position).getCountry_id() + Constants.TEAM_IMAGE_LAST_PART)
                             .placeholder(R.drawable.default_image)
                             .into(holder.countryImage);
                 }
@@ -150,14 +142,14 @@ public class RankingFragment extends Fragment {
         teamLayout.setVisibility(View.VISIBLE);
         rankingTeams.clear();
         try {
-            for (int i=0;i<jsonArray.length();i++) {
-                rankingTeams.add(gson.fromJson(String.valueOf(jsonArray.get(i)),RankingTeam.class));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                rankingTeams.add(gson.fromJson(String.valueOf(jsonArray.get(i)), RankingTeam.class));
             }
 
-            recyclerView.setAdapter(new BasicListAdapter<RankingTeam,TeamViewHolder>(rankingTeams) {
+            recyclerView.setAdapter(new BasicListAdapter<RankingTeam, TeamViewHolder>(rankingTeams) {
                 @Override
                 public TeamViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                    View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_team_ranking,parent,false);
+                    View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_team_ranking, parent, false);
                     return new TeamViewHolder(view1);
                 }
 
@@ -166,12 +158,12 @@ public class RankingFragment extends Fragment {
                     holder.teamRank.setText(rankingTeams.get(position).getRank());
                     holder.teamName.setText(rankingTeams.get(position).getName());
                     holder.teamName.setTypeface(tf);
-                    holder.teamMatches.setText("Matches: "+rankingTeams.get(position).getMatches());
+                    holder.teamMatches.setText("Matches: " + rankingTeams.get(position).getMatches());
                     holder.teamPoint.setText(rankingTeams.get(position).getPoints());
                     holder.teamRating.setText(rankingTeams.get(position).getRating());
 
                     Picasso.with(getContext())
-                            .load(Constants.TEAM_IMAGE_FIRST_PART+rankingTeams.get(position).getId()+Constants.TEAM_IMAGE_LAST_PART)
+                            .load(Constants.TEAM_IMAGE_FIRST_PART + rankingTeams.get(position).getId() + Constants.TEAM_IMAGE_LAST_PART)
                             .placeholder(R.drawable.default_image)
                             .into(holder.teamImage);
                 }

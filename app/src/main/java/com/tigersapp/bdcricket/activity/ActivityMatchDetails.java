@@ -1,44 +1,23 @@
 package com.tigersapp.bdcricket.activity;
 
 import android.os.Bundle;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.gson.Gson;
-import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.FragmentMatchSummary;
 import com.tigersapp.bdcricket.fragment.FragmentScoreBoard;
 import com.tigersapp.bdcricket.fragment.GossipFragment;
 import com.tigersapp.bdcricket.fragment.PlayingXIFragment;
-import com.tigersapp.bdcricket.model.Commentry;
-import com.tigersapp.bdcricket.model.Summary;
 import com.tigersapp.bdcricket.util.Constants;
-import com.tigersapp.bdcricket.util.DefaultMessageHandler;
-import com.tigersapp.bdcricket.util.Dialogs;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
-import com.tigersapp.bdcricket.util.NetworkService;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.Header;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -89,14 +68,14 @@ public class ActivityMatchDetails extends RoboAppCompatActivity {
 
         fragmentMatchSummary.setArguments(bundle);
         this.matchDetailsViewPagerAdapter.addFragment(fragmentMatchSummary, "কমেন্ট্রি");
-        this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(),"একাদশ");
+        this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(), "একাদশ");
         GossipFragment fragment = new GossipFragment();
         fragment.setArguments(bundle);
         this.matchDetailsViewPagerAdapter.addFragment(fragment, "আড্ডা");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
-    public void setPlayingXI(JSONArray batTeam1,JSONArray dnbTeam1,JSONArray batTeam2,JSONArray dnbTeam2,String team1Name,String team2Name) {
+    public void setPlayingXI(JSONArray batTeam1, JSONArray dnbTeam1, JSONArray batTeam2, JSONArray dnbTeam2, String team1Name, String team2Name) {
         ((PlayingXIFragment) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(2)).setPlayingXI(batTeam1, dnbTeam1, batTeam2, dnbTeam2, team1Name, team2Name);
     }
 

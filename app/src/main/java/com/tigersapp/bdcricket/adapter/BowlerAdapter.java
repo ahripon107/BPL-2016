@@ -22,14 +22,13 @@ import java.util.ArrayList;
  */
 public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerViewHolder> {
 
-    Context context;
-    ArrayList<Bowler> bowlers;
-    LayoutInflater layoutInflater;
+    private Context context;
+    private ArrayList<Bowler> bowlers;
+
 
     public BowlerAdapter(Context context, ArrayList<Bowler> bowlers) {
         this.context = context;
         this.bowlers = bowlers;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 

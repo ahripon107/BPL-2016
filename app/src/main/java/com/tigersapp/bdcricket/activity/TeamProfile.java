@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class TeamProfile extends AppCompatActivity {
 
-    ArrayList<String> teams,teamImages;
+    ArrayList<String> teams, teamImages;
     TeamProfileAdapter teamProfileAdapter;
     RecyclerView recyclerView;
 
@@ -68,7 +68,7 @@ public class TeamProfile extends AppCompatActivity {
         teamImages.add(Constants.SCO_TEAM_LOGO_URL);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        teamProfileAdapter = new TeamProfileAdapter(this, teams,teamImages);
+        teamProfileAdapter = new TeamProfileAdapter(this, teams, teamImages);
         recyclerView.setAdapter(teamProfileAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

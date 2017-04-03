@@ -3,16 +3,15 @@ package com.tigersapp.bdcricket.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.Gravity;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -81,7 +80,7 @@ public class FrontPage extends RoboAppCompatActivity
     public final void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(new LiveScoreFragment(), "লাইভ স্কোর");
-        this.matchDetailsViewPagerAdapter.addFragment(new OpinionFragment(),"মতামত");
+        this.matchDetailsViewPagerAdapter.addFragment(new OpinionFragment(), "মতামত");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 

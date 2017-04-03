@@ -20,6 +20,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.ActivityMatchDetails;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
@@ -30,7 +31,6 @@ import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;

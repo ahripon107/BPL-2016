@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,7 +26,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.LivestreamAndHighlights;
-import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.DividerItemDecoration;
@@ -38,7 +36,6 @@ import com.tigersapp.bdcricket.videoplayers.DMPlayerActivity;
 import com.tigersapp.bdcricket.videoplayers.FrameStream;
 import com.tigersapp.bdcricket.videoplayers.HighlightsVids;
 import com.tigersapp.bdcricket.videoplayers.LiveStreamView;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +44,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -68,7 +64,7 @@ public class Highlights extends RoboAppCompatActivity {
 
     @Inject
     Gson gson;
-    String cause,url;
+    String cause, url;
 
     Dialogs dialogs;
 
@@ -99,10 +95,10 @@ public class Highlights extends RoboAppCompatActivity {
             }
         });
 
-        recyclerView.setAdapter(new BasicListAdapter<LivestreamAndHighlights,HighlightsViewHolder>(objects) {
+        recyclerView.setAdapter(new BasicListAdapter<LivestreamAndHighlights, HighlightsViewHolder>(objects) {
             @Override
             public HighlightsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_livestream,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_livestream, parent, false);
                 return new HighlightsViewHolder(view);
             }
 
@@ -162,10 +158,11 @@ public class Highlights extends RoboAppCompatActivity {
         protected TextView teamName;
         protected LinearLayout linearLayout;
         protected Button watchLive;
+
         public HighlightsViewHolder(View itemView) {
             super(itemView);
             teamName = ViewHolder.get(itemView, R.id.tv_link_title);
-            linearLayout = ViewHolder.get(itemView,R.id.linear_layout);
+            linearLayout = ViewHolder.get(itemView, R.id.linear_layout);
             watchLive = ViewHolder.get(itemView, R.id.btn_watch);
         }
     }

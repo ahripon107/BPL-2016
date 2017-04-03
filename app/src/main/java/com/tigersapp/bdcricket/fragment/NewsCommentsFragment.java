@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,8 +20,6 @@ import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.LoginActivity;
@@ -32,8 +28,6 @@ import com.tigersapp.bdcricket.model.Comment;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.DefaultMessageHandler;
-import com.tigersapp.bdcricket.util.Dialogs;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.NetworkService;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -43,7 +37,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
@@ -53,7 +46,7 @@ import static com.tigersapp.bdcricket.activity.NewsDetailsActivity.EXTRA_NEWS_OB
  * @author Ripon
  */
 
-public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     private ArrayList<Comment> comments;
@@ -131,9 +124,8 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
                         publishComment(comment);
                         commentBody.getText().clear();
                     }
-                }
-                else {
-                    Intent intent = new Intent(getActivity(),LoginActivity.class);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
                     getActivity().startActivity(intent);
                 }
             }
@@ -141,7 +133,7 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
     }
 
     private void fetchContents() {
-        networkService.fetchComments(cricketNews.getSource()+cricketNews.getId() , new DefaultMessageHandler(getContext(), false) {
+        networkService.fetchComments(cricketNews.getSource() + cricketNews.getId(), new DefaultMessageHandler(getContext(), false) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -153,7 +145,7 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
                         JSONArray jsonArray = response.getJSONArray("content");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            comments.add(new Comment(jsonObject.getString("name"), jsonObject.getString("comment"),jsonObject.getString("profileimage"), jsonObject.getString("timestamp")));
+                            comments.add(new Comment(jsonObject.getString("name"), jsonObject.getString("comment"), jsonObject.getString("profileimage"), jsonObject.getString("timestamp")));
                         }
                     }
                     swipeRefreshLayout.setRefreshing(false);
@@ -168,7 +160,7 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
 
     public void publishComment(final String comment) {
 
-        networkService.insertComment(comment,profile, cricketNews.getSource()+cricketNews.getId(),new DefaultMessageHandler(getContext(), false) {
+        networkService.insertComment(comment, profile, cricketNews.getSource() + cricketNews.getId(), new DefaultMessageHandler(getContext(), false) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -178,7 +170,7 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
 
                     if (response.getString("msg").equals("Successful")) {
                         Toast.makeText(getContext(), "Comment successfully posted", Toast.LENGTH_LONG).show();
-                        comments.add(new Comment(profile.getName(), comment,profile.getProfilePictureUri(50,50).toString(), System.currentTimeMillis() + ""));
+                        comments.add(new Comment(profile.getName(), comment, profile.getProfilePictureUri(50, 50).toString(), System.currentTimeMillis() + ""));
                         recyclerView.getAdapter().notifyDataSetChanged();
                         if (comments.size() != 0) {
                             recyclerView.smoothScrollToPosition(comments.size() - 1);

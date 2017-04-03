@@ -17,7 +17,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.PlayerCareerActivity;
 import com.tigersapp.bdcricket.model.Player;
-import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
@@ -60,7 +59,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
             @Override
             public void onClick(View v) {
 
-                String url = "http://apisea.xyz/Cricket/apis/v1/YahooToCricAPI.php?key=bl905577&yahoo="+players.get(position).getPersonid();
+                String url = "http://apisea.xyz/Cricket/apis/v1/YahooToCricAPI.php?key=bl905577&yahoo=" + players.get(position).getPersonid();
                 dialogs.showDialog();
 
                 FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
@@ -71,10 +70,10 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
                             if (response.getString("msg").equals("Successful")) {
                                 String playerID = (response.getJSONArray("content").getJSONObject(0).getString("cricapiID"));
                                 Intent intent = new Intent(context, PlayerCareerActivity.class);
-                                intent.putExtra("playerID",playerID);
+                                intent.putExtra("playerID", playerID);
                                 context.startActivity(intent);
                             } else {
-                                Toast.makeText(context,"Profile Not Found",Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Profile Not Found", Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

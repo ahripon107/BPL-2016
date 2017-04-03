@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
@@ -91,13 +89,13 @@ public class SeriesStatsActivity extends AppCompatActivity {
 
                     jsonArray = response.getJSONArray("statsType");
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        seriesStatsModels.add(gson.fromJson(String.valueOf(jsonArray.getJSONObject(i)),RecordModel.class));
+                        seriesStatsModels.add(gson.fromJson(String.valueOf(jsonArray.getJSONObject(i)), RecordModel.class));
                     }
 
-                    recyclerView.setAdapter(new BasicListAdapter<RecordModel,SeriesStatsViewHolder>(seriesStatsModels) {
+                    recyclerView.setAdapter(new BasicListAdapter<RecordModel, SeriesStatsViewHolder>(seriesStatsModels) {
                         @Override
                         public SeriesStatsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_records,parent,false);
+                            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_records, parent, false);
                             return new SeriesStatsViewHolder(view);
                         }
 
@@ -108,9 +106,9 @@ public class SeriesStatsActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     Intent intent = new Intent(SeriesStatsActivity.this, SeriesStatsDetailsActivity.class);
-                                    intent.putExtra("title",seriesStatsModels.get(position).getHeader());
-                                    intent.putExtra("seriesId",seriesIds.get(spinner.getSelectedItemPosition()));
-                                    intent.putExtra("url",seriesStatsModels.get(position).getUrl());
+                                    intent.putExtra("title", seriesStatsModels.get(position).getHeader());
+                                    intent.putExtra("seriesId", seriesIds.get(spinner.getSelectedItemPosition()));
+                                    intent.putExtra("url", seriesStatsModels.get(position).getUrl());
                                     startActivity(intent);
                                 }
                             });
@@ -142,8 +140,8 @@ public class SeriesStatsActivity extends AppCompatActivity {
 
         public SeriesStatsViewHolder(View itemView) {
             super(itemView);
-            textView = ViewHolder.get(itemView,R.id.tv_record_type);
-            recordTypeLayout = ViewHolder.get(itemView,R.id.record_type_layout);
+            textView = ViewHolder.get(itemView, R.id.tv_record_type);
+            recordTypeLayout = ViewHolder.get(itemView, R.id.record_type_layout);
         }
     }
 

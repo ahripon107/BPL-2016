@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Ripon
  */
-public abstract class BasicListAdapter<T,X extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<X> {
+public abstract class BasicListAdapter<T, X extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<X> {
 
     private List<T> itemList;
 
@@ -20,6 +20,7 @@ public abstract class BasicListAdapter<T,X extends RecyclerView.ViewHolder> exte
         this.itemList = itemList;
         notifyDataSetChanged();
     }
+
     @Override
     public abstract X onCreateViewHolder(ViewGroup parent, int viewType);
 
@@ -36,7 +37,7 @@ public abstract class BasicListAdapter<T,X extends RecyclerView.ViewHolder> exte
         return position;
     }
 
-    public T getItem(int position){
+    public T getItem(int position) {
         return itemList.get(position);
     }
 }

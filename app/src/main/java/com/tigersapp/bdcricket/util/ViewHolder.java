@@ -4,7 +4,7 @@ import android.util.SparseArray;
 import android.view.View;
 
 /**
- * Created by amin on 8/11/16.
+ * @author Ripon
  */
 public class ViewHolder {
 

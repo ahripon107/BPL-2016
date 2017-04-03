@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.RecordDetailsModel1;
@@ -30,16 +29,20 @@ public class RecordsDetailsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recycler_view_layout,container,false);
+        return inflater.inflate(R.layout.recycler_view_layout, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        return view;
     }
 
     public void setUpSixElements(final ArrayList<RecordDetailsModel1> recordDetailsModel1s) {
-        recyclerView.setAdapter(new BasicListAdapter<RecordDetailsModel1,SixElementViewHolder>(recordDetailsModel1s) {
+        recyclerView.setAdapter(new BasicListAdapter<RecordDetailsModel1, SixElementViewHolder>(recordDetailsModel1s) {
             @Override
             public SixElementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_six_elements,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_six_elements, parent, false);
                 return new SixElementViewHolder(view);
             }
 
@@ -57,10 +60,10 @@ public class RecordsDetailsFragment extends Fragment {
     }
 
     public void setUpFourElements(final ArrayList<RecordDetailsModel2> recordDetailsModel2s) {
-        recyclerView.setAdapter(new BasicListAdapter<RecordDetailsModel2,FourElementViewHolder>(recordDetailsModel2s) {
+        recyclerView.setAdapter(new BasicListAdapter<RecordDetailsModel2, FourElementViewHolder>(recordDetailsModel2s) {
             @Override
             public FourElementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_four_element,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_four_element, parent, false);
                 return new FourElementViewHolder(view);
             }
 
@@ -76,10 +79,10 @@ public class RecordsDetailsFragment extends Fragment {
     }
 
     public void setUpThreeElements(final ArrayList<RecordDetailsModel3> recordDetailsModel3s) {
-        recyclerView.setAdapter(new BasicListAdapter<RecordDetailsModel3,ThreeElementViewHolder>(recordDetailsModel3s) {
+        recyclerView.setAdapter(new BasicListAdapter<RecordDetailsModel3, ThreeElementViewHolder>(recordDetailsModel3s) {
             @Override
             public ThreeElementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_three_elements,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_three_elements, parent, false);
                 return new ThreeElementViewHolder(view);
             }
 
@@ -94,43 +97,40 @@ public class RecordsDetailsFragment extends Fragment {
     }
 
     private static class SixElementViewHolder extends RecyclerView.ViewHolder {
-        protected TextView tv1,tv2,tv3,tv4,tv5,tv6;
+        protected TextView tv1, tv2, tv3, tv4, tv5, tv6;
 
         public SixElementViewHolder(View itemView) {
             super(itemView);
-            tv1 = ViewHolder.get(itemView,R.id.tv_str1);
-            tv2 = ViewHolder.get(itemView,R.id.tv_str2);
-            tv3 = ViewHolder.get(itemView,R.id.tv_str3);
-            tv4 = ViewHolder.get(itemView,R.id.tv_str4);
-            tv5 = ViewHolder.get(itemView,R.id.tv_str5);
-            tv6 = ViewHolder.get(itemView,R.id.tv_str6);
-
+            tv1 = ViewHolder.get(itemView, R.id.tv_str1);
+            tv2 = ViewHolder.get(itemView, R.id.tv_str2);
+            tv3 = ViewHolder.get(itemView, R.id.tv_str3);
+            tv4 = ViewHolder.get(itemView, R.id.tv_str4);
+            tv5 = ViewHolder.get(itemView, R.id.tv_str5);
+            tv6 = ViewHolder.get(itemView, R.id.tv_str6);
         }
     }
 
     private static class FourElementViewHolder extends RecyclerView.ViewHolder {
-        protected TextView tv1,tv2,tv3,tv4;
+        protected TextView tv1, tv2, tv3, tv4;
 
         public FourElementViewHolder(View itemView) {
             super(itemView);
-            tv1 = ViewHolder.get(itemView,R.id.tv_str1);
-            tv2 = ViewHolder.get(itemView,R.id.tv_str2);
-            tv3 = ViewHolder.get(itemView,R.id.tv_str3);
-            tv4 = ViewHolder.get(itemView,R.id.tv_str4);
-
+            tv1 = ViewHolder.get(itemView, R.id.tv_str1);
+            tv2 = ViewHolder.get(itemView, R.id.tv_str2);
+            tv3 = ViewHolder.get(itemView, R.id.tv_str3);
+            tv4 = ViewHolder.get(itemView, R.id.tv_str4);
         }
     }
 
     private static class ThreeElementViewHolder extends RecyclerView.ViewHolder {
-        protected TextView tv1,tv2,tv3;
+        protected TextView tv1, tv2, tv3;
 
         public ThreeElementViewHolder(View itemView) {
             super(itemView);
-            tv1 = ViewHolder.get(itemView,R.id.tv_str1);
-            tv2 = ViewHolder.get(itemView,R.id.tv_str2);
-            tv3 = ViewHolder.get(itemView,R.id.tv_str3);
+            tv1 = ViewHolder.get(itemView, R.id.tv_str1);
+            tv2 = ViewHolder.get(itemView, R.id.tv_str2);
+            tv3 = ViewHolder.get(itemView, R.id.tv_str3);
 
         }
     }
-
 }

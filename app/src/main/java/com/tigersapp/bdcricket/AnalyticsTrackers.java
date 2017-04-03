@@ -9,9 +9,6 @@ import com.google.android.gms.analytics.Tracker;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Ripon on 9/12/16.
- */
 
 /**
  * A collection of Google Analytics trackers. Fetch the tracker you need using

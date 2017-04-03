@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.fragment;
 
-import android.app.AlertDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.NewsDetailsActivity;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
@@ -29,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 import static com.tigersapp.bdcricket.activity.NewsDetailsActivity.EXTRA_NEWS_OBJECT;
 
@@ -53,7 +50,7 @@ public class NewsDetailsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_news_details,container,false);
+        return inflater.inflate(R.layout.fragment_news_details, container, false);
     }
 
     @Override
@@ -117,7 +114,7 @@ public class NewsDetailsFragment extends Fragment {
                     if (response.has("getnewsby_id")) {
                         JSONObject jsonObject = response.getJSONObject("getnewsby_id");
                         details.setText(Html.fromHtml(jsonObject.getString("summery")));
-                    } else if (response.has("contents")){
+                    } else if (response.has("contents")) {
                         response = response.getJSONArray("contents").getJSONObject(0);
                         details.setText(Html.fromHtml(response.getString("news_details")));
                     } else {

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.ActivityMatchDetails;
 import com.tigersapp.bdcricket.activity.FullCommentryActivity;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Commentry;
@@ -77,8 +75,8 @@ public class FragmentMatchSummary extends RoboFragment {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getActivity(), FullCommentryActivity.class);
-                intent.putExtra("numberofinnings",FragmentScoreBoard.numberOfInnings);
-                intent.putExtra("id",yahooID);
+                intent.putExtra("numberofinnings", FragmentScoreBoard.numberOfInnings);
+                intent.putExtra("id", yahooID);
                 startActivity(intent);
             }
         });
@@ -98,7 +96,7 @@ public class FragmentMatchSummary extends RoboFragment {
     }
 
     private void fetch() {
-        networkService.fetchMatchIdMatcher(liveMatchID, new DefaultMessageHandler(getContext(), false){
+        networkService.fetchMatchIdMatcher(liveMatchID, new DefaultMessageHandler(getContext(), false) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -124,7 +122,7 @@ public class FragmentMatchSummary extends RoboFragment {
 
     public void loadCommentry(String yahooID) {
 
-        networkService.loadCommentryFromYahoo(yahooID, new DefaultMessageHandler(getContext(), false){
+        networkService.loadCommentryFromYahoo(yahooID, new DefaultMessageHandler(getContext(), false) {
             @Override
             public void onSuccess(Message msg) {
                 commentry.clear();
@@ -145,35 +143,35 @@ public class FragmentMatchSummary extends RoboFragment {
                                     JSONObject obj = jsonArray1.getJSONObject(i);
                                     if (obj.getString("type").equals("ball")) {
                                         String string = "";
-                                        String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                        String ov = (Integer.parseInt(obj.getString("ov")) - 1) + "." + obj.getString("n") + " ";
                                         string += obj.getString("shc") + " - ";
                                         string += obj.getString("r") + " run; ";
                                         string += obj.getString("c");
                                         if (obj.has("dmsl")) {
-                                            commentry.add(new Commentry("ball","W",ov,string));
+                                            commentry.add(new Commentry("ball", "W", ov, string));
                                         } else {
-                                            commentry.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                            commentry.add(new Commentry("ball", obj.getString("r"), ov, string));
                                         }
 
                                     } else {
-                                        commentry.add(new Commentry("nonball","","",obj.getString("c")));
+                                        commentry.add(new Commentry("nonball", "", "", obj.getString("c")));
                                     }
                                 }
                             } else if (object instanceof JSONObject) {
                                 JSONObject obj = (JSONObject) object;
                                 if (obj.getString("type").equals("ball")) {
                                     String string = "";
-                                    String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                    String ov = (Integer.parseInt(obj.getString("ov")) - 1) + "." + obj.getString("n") + " ";
                                     string += obj.getString("shc") + " - ";
                                     string += obj.getString("r") + " run; ";
                                     string += obj.getString("c");
                                     if (obj.has("dmsl")) {
-                                        commentry.add(new Commentry("ball","W",ov,string));
+                                        commentry.add(new Commentry("ball", "W", ov, string));
                                     } else {
-                                        commentry.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                        commentry.add(new Commentry("ball", obj.getString("r"), ov, string));
                                     }
                                 } else {
-                                    commentry.add(new Commentry("nonball","","",obj.getString("c")));
+                                    commentry.add(new Commentry("nonball", "", "", obj.getString("c")));
                                 }
                             }
                             //commentry.add("-------------------------------------------");
@@ -185,17 +183,17 @@ public class FragmentMatchSummary extends RoboFragment {
                             JSONObject obj = jsonArray1.getJSONObject(i);
                             if (obj.getString("type").equals("ball")) {
                                 String string = "";
-                                String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                String ov = (Integer.parseInt(obj.getString("ov")) - 1) + "." + obj.getString("n") + " ";
                                 string += obj.getString("shc") + " - ";
                                 string += obj.getString("r") + " run; ";
                                 string += obj.getString("c");
                                 if (obj.has("dmsl")) {
-                                    commentry.add(new Commentry("ball","W",ov,string));
+                                    commentry.add(new Commentry("ball", "W", ov, string));
                                 } else {
-                                    commentry.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                    commentry.add(new Commentry("ball", obj.getString("r"), ov, string));
                                 }
                             } else {
-                                commentry.add(new Commentry("nonball","","",obj.getString("c")));
+                                commentry.add(new Commentry("nonball", "", "", obj.getString("c")));
                             }
                         }
 
@@ -234,9 +232,9 @@ public class FragmentMatchSummary extends RoboFragment {
                     } else {
                         holder.overno.setText(commentry.getOver());
                         if (commentry.getEvent().equals("4") || commentry.getEvent().equals("6")) {
-                            holder.event.setTextColor(ContextCompat.getColor(getContext(),R.color.cpb_green_dark));
+                            holder.event.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
                         } else if (commentry.getEvent().equals("W")) {
-                            holder.event.setTextColor(ContextCompat.getColor(getContext(),R.color.cpb_red_dark));
+                            holder.event.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_red_dark));
                         }
                         holder.event.setText(commentry.getEvent());
                         //holder.event.setBackgroundDrawable(ContextCompat.getDrawable(getContext(),R.drawable.round));
@@ -261,7 +259,7 @@ public class FragmentMatchSummary extends RoboFragment {
         fullCommentry.setVisibility(View.GONE);
     }
 
-    public void setMatchID (String id) {
+    public void setMatchID(String id) {
         this.yahooID = id;
     }
 
@@ -269,7 +267,7 @@ public class FragmentMatchSummary extends RoboFragment {
 
         protected TextView item;
         protected LinearLayout linearLayout;
-        protected TextView overno,event;
+        protected TextView overno, event;
 
         public CommentryViewHolder(View itemView) {
             super(itemView);

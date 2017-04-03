@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.fragment;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -19,10 +18,8 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.FixtureActivity;
 import com.tigersapp.bdcricket.activity.InsertOpinionActivity;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
-import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -34,22 +31,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
  */
 
-public class OpinionFragment extends Fragment{
+public class OpinionFragment extends Fragment {
 
     RecyclerView recyclerView;
-    ArrayList<String> data,ids;
+    ArrayList<String> data, ids;
     Typeface typeface;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.recycler_view_layout,container,false);
+        return inflater.inflate(R.layout.recycler_view_layout, container, false);
     }
 
     @Override
@@ -60,11 +56,11 @@ public class OpinionFragment extends Fragment{
         data = new ArrayList<>();
         ids = new ArrayList<>();
 
-        typeface = Typeface.createFromAsset(getActivity().getAssets(),Constants.SOLAIMAN_LIPI_FONT);
-        recyclerView.setAdapter(new BasicListAdapter<String,OpinionViewHolder>(data) {
+        typeface = Typeface.createFromAsset(getActivity().getAssets(), Constants.SOLAIMAN_LIPI_FONT);
+        recyclerView.setAdapter(new BasicListAdapter<String, OpinionViewHolder>(data) {
             @Override
             public OpinionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_opinion_ques,parent,false);
+                View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_opinion_ques, parent, false);
                 return new OpinionViewHolder(view1);
             }
 
@@ -76,8 +72,8 @@ public class OpinionFragment extends Fragment{
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), InsertOpinionActivity.class);
-                        intent.putExtra("opinionid",ids.get(position));
-                        intent.putExtra("question",data.get(position));
+                        intent.putExtra("opinionid", ids.get(position));
+                        intent.putExtra("question", data.get(position));
                         getActivity().startActivity(intent);
                     }
                 });
@@ -88,7 +84,7 @@ public class OpinionFragment extends Fragment{
         String url = Constants.OPINION_QUES_URL;
         Log.d(Constants.TAG, url);
         RequestParams params = new RequestParams();
-        params.add("key","bl905577");
+        params.add("key", "bl905577");
 
         FetchFromWeb.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -96,7 +92,7 @@ public class OpinionFragment extends Fragment{
 
                 try {
                     JSONArray jsonArray = response.getJSONArray("content");
-                    for (int i=0;i<jsonArray.length();i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
                         data.add(obj.getString("question"));
                         ids.add(obj.getString("id"));
@@ -122,8 +118,8 @@ public class OpinionFragment extends Fragment{
 
         public OpinionViewHolder(View itemView) {
             super(itemView);
-            ques = ViewHolder.get(itemView,R.id.tv_opinion_ques);
-            linearLayout = ViewHolder.get(itemView,R.id.opinion_layout);
+            ques = ViewHolder.get(itemView, R.id.tv_opinion_ques);
+            linearLayout = ViewHolder.get(itemView, R.id.opinion_layout);
         }
     }
 }

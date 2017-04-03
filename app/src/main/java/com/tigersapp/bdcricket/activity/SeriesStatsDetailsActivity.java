@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -36,13 +35,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
  */
 
-public class SeriesStatsDetailsActivity extends AppCompatActivity{
+public class SeriesStatsDetailsActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -90,13 +88,13 @@ public class SeriesStatsDetailsActivity extends AppCompatActivity{
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-        fetchData(url+"/"+seriesId);
+        fetchData(url + "/" + seriesId);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(Constants.TAG, "onItemSelected: called");
-                fetchData(url+"/"+seriesIds.get(position));
+                fetchData(url + "/" + seriesIds.get(position));
             }
 
             @Override
@@ -152,24 +150,24 @@ public class SeriesStatsDetailsActivity extends AppCompatActivity{
                         String a[] = header.split(",");
                         JSONArray jsonArray = response.getJSONObject("series-stats").getJSONArray("Test");
                         if (arr.length == 6) {
-                            sixElementModels.add(new RecordDetailsModel1(a[0],a[1],a[2],a[3],a[4],a[5]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            sixElementModels.add(new RecordDetailsModel1(a[0], a[1], a[2], a[3], a[4], a[5]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                sixElementModels.add(new RecordDetailsModel1(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2]),obj.getString(arr[3]),obj.getString(arr[4]),obj.getString(arr[5])));
+                                sixElementModels.add(new RecordDetailsModel1(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2]), obj.getString(arr[3]), obj.getString(arr[4]), obj.getString(arr[5])));
                             }
                             testFragment.setUpSixElements(sixElementModels);
                         } else if (arr.length == 4) {
-                            fourElementModel.add(new RecordDetailsModel2(a[0],a[1],a[2],a[3]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            fourElementModel.add(new RecordDetailsModel2(a[0], a[1], a[2], a[3]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                fourElementModel.add(new RecordDetailsModel2(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2]),obj.getString(arr[3])));
+                                fourElementModel.add(new RecordDetailsModel2(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2]), obj.getString(arr[3])));
                             }
                             testFragment.setUpFourElements(fourElementModel);
                         } else if (arr.length == 3) {
-                            threeElementModel.add(new RecordDetailsModel3(a[0],a[1],a[2]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            threeElementModel.add(new RecordDetailsModel3(a[0], a[1], a[2]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                threeElementModel.add(new RecordDetailsModel3(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2])));
+                                threeElementModel.add(new RecordDetailsModel3(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2])));
                             }
                             testFragment.setUpThreeElements(threeElementModel);
                         }
@@ -187,24 +185,24 @@ public class SeriesStatsDetailsActivity extends AppCompatActivity{
                         String a[] = header.split(",");
                         JSONArray jsonArray = response.getJSONObject("series-stats").getJSONArray("Odi");
                         if (arr.length == 6) {
-                            sixElementModels.add(new RecordDetailsModel1(a[0],a[1],a[2],a[3],a[4],a[5]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            sixElementModels.add(new RecordDetailsModel1(a[0], a[1], a[2], a[3], a[4], a[5]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                sixElementModels.add(new RecordDetailsModel1(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2]),obj.getString(arr[3]),obj.getString(arr[4]),obj.getString(arr[5])));
+                                sixElementModels.add(new RecordDetailsModel1(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2]), obj.getString(arr[3]), obj.getString(arr[4]), obj.getString(arr[5])));
                             }
                             odiFragment.setUpSixElements(sixElementModels);
                         } else if (arr.length == 4) {
-                            fourElementModel.add(new RecordDetailsModel2(a[0],a[1],a[2],a[3]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            fourElementModel.add(new RecordDetailsModel2(a[0], a[1], a[2], a[3]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                fourElementModel.add(new RecordDetailsModel2(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2]),obj.getString(arr[3])));
+                                fourElementModel.add(new RecordDetailsModel2(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2]), obj.getString(arr[3])));
                             }
                             odiFragment.setUpFourElements(fourElementModel);
                         } else if (arr.length == 3) {
-                            threeElementModel.add(new RecordDetailsModel3(a[0],a[1],a[2]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            threeElementModel.add(new RecordDetailsModel3(a[0], a[1], a[2]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                threeElementModel.add(new RecordDetailsModel3(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2])));
+                                threeElementModel.add(new RecordDetailsModel3(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2])));
                             }
                             odiFragment.setUpThreeElements(threeElementModel);
                         }
@@ -222,24 +220,24 @@ public class SeriesStatsDetailsActivity extends AppCompatActivity{
                         String a[] = header.split(",");
                         JSONArray jsonArray = response.getJSONObject("series-stats").getJSONArray("T20");
                         if (arr.length == 6) {
-                            sixElementModels.add(new RecordDetailsModel1(a[0],a[1],a[2],a[3],a[4],a[5]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            sixElementModels.add(new RecordDetailsModel1(a[0], a[1], a[2], a[3], a[4], a[5]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                sixElementModels.add(new RecordDetailsModel1(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2]),obj.getString(arr[3]),obj.getString(arr[4]),obj.getString(arr[5])));
+                                sixElementModels.add(new RecordDetailsModel1(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2]), obj.getString(arr[3]), obj.getString(arr[4]), obj.getString(arr[5])));
                             }
                             t20Fragment.setUpSixElements(sixElementModels);
                         } else if (arr.length == 4) {
-                            fourElementModel.add(new RecordDetailsModel2(a[0],a[1],a[2],a[3]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            fourElementModel.add(new RecordDetailsModel2(a[0], a[1], a[2], a[3]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                fourElementModel.add(new RecordDetailsModel2(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2]),obj.getString(arr[3])));
+                                fourElementModel.add(new RecordDetailsModel2(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2]), obj.getString(arr[3])));
                             }
                             t20Fragment.setUpFourElements(fourElementModel);
                         } else if (arr.length == 3) {
-                            threeElementModel.add(new RecordDetailsModel3(a[0],a[1],a[2]));
-                            for (int i=0;i<jsonArray.length();i++) {
+                            threeElementModel.add(new RecordDetailsModel3(a[0], a[1], a[2]));
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                threeElementModel.add(new RecordDetailsModel3(obj.getString(arr[0]),obj.getString(arr[1]),obj.getString(arr[2])));
+                                threeElementModel.add(new RecordDetailsModel3(obj.getString(arr[0]), obj.getString(arr[1]), obj.getString(arr[2])));
                             }
                             t20Fragment.setUpThreeElements(threeElementModel);
                         }

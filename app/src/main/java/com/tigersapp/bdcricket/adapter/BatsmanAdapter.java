@@ -25,8 +25,8 @@ import java.util.ArrayList;
  */
 public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanViewHolder> {
 
-    Context context;
-    ArrayList<Batsman> batsmans;
+    private Context context;
+    private ArrayList<Batsman> batsmans;
 
     public BatsmanAdapter(Context context, ArrayList<Batsman> batsmans) {
         this.context = context;
@@ -65,8 +65,8 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
             }
         });
 
-        if (position%2 == 1) {
-            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context,R.color.batsmanbowlerbackground));
+        if (position % 2 == 1) {
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.batsmanbowlerbackground));
         }
     }
 
@@ -100,7 +100,7 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
             six = ViewHolder.get(itemView, R.id.six);
             out = ViewHolder.get(itemView, R.id.desc_out);
             sr = ViewHolder.get(itemView, R.id.sr);
-            linearLayout = ViewHolder.get(itemView,R.id.batsman_layout);
+            linearLayout = ViewHolder.get(itemView, R.id.batsman_layout);
         }
     }
 }

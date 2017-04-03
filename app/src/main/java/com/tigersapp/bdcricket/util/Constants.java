@@ -112,7 +112,7 @@ public class Constants {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd.HH:mm:ss");
         String timeAgo = "";
         try {
-            Date date1 = dateFormat.parse(date+"."+time);
+            Date date1 = dateFormat.parse(date + "." + time);
             long time1 = date1.getTime();
             timeAgo = getTimeAgo(time1);
         } catch (ParseException e) {
@@ -126,7 +126,7 @@ public class Constants {
             String replace = teamName.replace(" ", "");
             Log.d(TAG, replace);
 
-            return "http://apisea.xyz/BPL2016/images/"+replace+".png";
+            return "http://apisea.xyz/BPL2016/images/" + replace + ".png";
         } else {
             return "xyz";
         }

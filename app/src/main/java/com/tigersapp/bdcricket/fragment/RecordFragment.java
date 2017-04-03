@@ -28,9 +28,6 @@ public class RecordFragment extends Fragment {
     ArrayList<RecordVsOthers> pl;
     TeamRecordAdapter teamRecordAdapter;
 
-    public RecordFragment() {
-
-    }
 
     public static RecordFragment newInstanceOfRecordFragment(String text, String what) {
         RecordFragment myFragment = new RecordFragment();
@@ -46,9 +43,14 @@ public class RecordFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.playersfragment, container, false);
+    }
 
-        View v = inflater.inflate(R.layout.playersfragment, container, false);
-        recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         pl = new ArrayList<>();
         teamRecordAdapter = new TeamRecordAdapter(this.getActivity(), pl);
         recyclerView.setAdapter(teamRecordAdapter);
@@ -102,7 +104,5 @@ public class RecordFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return v;
     }
-
 }

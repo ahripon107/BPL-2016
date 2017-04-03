@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -15,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
@@ -32,7 +32,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
@@ -42,9 +41,10 @@ import roboguice.inject.InjectView;
 public class FullCommentryFragment extends RoboFragment {
 
     @InjectView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
-    ArrayList<Commentry> commentries;
+    @Inject
+    private ArrayList<Commentry> commentries;
 
     Dialogs dialogs;
 
@@ -57,7 +57,7 @@ public class FullCommentryFragment extends RoboFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        commentries = new ArrayList<>();
+
         dialogs = new Dialogs(getContext());
         recyclerView.setAdapter(new BasicListAdapter<Commentry, CommentryViewHolder>(commentries) {
             @Override
@@ -81,9 +81,9 @@ public class FullCommentryFragment extends RoboFragment {
                 } else {
                     holder.overno.setText(commentry.getOver());
                     if (commentry.getEvent().equals("4") || commentry.getEvent().equals("6")) {
-                        holder.event.setTextColor(ContextCompat.getColor(getContext(),R.color.cpb_green_dark));
+                        holder.event.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_green_dark));
                     } else if (commentry.getEvent().equals("W")) {
-                        holder.event.setTextColor(ContextCompat.getColor(getContext(),R.color.cpb_red_dark));
+                        holder.event.setTextColor(ContextCompat.getColor(getContext(), R.color.cpb_red_dark));
                     }
                     holder.event.setText(commentry.getEvent());
                     //holder.event.setBackgroundDrawable(ContextCompat.getDrawable(getContext(),R.drawable.round));
@@ -125,34 +125,34 @@ public class FullCommentryFragment extends RoboFragment {
                                     JSONObject obj = jsonArray1.getJSONObject(i);
                                     if (obj.getString("type").equals("ball")) {
                                         String string = "";
-                                        String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                        String ov = (Integer.parseInt(obj.getString("ov")) - 1) + "." + obj.getString("n") + " ";
                                         string += obj.getString("shc") + " - ";
                                         string += obj.getString("r") + " run; ";
                                         string += obj.getString("c");
                                         if (obj.has("dmsl")) {
-                                            commentries.add(new Commentry("ball","W",ov,string));
+                                            commentries.add(new Commentry("ball", "W", ov, string));
                                         } else {
-                                            commentries.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                            commentries.add(new Commentry("ball", obj.getString("r"), ov, string));
                                         }
                                     } else {
-                                        commentries.add(new Commentry("nonball","","",obj.getString("c")));
+                                        commentries.add(new Commentry("nonball", "", "", obj.getString("c")));
                                     }
                                 }
                             } else if (object instanceof JSONObject) {
                                 JSONObject obj = (JSONObject) object;
                                 if (obj.getString("type").equals("ball")) {
                                     String string = "";
-                                    String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                    String ov = (Integer.parseInt(obj.getString("ov")) - 1) + "." + obj.getString("n") + " ";
                                     string += obj.getString("shc") + " - ";
                                     string += obj.getString("r") + " run; ";
                                     string += obj.getString("c");
                                     if (obj.has("dmsl")) {
-                                        commentries.add(new Commentry("ball","W",ov,string));
+                                        commentries.add(new Commentry("ball", "W", ov, string));
                                     } else {
-                                        commentries.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                        commentries.add(new Commentry("ball", obj.getString("r"), ov, string));
                                     }
                                 } else {
-                                    commentries.add(new Commentry("nonball","","",obj.getString("c")));
+                                    commentries.add(new Commentry("nonball", "", "", obj.getString("c")));
                                 }
                             }
                             //commentries.add("-------------------------------------------");
@@ -164,17 +164,17 @@ public class FullCommentryFragment extends RoboFragment {
                             JSONObject obj = jsonArray1.getJSONObject(i);
                             if (obj.getString("type").equals("ball")) {
                                 String string = "";
-                                String ov = (Integer.parseInt(obj.getString("ov"))-1) + "." + obj.getString("n") + " ";
+                                String ov = (Integer.parseInt(obj.getString("ov")) - 1) + "." + obj.getString("n") + " ";
                                 string += obj.getString("shc") + " - ";
                                 string += obj.getString("r") + " run; ";
                                 string += obj.getString("c");
                                 if (obj.has("dmsl")) {
-                                    commentries.add(new Commentry("ball","W",ov,string));
+                                    commentries.add(new Commentry("ball", "W", ov, string));
                                 } else {
-                                    commentries.add(new Commentry("ball",obj.getString("r"),ov,string));
+                                    commentries.add(new Commentry("ball", obj.getString("r"), ov, string));
                                 }
                             } else {
-                                commentries.add(new Commentry("nonball","","",obj.getString("c")));
+                                commentries.add(new Commentry("nonball", "", "", obj.getString("c")));
                             }
                         }
                     }
@@ -201,7 +201,7 @@ public class FullCommentryFragment extends RoboFragment {
 
         protected TextView item;
         protected LinearLayout linearLayout;
-        protected TextView overno,event;
+        protected TextView overno, event;
 
         public CommentryViewHolder(View itemView) {
             super(itemView);

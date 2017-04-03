@@ -1,9 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,27 +19,24 @@ import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Gallery;
 import com.tigersapp.bdcricket.model.ImageHolder;
-import com.tigersapp.bdcricket.model.TrollPost;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -129,7 +122,7 @@ public class GalleryOfMatchActivity extends RoboAppCompatActivity {
                     JSONArray jsonArray = response.getJSONArray("Image Details");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        Gallery gallery = new Gallery(obj.getString("cap"),"","",response.getJSONObject("Event Details").getString("base")+obj.getString("urlLarge"));
+                        Gallery gallery = new Gallery(obj.getString("cap"), "", "", response.getJSONObject("Event Details").getString("base") + obj.getString("urlLarge"));
                         galleries.add(gallery);
                     }
                 } catch (JSONException e) {
@@ -174,7 +167,7 @@ public class GalleryOfMatchActivity extends RoboAppCompatActivity {
             imageView = ViewHolder.get(itemView, R.id.img_troll_post);
             title = ViewHolder.get(itemView, R.id.tv_troll_post_title);
             courtesy = ViewHolder.get(itemView, R.id.tv_troll_post_courtesy);
-            linearLayout = ViewHolder.get(itemView,R.id.image_container);
+            linearLayout = ViewHolder.get(itemView, R.id.image_container);
         }
     }
 }

@@ -40,7 +40,7 @@ public class LiveStreamView extends AppCompatActivity {
 
 
         videoView1.setVideoURI(Uri.parse(getIntent().getStringExtra("url")));
-        videoView1.setMediaController (new MediaController(this));
+        videoView1.setMediaController(new MediaController(this));
         videoView1.requestFocus();
         videoView1.start();
 
@@ -49,7 +49,7 @@ public class LiveStreamView extends AppCompatActivity {
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);
 
-        Toast.makeText(getApplicationContext(),"Please wait while video is loading",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Please wait while video is loading", Toast.LENGTH_LONG).show();
     }
 
     @Override

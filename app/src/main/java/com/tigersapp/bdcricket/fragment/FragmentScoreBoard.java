@@ -4,7 +4,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,25 +47,56 @@ import roboguice.inject.InjectView;
  */
 public class FragmentScoreBoard extends RoboFragment {
 
-    RecyclerView battingInnings1;
+    @InjectView(R.id.lvBattingInnings1)
+    private RecyclerView battingInnings1;
 
-    RecyclerView bowlingInnings1;
+    @InjectView(R.id.lvBowlingInnings1)
+    private RecyclerView bowlingInnings1;
 
+    @InjectView(R.id.innings1extra)
+    private TextView innings1extra;
 
-    TextView innings1extra,innings1total,innings1fallofwickets,innings1dnb;
+    @InjectView(R.id.innings1total)
+    private TextView innings1total;
 
-    LinearLayout firstInningsContainer;
+    @InjectView(R.id.innings1fow)
+    private TextView innings1fallofwickets;
 
+    @InjectView(R.id.innings1DNB)
+    private TextView innings1dnb;
+
+    @InjectView(R.id.firstinningscontainer)
+    private LinearLayout firstInningsContainer;
+
+    @InjectView(R.id.labelGround)
     private TextView labelGround;
-    private TextView labelInfo;
-    private TextView labelMatchStatus;
-    private TextView labelTeam1;
-    private TextView labelTeam2;
-    private TextView labelTournament;
-    private JSONObject response;
-    public static int numberOfInnings = 0;
 
-    private Button firstInnings, secondInnings, thirdInnings, fourthInnings;
+    @InjectView(R.id.labelInfo)
+    private TextView labelInfo;
+
+    @InjectView(R.id.labelMatchStatus)
+    private TextView labelMatchStatus;
+
+    @InjectView(R.id.labelTeam1)
+    private TextView labelTeam1;
+
+    @InjectView(R.id.labelTeam2)
+    private TextView labelTeam2;
+
+    @InjectView(R.id.labelTournament)
+    private TextView labelTournament;
+
+    @InjectView(R.id.btn_first_inns)
+    private Button firstInnings;
+
+    @InjectView(R.id.btn_second_inns)
+    private Button secondInnings;
+
+    @InjectView(R.id.btn_third_inns)
+    private Button thirdInnings;
+
+    @InjectView(R.id.btn_fourth_inns)
+    private Button fourthInnings;
 
     @Inject
     private NetworkService networkService;
@@ -78,11 +108,13 @@ public class FragmentScoreBoard extends RoboFragment {
     private Gson gson;
 
     private String liveMatchID;
+    private JSONObject response;
+    public static int numberOfInnings = 0;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_score_board,container,false);
+        return inflater.inflate(R.layout.fragment_score_board, container, false);
     }
 
     @Override
@@ -90,32 +122,9 @@ public class FragmentScoreBoard extends RoboFragment {
         super.onViewCreated(view, savedInstanceState);
 
         liveMatchID = getArguments().getString("liveMatchID");
-        battingInnings1 = (RecyclerView) view.findViewById(R.id.lvBattingInnings1);
-
-        bowlingInnings1 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings1);
 
         battingInnings1.setNestedScrollingEnabled(false);
-
         bowlingInnings1.setNestedScrollingEnabled(false);
-
-        innings1extra = (TextView) view.findViewById(R.id.innings1extra);
-        innings1total = (TextView) view.findViewById(R.id.innings1total);
-        innings1fallofwickets = (TextView) view.findViewById(R.id.innings1fow);
-        innings1dnb = (TextView) view.findViewById(R.id.innings1DNB);
-
-        firstInningsContainer = (LinearLayout) view.findViewById(R.id.firstinningscontainer);
-
-        this.labelTournament = (TextView) view.findViewById(R.id.labelTournament);
-        this.labelTeam1 = (TextView) view.findViewById(R.id.labelTeam1);
-        this.labelTeam2 = (TextView) view.findViewById(R.id.labelTeam2);
-        this.labelGround = (TextView) view.findViewById(R.id.labelGround);
-        this.labelInfo = (TextView) view.findViewById(R.id.labelInfo);
-        this.labelMatchStatus = (TextView) view.findViewById(R.id.labelMatchStatus);
-
-        firstInnings = (Button) view.findViewById(R.id.btn_first_inns);
-        secondInnings = (Button) view.findViewById(R.id.btn_second_inns);
-        thirdInnings = (Button) view.findViewById(R.id.btn_third_inns);
-        fourthInnings = (Button) view.findViewById(R.id.btn_fourth_inns);
 
         firstInnings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,7 +247,7 @@ public class FragmentScoreBoard extends RoboFragment {
                     //((FragmentScoreBoard) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(0)).loadEachTeamScore(liveMatchID);
 
                     if (response.has("innings1") && response.has("innings2")) {
-                        ((ActivityMatchDetails)getActivity()).setPlayingXI(response.getJSONObject("innings1").getJSONArray("batting"),response.getJSONObject("innings1").getJSONArray("dnb"),response.getJSONObject("innings2").getJSONArray("batting"),response.getJSONObject("innings2").getJSONArray("dnb"),summary.getTeam1(),summary.getTeam2());
+                        ((ActivityMatchDetails) getActivity()).setPlayingXI(response.getJSONObject("innings1").getJSONArray("batting"), response.getJSONObject("innings1").getJSONArray("dnb"), response.getJSONObject("innings2").getJSONArray("batting"), response.getJSONObject("innings2").getJSONArray("dnb"), summary.getTeam1(), summary.getTeam2());
                     }
 
                     if (response.has("innings1")) {
@@ -396,13 +405,13 @@ public class FragmentScoreBoard extends RoboFragment {
 
 
     public void setFirstInningsBattingList(JSONArray jsonArray) {
-        BatsmanAdapter batsmanAdapter = new BatsmanAdapter(getContext(),preocessBattingList(jsonArray));
+        BatsmanAdapter batsmanAdapter = new BatsmanAdapter(getContext(), preocessBattingList(jsonArray));
         battingInnings1.setAdapter(batsmanAdapter);
         battingInnings1.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     public void setFirstInningsBowlingList(JSONArray jsonArray) {
-        BowlerAdapter bowlerAdapter = new BowlerAdapter(getContext(),processBowlingList(jsonArray));
+        BowlerAdapter bowlerAdapter = new BowlerAdapter(getContext(), processBowlingList(jsonArray));
         bowlingInnings1.setAdapter(bowlerAdapter);
         bowlingInnings1.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -411,14 +420,14 @@ public class FragmentScoreBoard extends RoboFragment {
     public void setFirstInningsSummary(JSONObject jsonObject) {
         try {
             if (jsonObject.getJSONObject("extra").has("details")) {
-                innings1extra.setText(jsonObject.getJSONObject("extra").getString("details")+" --- "+jsonObject.getJSONObject("extra").getString("total"));
+                innings1extra.setText(jsonObject.getJSONObject("extra").getString("details") + " --- " + jsonObject.getJSONObject("extra").getString("total"));
             } else {
                 innings1extra.setText("0");
             }
             if (jsonObject.getJSONObject("total").has("wickets")) {
-                innings1total.setText("("+jsonObject.getJSONObject("total").getString("overs") +" overs)   "+jsonObject.getJSONObject("total").getString("score") +" for "+jsonObject.getJSONObject("total").getString("wickets"));
+                innings1total.setText("(" + jsonObject.getJSONObject("total").getString("overs") + " overs)   " + jsonObject.getJSONObject("total").getString("score") + " for " + jsonObject.getJSONObject("total").getString("wickets"));
             } else {
-                innings1total.setText("("+jsonObject.getJSONObject("total").getString("overs") +" overs)   "+jsonObject.getJSONObject("total").getString("score"));
+                innings1total.setText("(" + jsonObject.getJSONObject("total").getString("overs") + " overs)   " + jsonObject.getJSONObject("total").getString("score"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -427,10 +436,10 @@ public class FragmentScoreBoard extends RoboFragment {
 
     public void setFirstInningsFOW(JSONArray jsonArray) {
         String string = "<b>Fall of wickets:</b> ";
-        for (int i=0;i<jsonArray.length();i++) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                string += jsonObject.getString("score")+" ( "+jsonObject.getString("player")+" , "+jsonObject.getString("over")+" ), ";
+                string += jsonObject.getString("score") + " ( " + jsonObject.getString("player") + " , " + jsonObject.getString("over") + " ), ";
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -440,10 +449,10 @@ public class FragmentScoreBoard extends RoboFragment {
 
     public void setFirstInningsDNB(JSONArray jsonArray) {
         String string = "<b>Did not bat:</b> ";
-        for (int i=0;i<jsonArray.length();i++) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                string += jsonObject.getString("playerName")+", ";
+                string += jsonObject.getString("playerName") + ", ";
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -458,7 +467,7 @@ public class FragmentScoreBoard extends RoboFragment {
 
     public ArrayList<Batsman> preocessBattingList(JSONArray jsonArray) {
         ArrayList<Batsman> batsmen = new ArrayList<>();
-        for (int i=0;i<jsonArray.length();i++) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String playerId = jsonObject.getJSONObject("player").getString("playerId");
@@ -470,7 +479,7 @@ public class FragmentScoreBoard extends RoboFragment {
                 String fours = jsonObject.getString("fours");
                 String sixes = jsonObject.getString("sixes");
                 String sr = jsonObject.getString("strikeRate");
-                Batsman batsman = new Batsman(playerId,name,out,runs,balls,fours,sixes,sr);
+                Batsman batsman = new Batsman(playerId, name, out, runs, balls, fours, sixes, sr);
                 batsmen.add(batsman);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -482,16 +491,16 @@ public class FragmentScoreBoard extends RoboFragment {
 
     public ArrayList<Bowler> processBowlingList(JSONArray jsonArray) {
         ArrayList<Bowler> bowlers = new ArrayList<>();
-        for (int i=0;i<jsonArray.length();i++) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String playerId = jsonObject.getJSONObject("player").getString("playerId");
-                String name =jsonObject.getJSONObject("player").getString("playerName");
+                String name = jsonObject.getJSONObject("player").getString("playerName");
                 String over = jsonObject.getString("overs");
                 String maiden = jsonObject.getString("maidens");
                 String run = jsonObject.getString("runs");
                 String wicket = jsonObject.getString("wickets");
-                Bowler bowler = new Bowler(playerId,name,over,maiden,run,wicket);
+                Bowler bowler = new Bowler(playerId, name, over, maiden, run, wicket);
                 bowlers.add(bowler);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -501,7 +510,7 @@ public class FragmentScoreBoard extends RoboFragment {
         return bowlers;
     }
 
-    public void loadEachTeamScore (final String matchID) {
+    public void loadEachTeamScore(final String matchID) {
         String url = "http://37.187.95.220:8080/cricket-api/api/match/live";
         Log.d(Constants.TAG, url);
 
@@ -517,16 +526,16 @@ public class FragmentScoreBoard extends RoboFragment {
                             String team1 = obj.getJSONObject("team1").getString("teamName");
                             String team2 = obj.getJSONObject("team2").getString("teamName");
                             if (obj.getJSONObject("team1").has("score")) {
-                                team1+= " "+obj.getJSONObject("team1").getString("score");
+                                team1 += " " + obj.getJSONObject("team1").getString("score");
                             }
                             if (obj.getJSONObject("team1").has("score1")) {
-                                team1+= " & "+obj.getJSONObject("team1").getString("score1");
+                                team1 += " & " + obj.getJSONObject("team1").getString("score1");
                             }
                             if (obj.getJSONObject("team2").has("score")) {
-                                team2+= " "+obj.getJSONObject("team2").getString("score");
+                                team2 += " " + obj.getJSONObject("team2").getString("score");
                             }
                             if (obj.getJSONObject("team2").has("score1")) {
-                                team2+= " & "+obj.getJSONObject("team2").getString("score1");
+                                team2 += " & " + obj.getJSONObject("team2").getString("score1");
                             }
                             labelTeam1.setText(team1);
                             labelTeam2.setText(team2);

@@ -25,7 +25,7 @@ import com.tigersapp.bdcricket.R;
 
 
 /**
- * Created by Ripon on 10/25/15.
+ * @author Ripon
  */
 public class CircleImageView extends ImageView {
 

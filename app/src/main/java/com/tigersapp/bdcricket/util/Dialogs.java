@@ -28,6 +28,6 @@ public class Dialogs {
 
     public void dismissDialog() {
         if (progressDialog != null && progressDialog.isShowing())
-        progressDialog.dismiss();
+            progressDialog.dismiss();
     }
 }

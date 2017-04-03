@@ -8,8 +8,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -24,7 +22,7 @@ import com.tigersapp.bdcricket.R;
  * @author Ripon
  */
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
     LoginButton loginButton;
     CallbackManager callbackManager;
@@ -37,7 +35,7 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
-        textView =(TextView) findViewById(R.id.login_text);
+        textView = (TextView) findViewById(R.id.login_text);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -50,23 +48,23 @@ public class LoginActivity extends AppCompatActivity{
         if (profile == null) {
             textView.setText("Please Log In");
         } else {
-            textView.setText("You are logged in as "+profile.getName());
+            textView.setText("You are logged in as " + profile.getName());
         }
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(LoginActivity.this,"Login Success",Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_LONG).show();
                 finish();
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(LoginActivity.this,"Login cancel",Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Login cancel", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(LoginActivity.this,"Login error",Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Login error", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -78,7 +76,7 @@ public class LoginActivity extends AppCompatActivity{
                 if (currentProfile == null) {
                     textView.setText("Please Log In");
                 } else {
-                    textView.setText("You are logged in as "+currentProfile.getName());
+                    textView.setText("You are logged in as " + currentProfile.getName());
                 }
             }
         };

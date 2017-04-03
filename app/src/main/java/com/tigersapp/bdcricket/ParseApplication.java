@@ -22,9 +22,9 @@ public class ParseApplication extends MultiDexApplication {
             .getSimpleName();
 
     private static ParseApplication mInstance;
+
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
 

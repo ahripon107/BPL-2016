@@ -22,9 +22,8 @@ public class HighlightsVids extends YouTubeBaseActivity implements
         YouTubePlayer.OnInitializedListener {
 
     private static final int RECOVERY_DIALOG_REQUEST = 1;
-    String url;
-    AdView adView;
-
+    private String url;
+    private AdView adView;
     private YouTubePlayerView youTubeView;
 
     @Override

@@ -40,7 +40,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         String data = getIntent().getStringExtra("data");
         mTabLayout = (TabLayout) findViewById(R.id.hoteltab_layout);
-        mAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), Titles,data);
+        mAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), Titles, data);
         mPager = (ViewPager) findViewById(R.id.view_pager);
         mPager.setAdapter(mAdapter);
 
@@ -85,12 +85,12 @@ public class TeamDetailsActivity extends AppCompatActivity {
             if (position == 0) {
                 return BasicInfoFragment.newInstanceOfDescriptionFragment(data);
             } else if (position == 1) {
-                return RecordFragment.newInstanceOfRecordFragment(data,"Test");
+                return RecordFragment.newInstanceOfRecordFragment(data, "Test");
             } else if (position == 2) {
                 return RecordFragment.newInstanceOfRecordFragment(data, "ODI");
             } else if (position == 3) {
                 return RecordFragment.newInstanceOfRecordFragment(data, "T20");
-            } else  {
+            } else {
                 return PlayersFragment.newInstanceOfPlayersFragment(data);
             }
         }

@@ -16,9 +16,9 @@ import com.tigersapp.bdcricket.util.DMWebVideoView;
  */
 public class DMPlayerActivity extends AppCompatActivity {
 
-    AdView adView;
+    private AdView adView;
     private DMWebVideoView mVideoView;
-    String url = "";
+    private String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

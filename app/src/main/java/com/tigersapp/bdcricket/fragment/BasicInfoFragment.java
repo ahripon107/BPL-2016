@@ -54,7 +54,7 @@ public class BasicInfoFragment extends Fragment {
             jsonObject = jsonObject.getJSONObject("TeamProfile");
 
             String a = jsonObject.getString("TeamName");
-            ((TeamDetailsActivity)getActivity()).getSupportActionBar().setTitle(a);
+            ((TeamDetailsActivity) getActivity()).getSupportActionBar().setTitle(a);
 
             JSONObject object;
 

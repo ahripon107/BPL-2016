@@ -21,7 +21,7 @@ import roboguice.inject.InjectView;
  * @author Ripon
  */
 
-public class PlayerBasicInfoFragment extends RoboFragment{
+public class PlayerBasicInfoFragment extends RoboFragment {
 
     @InjectView(R.id.player_image)
     private CircleImageView playerImage;
@@ -75,14 +75,14 @@ public class PlayerBasicInfoFragment extends RoboFragment{
         try {
             response = new JSONObject(data);
 
-            if (response.has("name"))  playerName.setText(response.getString("name"));
+            if (response.has("name")) playerName.setText(response.getString("name"));
             else playerName.setText("");
 
 
             if (response.has("born")) born.setText(response.getString("born"));
             else born.setText("");
 
-            if (response.has("currentAge"))currentAge.setText(response.getString("currentAge"));
+            if (response.has("currentAge")) currentAge.setText(response.getString("currentAge"));
             else currentAge.setText("");
 
             if (response.has("majorTeams")) majorTeams.setText(response.getString("majorTeams"));
@@ -91,10 +91,12 @@ public class PlayerBasicInfoFragment extends RoboFragment{
             if (response.has("playingRole")) playingRole.setText(response.getString("playingRole"));
             else playingRole.setText("");
 
-            if (response.has("battingStyle")) battingStyle.setText(response.getString("battingStyle"));
+            if (response.has("battingStyle"))
+                battingStyle.setText(response.getString("battingStyle"));
             else battingStyle.setText("");
 
-            if (response.has("bowlingStyle")) bowlingStyle.setText(response.getString("bowlingStyle"));
+            if (response.has("bowlingStyle"))
+                bowlingStyle.setText(response.getString("bowlingStyle"));
             else bowlingStyle.setText("");
 
             if (response.has("profile")) profile.setText(response.getString("profile"));

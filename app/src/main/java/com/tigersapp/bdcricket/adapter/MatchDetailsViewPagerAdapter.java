@@ -36,6 +36,7 @@ public class MatchDetailsViewPagerAdapter extends FragmentStatePagerAdapter {
         this.fragmentList.add(fragment);
         this.titleList.add(title);
     }
+
     public final void removeFragment(Fragment fragment, String title) {
         this.fragmentList.remove(fragment);
         this.titleList.remove(title);
