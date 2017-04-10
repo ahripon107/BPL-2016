@@ -86,20 +86,6 @@ public class GalleryOfMatchActivity extends RoboAppCompatActivity {
                         .load((galleries.get(position).getImg()))
                         .placeholder(R.drawable.default_image)
                         .into(holder.imageView);
-
-                /*holder.imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        File imgFile = new File(galleries.get(position).getImg());
-                        if(imgFile.exists()){
-
-                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                            imageHolder.setImage(myBitmap);
-                            startActivity(new Intent(GalleryOfMatchActivity.this, ImageViewerActivity.class));
-
-                        }
-                    }
-                });*/
             }
 
             @Override

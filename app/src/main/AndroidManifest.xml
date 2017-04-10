@@ -165,14 +165,6 @@
             </intent-filter>
         </activity>
 
-
-        <activity
-            android:name=".activity.ImageViewerActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait" />
-
         <!--
           Optionally, register AnalyticsReceiver and AnalyticsService to support background
           dispatching on non-Google Play devices
