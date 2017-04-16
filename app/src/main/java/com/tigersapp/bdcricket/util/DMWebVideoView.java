@@ -19,7 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.VideoView;
 
 /**
- * Created by amin on 9/8/16.
+ * @author Ripon
  */
 public class DMWebVideoView extends WebView {
 

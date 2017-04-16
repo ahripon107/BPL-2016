@@ -43,7 +43,7 @@ public class FullCommentryActivity extends RoboAppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        numberOfInnings = getIntent().getIntExtra("numberofinnings",0);
+        numberOfInnings = getIntent().getIntExtra("numberofinnings", 0);
         id = getIntent().getStringExtra("id");
         this.viewPager.setOffscreenPageLimit(3);
         setupViewPage(this.viewPager);
@@ -56,12 +56,12 @@ public class FullCommentryActivity extends RoboAppCompatActivity {
 
     public void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
-        for (int i=1;i<=numberOfInnings;i++) {
+        for (int i = 1; i <= numberOfInnings; i++) {
             FullCommentryFragment fullCommentryFragment = new FullCommentryFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("url","http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id="+id+"%20and%20innings_id="+i+"&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=");
+            bundle.putString("url", "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id=" + id + "%20and%20innings_id=" + i + "&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=");
             fullCommentryFragment.setArguments(bundle);
-            this.matchDetailsViewPagerAdapter.addFragment(fullCommentryFragment,"Innings "+i);
+            this.matchDetailsViewPagerAdapter.addFragment(fullCommentryFragment, "Innings " + i);
         }
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }

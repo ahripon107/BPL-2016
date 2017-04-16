@@ -19,19 +19,17 @@ import java.util.ArrayList;
  */
 public class TeamRecordAdapter extends RecyclerView.Adapter<TeamRecordAdapter.TeamRecordViewHolder> {
 
-    Context context;
-    ArrayList<RecordVsOthers> players;
-    LayoutInflater layoutInflater;
+    private Context context;
+    private ArrayList<RecordVsOthers> players;
 
     public TeamRecordAdapter(Context context, ArrayList<RecordVsOthers> players) {
         this.context = context;
         this.players = players;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public TeamRecordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singleteamrecord,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singleteamrecord, parent, false);
         return new TeamRecordViewHolder(view);
     }
 
@@ -73,15 +71,15 @@ public class TeamRecordAdapter extends RecyclerView.Adapter<TeamRecordAdapter.Te
             super(itemView);
 
             vsWhom = ViewHolder.get(itemView, R.id.tvAgainst);
-            played = ViewHolder.get(itemView,R.id.tvPlayed);
-            wins = ViewHolder.get(itemView,R.id.tvWins);
-            loss = ViewHolder.get(itemView,R.id.tvLoss);
-            draw = ViewHolder.get(itemView,R.id.tvDraw);
-            highestInnings = ViewHolder.get(itemView,R.id.tvHighestInnings);
-            BBI = ViewHolder.get(itemView,R.id.tvBBI);
-            bestIndividual = ViewHolder.get(itemView,R.id.tvBestIndividual);
-            mostWkts = ViewHolder.get(itemView,R.id.tvMostWickets);
-            mostRuns = ViewHolder.get(itemView,R.id.tvMostRuns);
+            played = ViewHolder.get(itemView, R.id.tvPlayed);
+            wins = ViewHolder.get(itemView, R.id.tvWins);
+            loss = ViewHolder.get(itemView, R.id.tvLoss);
+            draw = ViewHolder.get(itemView, R.id.tvDraw);
+            highestInnings = ViewHolder.get(itemView, R.id.tvHighestInnings);
+            BBI = ViewHolder.get(itemView, R.id.tvBBI);
+            bestIndividual = ViewHolder.get(itemView, R.id.tvBestIndividual);
+            mostWkts = ViewHolder.get(itemView, R.id.tvMostWickets);
+            mostRuns = ViewHolder.get(itemView, R.id.tvMostRuns);
         }
     }
 }

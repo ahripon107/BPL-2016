@@ -1,12 +1,9 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,9 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +23,17 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
-import com.tigersapp.bdcricket.fragment.NewsCommentsFragment;
 import com.tigersapp.bdcricket.model.Comment;
-import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
-import com.tigersapp.bdcricket.util.Validator;
+import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
 import org.json.JSONArray;
@@ -46,24 +43,37 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
+@ContentView(R.layout.activity_opinions)
+public class InsertOpinionActivity extends RoboAppCompatActivity {
 
-public class InsertOpinionActivity extends AppCompatActivity{
+    @Inject
+    private ArrayList<Comment> comments;
 
-    ArrayList<Comment> comments;
+    @InjectView(R.id.rvComments)
+    private RecyclerView recyclerView;
+
+    @InjectView(R.id.adViewOpinions)
+    private AdView adView;
+
+    @InjectView(R.id.commentBody)
+    private EditText commentBody;
+
+    @InjectView(R.id.btnSubmitComment)
+    private ImageButton sendComment;
+
+    @InjectView(R.id.opinion_question)
+    private TextView question;
+
     String url;
-    RecyclerView recyclerView;
     Typeface tf;
     String id;
-    AdView adView;
     Dialogs dialogs;
-    ImageButton sendComment;
-    TextView question;
-    EditText commentBody;
     Profile profile;
 
 
@@ -71,14 +81,12 @@ public class InsertOpinionActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_opinions);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView = (RecyclerView) findViewById(R.id.rvComments);
         recyclerView.setHasFixedSize(true);
-        id =  getIntent().getStringExtra("opinionid");
-        adView = (AdView) findViewById(R.id.adViewOpinions);
-        commentBody = (EditText) findViewById(R.id.commentBody);
+
+        id = getIntent().getStringExtra("opinionid");
+
         dialogs = new Dialogs(this);
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
@@ -86,8 +94,6 @@ public class InsertOpinionActivity extends AppCompatActivity{
         adView.loadAd(adRequest);
 
         tf = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
-
-        comments = new ArrayList<>();
 
         recyclerView.setAdapter(new BasicListAdapter<Comment, OpinionViewHolder>(comments) {
             @Override
@@ -102,6 +108,9 @@ public class InsertOpinionActivity extends AppCompatActivity{
                 holder.commenter.setTypeface(tf);
                 holder.commenter.setText("কমেন্ট করেছেন:  " + comments.get(position).getName());
                 holder.comment.setText(comments.get(position).getComment());
+                if (!comments.get(position).getProfileimage().equals("")) {
+                    Picasso.with(InsertOpinionActivity.this).load(comments.get(position).getProfileimage()).into(holder.imageView);
+                }
                 holder.timestamp.setText(Constants.getTimeAgo(Long.parseLong(comments.get(position).getTimestamp())));
             }
 
@@ -112,8 +121,9 @@ public class InsertOpinionActivity extends AppCompatActivity{
         RequestParams requestParams = new RequestParams();
 
         requestParams.add("key", "bl905577");
-        requestParams.add("newsid", "opinion"+id);
+        requestParams.add("newsid", "opinion" + id);
         url = Constants.FETCH_NEWS_COMMENT_URL;
+        Log.d(Constants.TAG, url);
 
         FetchFromWeb.get(url, requestParams, new JsonHttpResponseHandler() {
             @Override
@@ -124,7 +134,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
                         JSONArray jsonArray = response.getJSONArray("content");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            comments.add(new Comment(jsonObject.getString("name"), jsonObject.getString("comment"), jsonObject.getString("timestamp")));
+                            comments.add(new Comment(jsonObject.getString("name"), jsonObject.getString("comment"), jsonObject.getString("profileimage"), jsonObject.getString("timestamp")));
                         }
                     }
 
@@ -146,8 +156,6 @@ public class InsertOpinionActivity extends AppCompatActivity{
         });
 
 
-        sendComment = (ImageButton) findViewById(R.id.btnSubmitComment);
-
         question = (TextView) findViewById(R.id.opinion_question);
         question.setTypeface(tf);
         question.setText(getIntent().getStringExtra("question"));
@@ -162,11 +170,10 @@ public class InsertOpinionActivity extends AppCompatActivity{
                         publishComment(comment);
                         commentBody.getText().clear();
                     } else {
-                        Toast.makeText(getApplicationContext(),"Please write something",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Please write something", Toast.LENGTH_LONG).show();
                     }
-                }
-                else {
-                    Intent intent = new Intent(InsertOpinionActivity.this,LoginActivity.class);
+                } else {
+                    Intent intent = new Intent(InsertOpinionActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
             }
@@ -178,9 +185,10 @@ public class InsertOpinionActivity extends AppCompatActivity{
         RequestParams params = new RequestParams();
 
         params.put("key", "bl905577");
-        params.put("newsid", "opinion"+id);
+        params.put("newsid", "opinion" + id);
         params.put("name", profile.getName());
         params.put("comment", comment);
+        params.put("profileimage", profile.getProfilePictureUri(50, 50).toString());
         params.put("timestamp", System.currentTimeMillis() + "");
 
         url = Constants.INSERT_NEWS_COMMENT_URL;
@@ -192,7 +200,7 @@ public class InsertOpinionActivity extends AppCompatActivity{
                 try {
                     if (response.getString("msg").equals("Successful")) {
                         Toast.makeText(InsertOpinionActivity.this, "Comment successfully posted", Toast.LENGTH_LONG).show();
-                        comments.add(new Comment(profile.getName(), comment, System.currentTimeMillis() + ""));
+                        comments.add(new Comment(profile.getName(), comment, profile.getProfilePictureUri(50, 50).toString(), System.currentTimeMillis() + ""));
                         recyclerView.getAdapter().notifyDataSetChanged();
                         if (comments.size() != 0) {
                             recyclerView.smoothScrollToPosition(comments.size() - 1);
@@ -217,12 +225,14 @@ public class InsertOpinionActivity extends AppCompatActivity{
         protected TextView commenter;
         protected TextView comment;
         protected TextView timestamp;
+        protected ImageView imageView;
 
         public OpinionViewHolder(View v) {
             super(v);
             commenter = ViewHolder.get(v, R.id.tvName);
             comment = ViewHolder.get(v, R.id.tvComment);
-            timestamp = ViewHolder.get(itemView, R.id.tv_time_stamp);
+            timestamp = ViewHolder.get(v, R.id.tv_time_stamp);
+            imageView = ViewHolder.get(v, R.id.profile_image);
         }
     }
 

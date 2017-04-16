@@ -9,7 +9,6 @@
         android:id="@+id/match_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cardbackground"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical">
@@ -59,7 +58,7 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
-                    android:src="@drawable/bpl"
+                    android:src="@drawable/default_image"
                     app:civ_border_color="@color/dark"
                     app:civ_border_width="2dp" />
 
@@ -97,7 +96,7 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
-                    android:src="@drawable/bpl"
+                    android:src="@drawable/default_image"
                     app:civ_border_color="@color/dark"
                     app:civ_border_width="2dp" />
 

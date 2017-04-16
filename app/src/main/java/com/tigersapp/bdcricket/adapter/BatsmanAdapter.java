@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.PlayerProfileActivity;
+import com.tigersapp.bdcricket.activity.PlayerCareerActivity;
 import com.tigersapp.bdcricket.model.Batsman;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -25,8 +25,8 @@ import java.util.ArrayList;
  */
 public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanViewHolder> {
 
-    Context context;
-    ArrayList<Batsman> batsmans;
+    private Context context;
+    private ArrayList<Batsman> batsmans;
 
     public BatsmanAdapter(Context context, ArrayList<Batsman> batsmans) {
         this.context = context;
@@ -59,14 +59,14 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
         holder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, PlayerProfileActivity.class);
+                Intent intent = new Intent(context, PlayerCareerActivity.class);
                 intent.putExtra("playerID", batsmans.get(position).getPlayerId());
                 context.startActivity(intent);
             }
         });
 
-        if (position%2 == 1) {
-            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context,R.color.batsmanbowlerbackground));
+        if (position % 2 == 1) {
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.batsmanbowlerbackground));
         }
     }
 
@@ -100,7 +100,7 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
             six = ViewHolder.get(itemView, R.id.six);
             out = ViewHolder.get(itemView, R.id.desc_out);
             sr = ViewHolder.get(itemView, R.id.sr);
-            linearLayout = ViewHolder.get(itemView,R.id.batsman_layout);
+            linearLayout = ViewHolder.get(itemView, R.id.batsman_layout);
         }
     }
 }

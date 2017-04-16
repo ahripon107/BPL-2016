@@ -36,18 +36,22 @@ public class RecordsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recycler_view_layout,container,false);
+        return inflater.inflate(R.layout.recycler_view_layout, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        return view;
     }
 
     public void populateFragment(JSONArray jsonArray) throws JSONException {
-        for (int i=0;i<jsonArray.length();i++)
-            recordModels.add(gson.fromJson(String.valueOf(jsonArray.getJSONObject(i)),RecordModel.class));
-        recyclerView.setAdapter(new BasicListAdapter<RecordModel,RecordsViewHolder>(recordModels) {
+        for (int i = 0; i < jsonArray.length(); i++)
+            recordModels.add(gson.fromJson(String.valueOf(jsonArray.getJSONObject(i)), RecordModel.class));
+        recyclerView.setAdapter(new BasicListAdapter<RecordModel, RecordsViewHolder>(recordModels) {
             @Override
             public RecordsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_records,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_records, parent, false);
                 return new RecordsViewHolder(view);
             }
 
@@ -58,9 +62,9 @@ public class RecordsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), RecordDetailsActivity.class);
-                        intent.putExtra("title",recordModels.get(position).getHeader());
-                        intent.putExtra("recordtype",getArguments().getString("recordtype"));
-                        intent.putExtra("url",recordModels.get(position).getUrl());
+                        intent.putExtra("title", recordModels.get(position).getHeader());
+                        intent.putExtra("recordtype", getArguments().getString("recordtype"));
+                        intent.putExtra("url", recordModels.get(position).getUrl());
                         startActivity(intent);
                     }
                 });
@@ -75,8 +79,8 @@ public class RecordsFragment extends Fragment {
 
         public RecordsViewHolder(View itemView) {
             super(itemView);
-            textView = ViewHolder.get(itemView,R.id.tv_record_type);
-            recordTypeLayout = ViewHolder.get(itemView,R.id.record_type_layout);
+            textView = ViewHolder.get(itemView, R.id.tv_record_type);
+            recordTypeLayout = ViewHolder.get(itemView, R.id.record_type_layout);
         }
     }
 }

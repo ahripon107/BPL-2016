@@ -3,42 +3,39 @@ package com.tigersapp.bdcricket.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.Gravity;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.batch.android.Batch;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
-import com.tigersapp.bdcricket.fragment.ChattingFragment;
 import com.tigersapp.bdcricket.fragment.LiveScoreFragment;
 import com.tigersapp.bdcricket.fragment.OpinionFragment;
-import com.tigersapp.bdcricket.fragment.QuizFragment;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import roboguice.inject.ContentView;
 
-public class FrontPage extends AppCompatActivity
+@ContentView(R.layout.activity_front_page)
+public class FrontPage extends RoboAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
@@ -50,7 +47,7 @@ public class FrontPage extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_front_page);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         adView = (AdView) findViewById(R.id.adViewFontPage);
         setSupportActionBar(toolbar);
@@ -83,9 +80,7 @@ public class FrontPage extends AppCompatActivity
     public final void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(new LiveScoreFragment(), "লাইভ স্কোর");
-        this.matchDetailsViewPagerAdapter.addFragment(new ChattingFragment(), "চ্যাটিং");
-        this.matchDetailsViewPagerAdapter.addFragment(new OpinionFragment(),"মতামত");
-        //this.matchDetailsViewPagerAdapter.addFragment(new QuizFragment(),"Quiz");
+        this.matchDetailsViewPagerAdapter.addFragment(new OpinionFragment(), "মতামত");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
@@ -325,34 +320,4 @@ public class FrontPage extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Batch.onStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Batch.onStop(this);
-
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Batch.onDestroy(this);
-
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        Batch.onNewIntent(this, intent);
-
-        super.onNewIntent(intent);
-    }
-
-
 }

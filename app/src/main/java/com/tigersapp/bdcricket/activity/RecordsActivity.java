@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -27,7 +26,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
@@ -105,17 +103,17 @@ public class RecordsActivity extends AppCompatActivity {
         matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
 
         Bundle bundle = new Bundle();
-        bundle.putString("recordtype","batting");
+        bundle.putString("recordtype", "batting");
         battingRecordsFragment.setArguments(bundle);
         matchDetailsViewPagerAdapter.addFragment(battingRecordsFragment, "Batting Records");
 
         Bundle bundle1 = new Bundle();
-        bundle1.putString("recordtype","bowling");
+        bundle1.putString("recordtype", "bowling");
         bowlingRecordsFragment.setArguments(bundle1);
         matchDetailsViewPagerAdapter.addFragment(bowlingRecordsFragment, "Bowling Records");
 
         Bundle bundle2 = new Bundle();
-        bundle2.putString("recordtype","fastest");
+        bundle2.putString("recordtype", "fastest");
         fastestRecordsFragment.setArguments(bundle2);
         matchDetailsViewPagerAdapter.addFragment(fastestRecordsFragment, "Fastest Records");
 

@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.TeamDetailsActivity;
 import com.tigersapp.bdcricket.util.CircleImageView;
@@ -21,32 +21,30 @@ import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.ViewHolder;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
  */
 public class TeamProfileAdapter extends RecyclerView.Adapter<TeamProfileAdapter.TeamProfileViewHolder> {
 
-    Context context;
-    ArrayList<String> teamname;
-    ArrayList<String> teamImage;
-    Typeface typeface;
-    Dialogs dialogs;
+    private Context context;
+    private ArrayList<String> teamname;
+    private ArrayList<String> teamImage;
+    private Typeface typeface;
+    private Dialogs dialogs;
 
     public TeamProfileAdapter(Context context, ArrayList<String> teamName, ArrayList<String> teamImage) {
         this.context = context;
         this.teamname = teamName;
         this.teamImage = teamImage;
         this.dialogs = new Dialogs(context);
-        typeface = Typeface.createFromAsset(context.getAssets(),Constants.SOLAIMAN_LIPI_FONT);
+        typeface = Typeface.createFromAsset(context.getAssets(), Constants.SOLAIMAN_LIPI_FONT);
     }
 
     @Override
@@ -105,7 +103,7 @@ public class TeamProfileAdapter extends RecyclerView.Adapter<TeamProfileAdapter.
             super(itemView);
             circleImageView = ViewHolder.get(itemView, R.id.civTeams);
             tname = ViewHolder.get(itemView, R.id.tvTeamName);
-            linearLayout = ViewHolder.get(itemView,R.id.team_name_flag_container);
+            linearLayout = ViewHolder.get(itemView, R.id.team_name_flag_container);
         }
     }
 }

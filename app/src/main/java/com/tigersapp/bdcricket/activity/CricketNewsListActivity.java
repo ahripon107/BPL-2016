@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,17 +21,16 @@ import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.CricketNews;
-import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -76,10 +74,10 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
         typeface = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
         dialogs = new Dialogs(this);
 
-        recyclerView.setAdapter(new BasicListAdapter<CricketNews,NewsViewHolder>(cricketNewses) {
+        recyclerView.setAdapter(new BasicListAdapter<CricketNews, NewsViewHolder>(cricketNewses) {
             @Override
             public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singlenews, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_quotes, parent, false);
                 return new NewsViewHolder(view);
             }
 
@@ -123,9 +121,9 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
-                        CricketNews cricketNews = new CricketNews(jsonObject.getString("ContentID"),"http://www.banglanews24.com/media/imgAll/"+jsonObject.getString("ImageSMPath"),
-                                "http://www.banglanews24.com/api/details/"+jsonObject.getString("ContentID"),jsonObject.getString("ContentHeading"),
-                                jsonObject.getString("updated_at"),"banglanews","");
+                        CricketNews cricketNews = new CricketNews(jsonObject.getString("ContentID"), "http://www.banglanews24.com/media/imgAll/" + jsonObject.getString("ImageSMPath"),
+                                "http://www.banglanews24.com/api/details/" + jsonObject.getString("ContentID"), jsonObject.getString("ContentHeading"),
+                                jsonObject.getString("updated_at"), "banglanews", "");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -133,7 +131,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 }
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "banglanews "+response.toString());
+                Log.d(Constants.TAG, "banglanews " + response.toString());
             }
 
             @Override
@@ -160,9 +158,9 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
-                        CricketNews cricketNews = new CricketNews(jsonObject.getString("item_id"),jsonObject.getString("featured_image"),
-                                jsonObject.getString("main_news_url"),jsonObject.getString("title"),
-                                jsonObject.getString("datetime"),"kalerkantho","");
+                        CricketNews cricketNews = new CricketNews(jsonObject.getString("item_id"), jsonObject.getString("featured_image"),
+                                jsonObject.getString("main_news_url"), jsonObject.getString("title"),
+                                jsonObject.getString("datetime"), "kalerkantho", "");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -170,7 +168,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 }
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "kaler kantho "+response.toString());
+                Log.d(Constants.TAG, "kaler kantho " + response.toString());
             }
 
             @Override
@@ -189,9 +187,9 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
-                        CricketNews cricketNews = new CricketNews(jsonObject.getString("item_id"),jsonObject.getString("featured_image"),
-                                jsonObject.getString("main_news_url"),jsonObject.getString("title"),
-                                jsonObject.getString("datetime"),"bdprotidin","");
+                        CricketNews cricketNews = new CricketNews(jsonObject.getString("item_id"), jsonObject.getString("featured_image"),
+                                jsonObject.getString("main_news_url"), jsonObject.getString("title"),
+                                jsonObject.getString("datetime"), "bdprotidin", "");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -200,7 +198,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "bd protidin "+response.toString());
+                Log.d(Constants.TAG, "bd protidin " + response.toString());
             }
 
             @Override
@@ -219,9 +217,9 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                     response = response.getJSONObject(0).getJSONArray("data");
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
-                        CricketNews cricketNews = new CricketNews(jsonObject.getString("NewsId"),"http://cdn.risingbd.com/assets/"+jsonObject.getString("ImageSMPath"),
-                                "http://api.risingbd.com/index.php/News/Details?id="+jsonObject.getString("NewsId"),jsonObject.getString("NewsHeading"),
-                                jsonObject.getString("DateTimeInserted"),"risingbd","");
+                        CricketNews cricketNews = new CricketNews(jsonObject.getString("NewsId"), "http://cdn.risingbd.com/assets/" + jsonObject.getString("ImageSMPath"),
+                                "http://api.risingbd.com/index.php/News/Details?id=" + jsonObject.getString("NewsId"), jsonObject.getString("NewsHeading"),
+                                jsonObject.getString("DateTimeInserted"), "risingbd", "");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -230,7 +228,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "rising bd "+response.toString());
+                Log.d(Constants.TAG, "rising bd " + response.toString());
             }
 
             @Override
@@ -250,9 +248,9 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                     JSONArray response = object.getJSONArray("contents");
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
-                        CricketNews cricketNews = new CricketNews(jsonObject.getString("id"),jsonObject.getString("image"),
-                                "http://37.187.95.220/ipllive/news-details-api.php?key=yruguegbjbmdf&id="+jsonObject.getString("id"),jsonObject.getString("title"),
-                                jsonObject.getString("news_date"),"pavilion","");
+                        CricketNews cricketNews = new CricketNews(jsonObject.getString("id"), jsonObject.getString("image"),
+                                "http://37.187.95.220/ipllive/news-details-api.php?key=yruguegbjbmdf&id=" + jsonObject.getString("id"), jsonObject.getString("title"),
+                                jsonObject.getString("news_date"), "pavilion", "");
                         cricketNewses.add(cricketNews);
                     }
                 } catch (JSONException e) {
@@ -261,7 +259,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
 
                 //Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "pavilion "+object.toString());
+                Log.d(Constants.TAG, "pavilion " + object.toString());
             }
 
             @Override
@@ -278,7 +276,7 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
         protected TextView headline;
         protected TextView author;
         protected TextView time;
-        protected CircleImageView circleImageView;
+        protected ImageView circleImageView;
 
         public NewsViewHolder(View itemView) {
             super(itemView);

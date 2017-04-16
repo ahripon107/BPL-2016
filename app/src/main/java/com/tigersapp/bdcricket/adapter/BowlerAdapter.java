@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tigersapp.bdcricket.R;
-import com.tigersapp.bdcricket.activity.PlayerProfileActivity;
+import com.tigersapp.bdcricket.activity.PlayerCareerActivity;
 import com.tigersapp.bdcricket.model.Bowler;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -22,14 +22,13 @@ import java.util.ArrayList;
  */
 public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerViewHolder> {
 
-    Context context;
-    ArrayList<Bowler> bowlers;
-    LayoutInflater layoutInflater;
+    private Context context;
+    private ArrayList<Bowler> bowlers;
+
 
     public BowlerAdapter(Context context, ArrayList<Bowler> bowlers) {
         this.context = context;
         this.bowlers = bowlers;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
@@ -48,7 +47,7 @@ public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerView
         holder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, PlayerProfileActivity.class);
+                Intent intent = new Intent(context, PlayerCareerActivity.class);
                 intent.putExtra("playerID", bowlers.get(position).getPlayerId());
                 context.startActivity(intent);
             }

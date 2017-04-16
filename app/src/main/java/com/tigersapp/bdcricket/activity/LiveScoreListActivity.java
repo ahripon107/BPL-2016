@@ -20,6 +20,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Match;
@@ -29,7 +30,6 @@ import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,13 +49,13 @@ import roboguice.inject.InjectView;
 public class LiveScoreListActivity extends RoboAppCompatActivity {
 
     @InjectView(R.id.rv_live_score)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Inject
-    ArrayList<Match> datas;
+    private ArrayList<Match> datas;
 
     @InjectView(R.id.adViewLiveScoreList)
-    AdView adView;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ public class LiveScoreListActivity extends RoboAppCompatActivity {
                     public void onItemClick(View view, int position) {
                         if (source.equals("webview")) {
                             Intent intent = new Intent(LiveScoreListActivity.this, LiveScore.class);
-                            intent.putExtra("url", "http://www.criconly.com/ipl/2013/get__summary.php?id="+datas.get(position).getMatchId());
+                            intent.putExtra("url", "http://www.criconly.com/ipl/2013/get__summary.php?id=" + datas.get(position).getMatchId());
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(LiveScoreListActivity.this, ActivityMatchDetails.class);

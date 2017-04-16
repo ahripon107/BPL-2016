@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_margin="3dp"
-    android:background="@color/cardbackground">
+    android:padding="3dp">
 
     <TextView
         android:id="@+id/tv_player_rank"

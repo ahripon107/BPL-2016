@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -41,7 +41,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:paddingLeft="5dp"
-                        android:text="Name"
                         android:textColor="@color/Black"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -52,7 +51,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:paddingLeft="5dp"
-                        android:text="Born"
                         android:textColor="@color/Black"
                         android:textSize="13sp" />
 
@@ -62,7 +60,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:paddingLeft="5dp"
-                        android:text="Age"
                         android:textColor="@color/Black"
                         android:textSize="13sp" />
 
@@ -72,7 +69,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:paddingLeft="5dp"
-                        android:text="Major Teams"
                         android:textColor="@color/Black"
                         android:textSize="13sp" />
 
@@ -82,7 +78,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:paddingLeft="5dp"
-                        android:text="Playing Role"
                         android:textColor="@color/Black"
                         android:textSize="13sp" />
 
@@ -92,7 +87,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:paddingLeft="5dp"
-                        android:text="Batting Style"
                         android:textColor="@color/Black"
                         android:textSize="13sp" />
 
@@ -102,7 +96,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:paddingLeft="5dp"
-                        android:text="Bowling Style"
                         android:textColor="@color/Black"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -350,5 +343,5 @@
                 android:textSize="15sp" />
 
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

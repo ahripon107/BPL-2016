@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.PlayerListAdapter;
 import com.tigersapp.bdcricket.model.Player;
+import com.tigersapp.bdcricket.util.DividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +49,7 @@ public class PlayersFragment extends Fragment {
         playerListAdapter = new PlayerListAdapter(getContext(), pl);
         recyclerView.setAdapter(playerListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
         return v;
     }
 

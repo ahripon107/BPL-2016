@@ -1,5 +1,7 @@
 package com.tigersapp.bdcricket.util;
 
+import android.util.Log;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +11,12 @@ import java.util.Date;
  * @author ripon
  */
 public class Constants {
+
+    public static final String KEY = "key";
+    public static final String KEY_VALUE = "bl905577";
+
+    public static final int SUCCESS = 1;
+    public static final int FAILURE = 2;
 
     public static final String SOLAIMAN_LIPI_FONT = "fonts/solaimanlipi.ttf";
     public static final String TIMES_NEW_ROMAN_FONT = "fonts/timesnewroman.ttf";
@@ -31,10 +39,11 @@ public class Constants {
     public static String SHOW_PLAYER_IMAGE = "false";
     public static String QUIZ_ID = "1";
 
-    public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v5/accessChecker.php";
+    public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/BPL2016/apis/v6/accessChecker.php";
     public static final String OPINION_QUES_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchOpinionQuestions.php";
 
-    public static final String WELCOME_TEXT_URL = "http://apisea.xyz/BPL2016/apis/v5/welcometext.php?key=bl905577";
+    public static final String WELCOME_TEXT_URL = "http://apisea.xyz/BPL2016/apis/v6/welcometext.php?key=bl905577";
+    public static final String LIVE_SCORE_SOURCE_URL = "http://apisea.xyz/BPL2016/apis/v4/livescoresource.php";
 
     public static final String AUS_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/1_l-11-2-2012-975ee512e59ffc420e26dee2813daa27.png";
     public static final String BD_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/2_l-11-2-2012-a853bb5b43497e2b3a38791dc389adc0.png";
@@ -55,8 +64,8 @@ public class Constants {
 
     public static final String CRICBUZZ_LIVE_MATCHES = "http://mapps.cricbuzz.com/cbzandroid/2.0/currentmatches.json";
 
-    public static final String INSERT_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v4/insertnewscomment.php";
-    public static final String FETCH_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchnewscomments.php";
+    public static final String INSERT_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v6/insertnewscomment.php";
+    public static final String FETCH_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v6/fetchnewscomments.php";
     public static final String FETCH_QUIZ_QUESTIONS = "http://apisea.xyz/BPL2016/apis/v4/fetchQuizQuestions.php";
     public static final String INSERT_QUIZ_MARKS = "http://apisea.xyz/BPL2016/apis/v4/insertQuizNumber.php";
 
@@ -103,7 +112,7 @@ public class Constants {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd.HH:mm:ss");
         String timeAgo = "";
         try {
-            Date date1 = dateFormat.parse(date+"."+time);
+            Date date1 = dateFormat.parse(date + "." + time);
             long time1 = date1.getTime();
             timeAgo = getTimeAgo(time1);
         } catch (ParseException e) {
@@ -113,38 +122,15 @@ public class Constants {
     }
 
     public static String resolveLogo(String teamName) {
-        if (teamName.contains("Australia"))
-            return Constants.AUS_TEAM_LOGO_URL;
-        else if (teamName.contains("Bangladesh"))
-            return Constants.BD_TEAM_LOGO_URL;
-        else if (teamName.contains("England"))
-            return Constants.ENG_TEAM_LOGO_URL;
-        else if (teamName.contains("India"))
-            return Constants.IND_TEAm_LOGO_URL;
-        else if (teamName.contains("New Zealand"))
-            return Constants.NZ_TEAM_LOGO_URL;
-        else if (teamName.contains("Pakistan"))
-            return Constants.PAK_TEAM_LOGO_URL;
-        else if (teamName.contains("South Africa"))
-            return Constants.SA_TEAM_LOGO_URL;
-        else if (teamName.contains("Sri Lanka"))
-            return Constants.SL_TEAM_LOGO_URL;
-        else if (teamName.contains("West Indies"))
-            return Constants.WI_TEAM_LOGO_URL;
-        else if (teamName.contains("Zimbabwe"))
-            return Constants.ZIM_TEAM_LOGO_URL;
-        else if (teamName.contains("Bermuda"))
-            return Constants.BER_TEAM_LOGO_URL;
-        else if (teamName.contains("Canada"))
-            return Constants.CAN_TEAM_LOGO_URL;
-        else if (teamName.contains("Ireland"))
-            return Constants.IRE_TEAM_LOGO_URL;
-        else if (teamName.contains("Kenya"))
-            return Constants.KEN_TEAM_LOGO_URL;
-        else if (teamName.contains("Netherland"))
-            return Constants.NED_TEAM_LOGO_URL;
-        else if (teamName.contains("Scotland"))
-            return Constants.SCO_TEAM_LOGO_URL;
-        else return "n";
+        if (SHOW_PLAYER_IMAGE.equals("true")) {
+            String replace = teamName.replace(" ", "");
+            Log.d(TAG, replace);
+
+            return "http://apisea.xyz/BPL2016/images/" + replace + ".png";
+        } else {
+            return "xyz";
+        }
+
     }
+
 }

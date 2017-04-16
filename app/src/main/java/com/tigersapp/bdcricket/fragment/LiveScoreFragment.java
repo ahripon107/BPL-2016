@@ -5,13 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.activity.ActivityMatchDetails;
@@ -34,8 +33,10 @@ import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Match;
 import com.tigersapp.bdcricket.util.CircleImageView;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
 import com.tigersapp.bdcricket.util.Dialogs;
 import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.NetworkService;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -46,24 +47,31 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import roboguice.fragment.RoboFragment;
+import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
 
-public class LiveScoreFragment extends Fragment {
+public class LiveScoreFragment extends RoboFragment {
 
-    TextView welcomeText;
+    @InjectView(R.id.tv_welcome_text)
+    private TextView welcomeText;
+    @InjectView(R.id.live_matches)
+    private RecyclerView recyclerView;
+    @InjectView(R.id.tour_image)
+    private ImageView imageView;
+    @InjectView(R.id.tv_empty_view)
+    private TextView emptyView;
 
-    RecyclerView recyclerView;
+    @Inject
+    private ArrayList<Match> datas;
+    @Inject
+    private NetworkService networkService;
 
-    Typeface typeface;
-
-    ArrayList<Match> datas;
-    ImageView imageView;
-    Dialogs dialogs;
-    PackageInfo pInfo;
-
+    private Dialogs dialogs;
+    private PackageInfo pInfo;
 
     @Nullable
     @Override
@@ -75,12 +83,6 @@ public class LiveScoreFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        datas = new ArrayList<>();
-        typeface = Typeface.createFromAsset(getActivity().getAssets(), Constants.SOLAIMAN_LIPI_FONT);
-        welcomeText = (TextView) view.findViewById(R.id.tv_welcome_text);
-        recyclerView = (RecyclerView) view.findViewById(R.id.live_matches);
-        imageView = (ImageView) view.findViewById(R.id.tour_image);
-
         dialogs = new Dialogs(getContext());
         try {
             pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
@@ -91,11 +93,13 @@ public class LiveScoreFragment extends Fragment {
         String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
         Log.d(Constants.TAG, welcomeTextUrl);
 
-        FetchFromWeb.get(welcomeTextUrl, null, new JsonHttpResponseHandler() {
-
+        networkService.fetchWelcomeText(new DefaultMessageHandler(getContext(), true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, final JSONObject response) {
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    final JSONObject response = new JSONObject(string);
+
                     Constants.SHOW_PLAYER_IMAGE = response.getJSONArray("content").getJSONObject(0).getString("playerimage");
                     welcomeText.setText(Html.fromHtml(response.getJSONArray("content").getJSONObject(0).getString("description")));
                     if (response.getJSONArray("content").getJSONObject(0).getString("clickable").equals("true")) {
@@ -114,6 +118,7 @@ public class LiveScoreFragment extends Fragment {
                     }
 
                     if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("appimage").equals("true")) {
+                        imageView.setVisibility(View.VISIBLE);
                         Picasso.with(getContext())
                                 .load(response.getJSONArray("content").getJSONObject(0).getString("appimageurl"))
                                 .placeholder(R.drawable.default_image)
@@ -148,7 +153,7 @@ public class LiveScoreFragment extends Fragment {
                                     }
                                 });
 
-                        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -161,23 +166,16 @@ public class LiveScoreFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(Constants.TAG, response.toString());
             }
         });
 
-
-        String idMatcherURL = "http://apisea.xyz/BPL2016/apis/v4/livescoresource.php";
-        Log.d(Constants.TAG, idMatcherURL);
-        dialogs.showDialog();
-
-        RequestParams params = new RequestParams();
-        params.add("key", "bl905577");
-
-        FetchFromWeb.get(idMatcherURL, params, new JsonHttpResponseHandler() {
+        networkService.fetchLiveScoreSource(new DefaultMessageHandler(getContext(), true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
+
                     if (response.getString("msg").equals("Successful")) {
                         final String source = response.getJSONArray("content").getJSONObject(0).getString("scoresource");
                         String url = response.getJSONArray("content").getJSONObject(0).getString("url");
@@ -228,7 +226,6 @@ public class LiveScoreFragment extends Fragment {
                             );
 
                             if (source.equals("cricinfo")) {
-                                //String url = "http://cricinfo-mukki.rhcloud.com/api/match/live";
                                 Log.d(Constants.TAG, url);
 
                                 dialogs.showDialog();
@@ -247,6 +244,11 @@ public class LiveScoreFragment extends Fragment {
                                                         obj.getString("matchDescription"), "", "", "", obj.getString("matchId")));
                                             }
                                             recyclerView.getAdapter().notifyDataSetChanged();
+
+                                            emptyView.setVisibility(View.GONE);
+                                            if (datas.size() == 0) {
+                                                emptyView.setVisibility(View.VISIBLE);
+                                            }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -285,6 +287,10 @@ public class LiveScoreFragment extends Fragment {
                                                 }
                                             }
                                             recyclerView.getAdapter().notifyDataSetChanged();
+                                            emptyView.setVisibility(View.GONE);
+                                            if (datas.size() == 0) {
+                                                emptyView.setVisibility(View.VISIBLE);
+                                            }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -304,7 +310,6 @@ public class LiveScoreFragment extends Fragment {
                                 });
 
                             } else if (source.equals("webview")) {
-                                //String url = "http://www.criconly.com/ipl/2013/html/iphone_home_json.json";
                                 Log.d(Constants.TAG, url);
 
                                 dialogs.showDialog();
@@ -324,6 +329,10 @@ public class LiveScoreFragment extends Fragment {
                                             }
 
                                             recyclerView.getAdapter().notifyDataSetChanged();
+                                            emptyView.setVisibility(View.GONE);
+                                            if (datas.size() == 0) {
+                                                emptyView.setVisibility(View.VISIBLE);
+                                            }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -356,13 +365,9 @@ public class LiveScoreFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
-            }
         });
+
+        Log.d(Constants.TAG, Constants.LIVE_SCORE_SOURCE_URL);
 
         recyclerView.setNestedScrollingEnabled(false);
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tigersapp.bdcricket.R;
+import com.tigersapp.bdcricket.activity.TeamDetailsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +35,6 @@ public class BasicInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.basicinfofragment, container, false);
-        TextView teamName = (TextView) v.findViewById(R.id.tvTeamNameBasic);
         TextView testRank = (TextView) v.findViewById(R.id.tvTestRank);
         TextView odiRank = (TextView) v.findViewById(R.id.tvODIRank);
         TextView t20Rank = (TextView) v.findViewById(R.id.tvT20Rank);
@@ -54,7 +54,7 @@ public class BasicInfoFragment extends Fragment {
             jsonObject = jsonObject.getJSONObject("TeamProfile");
 
             String a = jsonObject.getString("TeamName");
-            teamName.setText("Team Name: " + a);
+            ((TeamDetailsActivity) getActivity()).getSupportActionBar().setTitle(a);
 
             JSONObject object;
 

@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -33,7 +32,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 
 /**
  * @author Ripon
@@ -62,15 +60,15 @@ public class GalleryActivity extends AppCompatActivity {
 
         dialogs.showDialog();
 
-        FetchFromWeb.get(galleryUrl,null,new JsonHttpResponseHandler() {
+        FetchFromWeb.get(galleryUrl, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 dialogs.dismissDialog();
                 try {
                     JSONArray jsonArray = response.getJSONArray("Match Details");
-                    for (int i=0;i<jsonArray.length();i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        galleries.add(new Gallery(obj.getString("name"),response.getJSONObject("Index").getString("match")+obj.getString("url"),obj.getString("dt"),response.getJSONObject("Index").getString("img")+obj.getString("img")));
+                        galleries.add(new Gallery(obj.getString("name"), response.getJSONObject("Index").getString("match") + obj.getString("url"), obj.getString("dt"), response.getJSONObject("Index").getString("img") + obj.getString("img")));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -95,11 +93,11 @@ public class GalleryActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView.setAdapter(new BasicListAdapter<Gallery,GalleryViewHolder>(galleries) {
+        recyclerView.setAdapter(new BasicListAdapter<Gallery, GalleryViewHolder>(galleries) {
 
             @Override
             public GalleryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singlenews,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singlenews, parent, false);
                 return new GalleryViewHolder(view);
             }
 
@@ -117,8 +115,8 @@ public class GalleryActivity extends AppCompatActivity {
                 holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(GalleryActivity.this,GalleryOfMatchActivity.class);
-                        intent.putExtra("url",gallery.getUrl());
+                        Intent intent = new Intent(GalleryActivity.this, GalleryOfMatchActivity.class);
+                        intent.putExtra("url", gallery.getUrl());
                         startActivity(intent);
                     }
                 });
@@ -156,11 +154,11 @@ public class GalleryActivity extends AppCompatActivity {
         public GalleryViewHolder(View itemView) {
             super(itemView);
 
-            matchTitle = ViewHolder.get(itemView,R.id.tv_headline);
-            imageView = ViewHolder.get(itemView,R.id.civ_news_thumb);
-            matchDate = ViewHolder.get(itemView,R.id.tv_times_ago);
-            author = ViewHolder.get(itemView,R.id.tv_author);
-            linearLayout = ViewHolder.get(itemView,R.id.news_item_container);
+            matchTitle = ViewHolder.get(itemView, R.id.tv_headline);
+            imageView = ViewHolder.get(itemView, R.id.civ_news_thumb);
+            matchDate = ViewHolder.get(itemView, R.id.tv_times_ago);
+            author = ViewHolder.get(itemView, R.id.tv_author);
+            linearLayout = ViewHolder.get(itemView, R.id.news_item_container);
         }
     }
 }

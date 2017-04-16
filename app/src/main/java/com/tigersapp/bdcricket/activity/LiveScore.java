@@ -27,9 +27,10 @@ public class LiveScore extends RoboAppCompatActivity {
     public static final String EXTRA_URL = "url";
 
     @InjectView(R.id.webView)
-    private WebView mWebview ;
+    private WebView mWebview;
+
     @InjectView(R.id.adViewLivescore)
-    AdView adView;
+    private AdView adView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,8 +38,6 @@ public class LiveScore extends RoboAppCompatActivity {
         setTitle("Details");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String url = getIntent().getStringExtra(EXTRA_URL);
-
-
         mWebview.getSettings().setJavaScriptEnabled(true);
 
         final Activity activity = this;
@@ -49,11 +48,10 @@ public class LiveScore extends RoboAppCompatActivity {
             }
         });
 
-        mWebview .loadUrl(url);
+        mWebview.loadUrl(url);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);
-
     }
 
     @Override

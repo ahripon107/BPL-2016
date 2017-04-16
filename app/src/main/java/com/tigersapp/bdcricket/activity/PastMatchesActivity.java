@@ -1,6 +1,5 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +20,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Match;
@@ -31,7 +31,6 @@ import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +39,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -51,13 +49,13 @@ import roboguice.inject.InjectView;
 public class PastMatchesActivity extends RoboAppCompatActivity {
 
     @InjectView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Inject
-    ArrayList<Match> data;
+    private ArrayList<Match> data;
 
     @InjectView(R.id.adViewFixture)
-    AdView adView;
+    private AdView adView;
 
     Dialogs dialogs;
 
@@ -123,7 +121,7 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
                                         intent.putExtra("matchID", cricinfoID);
                                         startActivity(intent);
                                     } else {
-                                        Toast.makeText(PastMatchesActivity.this,"Scorecard not available",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PastMatchesActivity.this, "Scorecard not available", Toast.LENGTH_SHORT).show();
                                     }
 
                                     Log.d(Constants.TAG, response.toString());
@@ -153,7 +151,7 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 dialogs.dismissDialog();
                 try {
-                    String team1, team2, venue, time="", seriesName, matcNo,matchID;
+                    String team1, team2, venue, time = "", seriesName, matcNo, matchID;
                     response = response.getJSONObject("query").getJSONObject("results");
                     JSONArray jsonArray = response.getJSONArray("Match");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -169,11 +167,11 @@ public class PastMatchesActivity extends RoboAppCompatActivity {
 
                         String by = obj.getJSONObject("Result").getString("by");
                         String how = obj.getJSONObject("Result").getString("how");
-                        JSONArray temp  = obj.getJSONObject("Result").getJSONArray("Team");
+                        JSONArray temp = obj.getJSONObject("Result").getJSONArray("Team");
                         if (temp.getJSONObject(0).getString("matchwon").equals("yes") && temp.getJSONObject(1).getString("matchwon").equals("no")) {
-                            time = team1 + " won by " + by +" " + how;
+                            time = team1 + " won by " + by + " " + how;
                         } else if (temp.getJSONObject(0).getString("matchwon").equals("no") && temp.getJSONObject(1).getString("matchwon").equals("yes")) {
-                            time = team2 + " won by " + by +" " + how;
+                            time = team2 + " won by " + by + " " + how;
                         } else if (temp.getJSONObject(0).getString("matchwon").equals("no") && temp.getJSONObject(1).getString("matchwon").equals("no")) {
                             time = how;
                         }

@@ -1,43 +1,21 @@
 package com.tigersapp.bdcricket.activity;
 
-import android.app.AlertDialog;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
-import com.tigersapp.bdcricket.fragment.FragmentMatchSummary;
-import com.tigersapp.bdcricket.fragment.FragmentScoreBoard;
 import com.tigersapp.bdcricket.fragment.NewsCommentsFragment;
 import com.tigersapp.bdcricket.fragment.NewsDetailsFragment;
-import com.tigersapp.bdcricket.fragment.PlayingXIFragment;
-import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
-import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import cz.msebera.android.httpclient.Header;
-import dmax.dialog.SpotsDialog;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -50,10 +28,10 @@ public class NewsDetailsActivity extends RoboAppCompatActivity {
     public static final String EXTRA_NEWS_OBJECT = "newsobject";
 
     @InjectView(R.id.adViewNewsDetails)
-    AdView adView;
+    private AdView adView;
 
     @InjectView(R.id.viewPager)
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

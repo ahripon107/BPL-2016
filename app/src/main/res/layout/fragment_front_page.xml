@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_welcome_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/pagebackground">
-
-            <TextView
-                android:id="@+id/tv_welcome_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Hello viewers !!"
-                android:textColor="@color/Black"
-                android:textSize="16sp"
-                android:layout_margin="10dp"
-                android:gravity="center_horizontal"/>
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:text="Hello viewers !!"
+            android:textColor="@color/Black"
+            android:textSize="16sp" />
 
 
-            <ImageView
-                android:layout_margin="10dp"
-                android:id="@+id/tour_image"
-                android:src="@drawable/default_image"
-                android:adjustViewBounds="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/tour_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/default_image"
+            android:visibility="gone"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/live_matches"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_empty_view"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textColor="@color/Black"
+            android:text="No live natches ongoing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
-        </LinearLayout>
-    </ScrollView>
-</FrameLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/live_matches"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
