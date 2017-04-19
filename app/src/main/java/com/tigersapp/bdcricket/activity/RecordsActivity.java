@@ -1,11 +1,10 @@
 package com.tigersapp.bdcricket.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,24 +12,25 @@ import android.view.MenuItem;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.google.inject.Inject;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.MatchDetailsViewPagerAdapter;
 import com.tigersapp.bdcricket.fragment.RecordsFragment;
 import com.tigersapp.bdcricket.util.Constants;
-import com.tigersapp.bdcricket.util.Dialogs;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
+import com.tigersapp.bdcricket.util.NetworkService;
+import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cz.msebera.android.httpclient.Header;
+import roboguice.inject.ContentView;
 
 /**
  * @author Ripon
  */
-public class RecordsActivity extends AppCompatActivity {
+@ContentView(R.layout.activity_match_details)
+public class RecordsActivity extends RoboAppCompatActivity {
 
     MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
     ViewPager viewPager;
@@ -38,14 +38,15 @@ public class RecordsActivity extends AppCompatActivity {
     TabLayout tabLayout;
     AdView adView;
     RecordsFragment battingRecordsFragment, bowlingRecordsFragment, fastestRecordsFragment;
-    Dialogs dialogs;
+
+    @Inject
+    private NetworkService networkService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_match_details);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        dialogs = new Dialogs(this);
 
         battingRecordsFragment = new RecordsFragment();
         bowlingRecordsFragment = new RecordsFragment();
@@ -54,23 +55,22 @@ public class RecordsActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         adView = (AdView) findViewById(R.id.adViewMatchDetails);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
         gson = new Gson();
         viewPager.setOffscreenPageLimit(2);
         setUpViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);
 
-        String url = Constants.RECORDS_URL;
-        Log.d(Constants.TAG, url);
-
-        dialogs.showDialog();
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchRecords(new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
                     if (battingRecordsFragment.isAdded()) {
                         battingRecordsFragment.populateFragment(response.getJSONObject("top-stats").getJSONArray("battingStats"));
                     }
@@ -84,17 +84,6 @@ public class RecordsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                dialogs.dismissDialog();
             }
         });
     }

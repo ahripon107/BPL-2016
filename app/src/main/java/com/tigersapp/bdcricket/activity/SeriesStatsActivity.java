@@ -2,11 +2,10 @@ package com.tigersapp.bdcricket.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,13 +18,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.google.inject.Inject;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.RecordModel;
-import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
 import com.tigersapp.bdcricket.util.Dialogs;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.NetworkService;
+import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
 import org.json.JSONArray;
@@ -35,13 +35,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
+import roboguice.inject.ContentView;
 
 /**
  * @author Ripon
  */
-
-public class SeriesStatsActivity extends AppCompatActivity {
+@ContentView(R.layout.activity_series_stats)
+public class SeriesStatsActivity extends RoboAppCompatActivity {
 
     Spinner spinner;
     RecyclerView recyclerView;
@@ -50,13 +50,16 @@ public class SeriesStatsActivity extends AppCompatActivity {
     Gson gson;
     Dialogs dialogs;
 
+    @Inject
+    NetworkService networkService;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_series_stats);
         spinner = (Spinner) findViewById(R.id.spinner);
         recyclerView = (RecyclerView) findViewById(R.id.series_stats);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         currentSeries = new ArrayList<>();
@@ -65,17 +68,17 @@ public class SeriesStatsActivity extends AppCompatActivity {
         gson = new Gson();
         dialogs = new Dialogs(this);
 
-        fetchData(Constants.SERIES_STATS_URL);
-
+        fetchData();
     }
 
-    public void fetchData(String url) {
+    public void fetchData() {
         dialogs.showDialog();
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchSeriesStats(new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
                     response = response.getJSONObject("series-stats");
                     JSONArray jsonArray = response.getJSONArray("seriesDetails");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -119,17 +122,6 @@ public class SeriesStatsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                dialogs.dismissDialog();
             }
         });
     }

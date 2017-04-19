@@ -90,4 +90,28 @@ public class NetworkService {
     public void fetchSpecificPointTable(String url, Handler handler) {
         httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
     }
+
+    public void fetchBanglanews(Handler handler) {
+        httpClient.get("http://www.banglanews24.com/api/category/5", null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchBdProtidin(Handler handler) {
+        httpClient.get("http://www.bd-pratidin.com/api/categorynews/9", null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchRisingBd(Handler handler) {
+        httpClient.get("http://api.risingbd.com/index.php/News?name=Latest&cat_id=3", null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchRecords(Handler handler) {
+        httpClient.get(Constants.RECORDS_URL, null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchSeriesStats(Handler handler) {
+        httpClient.get(Constants.SERIES_STATS_URL, null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchQuotes(Handler handler) {
+        httpClient.get("http://m.cricbuzz.com/cricbuzz-android/quotes", null, new DefaultAsyncHttpResponseHandler(handler));
+    }
 }

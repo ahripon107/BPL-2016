@@ -3,9 +3,9 @@ package com.tigersapp.bdcricket.activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,20 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
-import com.tigersapp.bdcricket.util.Dialogs;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
+import com.tigersapp.bdcricket.util.NetworkService;
 import com.tigersapp.bdcricket.util.RecyclerItemClickListener;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
@@ -39,7 +36,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import cz.msebera.android.httpclient.Header;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -59,11 +55,10 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
     private ArrayList<CricketNews> cricketNewses;
 
     @Inject
-    private Gson gson;
+    private NetworkService networkService;
 
     private Typeface typeface;
 
-    private Dialogs dialogs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +67,6 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
         setTitle("স্পোর্টস নিউজ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         typeface = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
-        dialogs = new Dialogs(this);
 
         recyclerView.setAdapter(new BasicListAdapter<CricketNews, NewsViewHolder>(cricketNewses) {
             @Override
@@ -110,15 +104,12 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 })
         );
 
-        String url = "http://www.banglanews24.com/api/category/5";
-        Log.d(Constants.TAG, url);
-
-        dialogs.showDialog();
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchBanglanews(new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONArray response = new JSONArray(string);
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("ContentID"), "http://www.banglanews24.com/media/imgAll/" + jsonObject.getString("ImageSMPath"),
@@ -131,60 +122,15 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 }
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "banglanews " + response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(CricketNewsListActivity.this, "Failed", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-                Toast.makeText(CricketNewsListActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
 
-        url = "http://www.kalerkantho.com/api/categorynews/8";
-        Log.d(Constants.TAG, url);
-
-
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchBdProtidin(new DefaultMessageHandler(this) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        CricketNews cricketNews = new CricketNews(jsonObject.getString("item_id"), jsonObject.getString("featured_image"),
-                                jsonObject.getString("main_news_url"), jsonObject.getString("title"),
-                                jsonObject.getString("datetime"), "kalerkantho", "");
-                        cricketNewses.add(cricketNews);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Collections.sort(cricketNewses);
-                recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "kaler kantho " + response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-
-            }
-        });
-
-        url = "http://www.bd-pratidin.com/api/categorynews/9";
-        Log.d(Constants.TAG, url);
-
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-
-                try {
+                    JSONArray response = new JSONArray(string);
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         CricketNews cricketNews = new CricketNews(jsonObject.getString("item_id"), jsonObject.getString("featured_image"),
@@ -195,25 +141,17 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "bd protidin " + response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
             }
         });
 
-        url = "http://api.risingbd.com/index.php/News?name=Latest&cat_id=3";
-        Log.d(Constants.TAG, url);
-
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchRisingBd(new DefaultMessageHandler(this) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONArray response = new JSONArray(string);
                     response = response.getJSONObject(0).getJSONArray("data");
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
@@ -225,45 +163,8 @@ public class CricketNewsListActivity extends RoboAppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 Collections.sort(cricketNewses);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "rising bd " + response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-            }
-        });
-
-        url = "http://37.187.95.220/ipllive/new-home-api.php?key=jkfjkfgkfgkfghkg";
-        Log.d(Constants.TAG, url);
-
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject object) {
-
-                try {
-
-                    JSONArray response = object.getJSONArray("contents");
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        CricketNews cricketNews = new CricketNews(jsonObject.getString("id"), jsonObject.getString("image"),
-                                "http://37.187.95.220/ipllive/news-details-api.php?key=yruguegbjbmdf&id=" + jsonObject.getString("id"), jsonObject.getString("title"),
-                                jsonObject.getString("news_date"), "pavilion", "");
-                        cricketNewses.add(cricketNews);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                //Collections.sort(cricketNewses);
-                recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, "pavilion " + object.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
             }
         });
 

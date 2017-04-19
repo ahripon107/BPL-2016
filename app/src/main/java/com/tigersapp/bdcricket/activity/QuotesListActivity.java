@@ -1,12 +1,11 @@
 package com.tigersapp.bdcricket.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,18 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.google.inject.Inject;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.CricketNews;
 import com.tigersapp.bdcricket.util.Constants;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
 import com.tigersapp.bdcricket.util.Dialogs;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.NetworkService;
+import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
 import org.json.JSONArray;
@@ -35,23 +35,26 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
+import roboguice.inject.ContentView;
 
 /**
  * @author Ripon
  */
-
-public class QuotesListActivity extends AppCompatActivity {
+@ContentView(R.layout.news)
+public class QuotesListActivity extends RoboAppCompatActivity {
 
     RecyclerView recyclerView;
     AdView adView;
     ArrayList<CricketNews> quotes;
     Dialogs dialogs;
 
+    @Inject
+    NetworkService networkService;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.news);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         dialogs = new Dialogs(this);
 
@@ -85,15 +88,12 @@ public class QuotesListActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String url = "http://m.cricbuzz.com/cricbuzz-android/quotes";
-        Log.d(Constants.TAG, url);
-
-        dialogs.showDialog();
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchQuotes(new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
                     JSONArray jsonArray = response.getJSONArray("quotes");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -106,22 +106,8 @@ public class QuotesListActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(QuotesListActivity.this, "Failed", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-                Toast.makeText(QuotesListActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     private static class QuotesViewHolder extends RecyclerView.ViewHolder {
