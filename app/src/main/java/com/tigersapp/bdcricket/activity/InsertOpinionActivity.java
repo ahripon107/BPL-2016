@@ -3,10 +3,10 @@ package com.tigersapp.bdcricket.activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,15 +24,13 @@ import com.facebook.Profile;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Comment;
 import com.tigersapp.bdcricket.util.Constants;
-import com.tigersapp.bdcricket.util.Dialogs;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
+import com.tigersapp.bdcricket.util.NetworkService;
 import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
@@ -42,7 +40,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -70,10 +67,13 @@ public class InsertOpinionActivity extends RoboAppCompatActivity {
     @InjectView(R.id.opinion_question)
     private TextView question;
 
+    @Inject
+    private NetworkService networkService;
+
     String url;
     Typeface tf;
     String id;
-    Dialogs dialogs;
+
     Profile profile;
 
 
@@ -86,8 +86,6 @@ public class InsertOpinionActivity extends RoboAppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         id = getIntent().getStringExtra("opinionid");
-
-        dialogs = new Dialogs(this);
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
@@ -117,19 +115,13 @@ public class InsertOpinionActivity extends RoboAppCompatActivity {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        dialogs.showDialog();
-        RequestParams requestParams = new RequestParams();
 
-        requestParams.add("key", "bl905577");
-        requestParams.add("newsid", "opinion" + id);
-        url = Constants.FETCH_NEWS_COMMENT_URL;
-        Log.d(Constants.TAG, url);
-
-        FetchFromWeb.get(url, requestParams, new JsonHttpResponseHandler() {
+        networkService.fetchOpinionComments(id, new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
                     if (response.getString("msg").equals("Successful")) {
                         JSONArray jsonArray = response.getJSONArray("content");
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -138,7 +130,6 @@ public class InsertOpinionActivity extends RoboAppCompatActivity {
                         }
                     }
 
-                    Log.d(Constants.TAG, response.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -147,14 +138,7 @@ public class InsertOpinionActivity extends RoboAppCompatActivity {
                     recyclerView.smoothScrollToPosition(comments.size() - 1);
                 }
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(InsertOpinionActivity.this, "Failed", Toast.LENGTH_LONG).show();
-            }
         });
-
 
         question = (TextView) findViewById(R.id.opinion_question);
         question.setTypeface(tf);
@@ -181,23 +165,13 @@ public class InsertOpinionActivity extends RoboAppCompatActivity {
     }
 
     public void publishComment(final String comment) {
-        dialogs.showDialog();
-        RequestParams params = new RequestParams();
 
-        params.put("key", "bl905577");
-        params.put("newsid", "opinion" + id);
-        params.put("name", profile.getName());
-        params.put("comment", comment);
-        params.put("profileimage", profile.getProfilePictureUri(50, 50).toString());
-        params.put("timestamp", System.currentTimeMillis() + "");
-
-        url = Constants.INSERT_NEWS_COMMENT_URL;
-
-        FetchFromWeb.post(url, params, new JsonHttpResponseHandler() {
+        networkService.publishOpinionComment(id, profile.getName(), comment, profile.getProfilePictureUri(50, 50).toString(), new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
                     if (response.getString("msg").equals("Successful")) {
                         Toast.makeText(InsertOpinionActivity.this, "Comment successfully posted", Toast.LENGTH_LONG).show();
                         comments.add(new Comment(profile.getName(), comment, profile.getProfilePictureUri(50, 50).toString(), System.currentTimeMillis() + ""));
@@ -207,16 +181,9 @@ public class InsertOpinionActivity extends RoboAppCompatActivity {
                         }
                     }
 
-                    Log.d(Constants.TAG, response.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(InsertOpinionActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
     }

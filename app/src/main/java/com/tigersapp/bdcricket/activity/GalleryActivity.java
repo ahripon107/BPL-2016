@@ -2,11 +2,10 @@ package com.tigersapp.bdcricket.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,14 +14,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.google.inject.Inject;
 import com.squareup.picasso.Picasso;
 import com.tigersapp.bdcricket.R;
 import com.tigersapp.bdcricket.adapter.BasicListAdapter;
 import com.tigersapp.bdcricket.model.Gallery;
-import com.tigersapp.bdcricket.util.Constants;
-import com.tigersapp.bdcricket.util.Dialogs;
-import com.tigersapp.bdcricket.util.FetchFromWeb;
+import com.tigersapp.bdcricket.util.DefaultMessageHandler;
+import com.tigersapp.bdcricket.util.NetworkService;
+import com.tigersapp.bdcricket.util.RoboAppCompatActivity;
 import com.tigersapp.bdcricket.util.ViewHolder;
 
 import org.json.JSONArray;
@@ -31,17 +30,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
+import roboguice.inject.ContentView;
 
 /**
  * @author Ripon
  */
-
-public class GalleryActivity extends AppCompatActivity {
+@ContentView(R.layout.playersfragment)
+public class GalleryActivity extends RoboAppCompatActivity {
 
     RecyclerView recyclerView;
     ArrayList<Gallery> galleries;
-    Dialogs dialogs;
+
+    @Inject
+    NetworkService networkService;
 
 
     @Override
@@ -49,22 +50,16 @@ public class GalleryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setContentView(R.layout.playersfragment);
-        galleries = new ArrayList<>();
-        dialogs = new Dialogs(this);
 
+        galleries = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        String galleryUrl = "http://mapps.cricbuzz.com/cricbuzz-android/gallery/";
-        Log.d(Constants.TAG, galleryUrl);
-
-        dialogs.showDialog();
-
-        FetchFromWeb.get(galleryUrl, null, new JsonHttpResponseHandler() {
+        networkService.fetchGallery(new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
                 try {
+                    JSONObject response = new JSONObject(string);
                     JSONArray jsonArray = response.getJSONArray("Match Details");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
@@ -73,23 +68,7 @@ public class GalleryActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 recyclerView.getAdapter().notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                dialogs.dismissDialog();
             }
         });
 

@@ -114,4 +114,32 @@ public class NetworkService {
     public void fetchQuotes(Handler handler) {
         httpClient.get("http://m.cricbuzz.com/cricbuzz-android/quotes", null, new DefaultAsyncHttpResponseHandler(handler));
     }
+
+    public void fetchOpinionComments(String id, Handler handler) {
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("key", "bl905577");
+        requestParams.add("newsid", "opinion" + id);
+
+        httpClient.get(Constants.FETCH_NEWS_COMMENT_URL, requestParams, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void publishOpinionComment(String id, String name, String comment, String image, Handler handler) {
+        RequestParams params = new RequestParams();
+        params.put("key", "bl905577");
+        params.put("newsid", "opinion" + id);
+        params.put("name", name);
+        params.put("comment", comment);
+        params.put("profileimage", image);
+        params.put("timestamp", System.currentTimeMillis() + "");
+
+        httpClient.post(Constants.INSERT_NEWS_COMMENT_URL, params, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchGalleryOfMatch(String url, Handler handler) {
+        httpClient.get(url, null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchGallery(Handler handler) {
+        httpClient.get("http://mapps.cricbuzz.com/cricbuzz-android/gallery/", null, new DefaultAsyncHttpResponseHandler(handler));
+    }
 }
