@@ -19,7 +19,12 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        applicationId "com.tigersapp.bdcricket"
+        applicationId "com.banglacricket.bdcricketteam"
+
+        manifestPlaceholders = [onesignal_app_id: "bc22e2b5-6394-4f7b-84c5-92a4019afd43",
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: "REMOTE"]
+
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 11
@@ -60,13 +65,15 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.google.android.gms:play-services-gcm:10.2.1'
     compile 'com.google.android.gms:play-services-ads:10.2.1'
+    compile "com.google.android.gms:play-services-location:10.2.1"
     compile 'com.google.android.gms:play-services-analytics:10.2.1'
+    compile 'com.onesignal:OneSignal:3.+@aar'
     compile 'org.roboguice:roboguice:2.0'
     compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
     compile 'com.github.d-max:spots-dialog:0.4@aar'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.firebase:firebase-core:10.0.1'
-    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile 'com.google.firebase:firebase-core:10.2.1'
+    compile 'com.google.firebase:firebase-messaging:10.2.1'
     compile 'com.android.support:multidex:1.0.1'
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')

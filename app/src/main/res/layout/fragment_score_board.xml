@@ -15,7 +15,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/pagebackground"
             android:orientation="vertical">
 
             <LinearLayout
@@ -153,7 +152,6 @@
                     android:background="@color/CornflowerBlue"
                     android:paddingBottom="6dp"
                     android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
                     android:paddingTop="6dp">
 
                     <TextView
@@ -169,6 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
                         android:text="Run"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
 
@@ -177,30 +176,34 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
                         android:text="Ball"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.2"
                         android:text="4S"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.2"
                         android:text="6S"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.4"
                         android:text="SR"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -213,8 +216,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/lvBattingInnings1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp" />
+                    android:layout_height="wrap_content" />
 
                 <View
                     android:layout_width="match_parent"
@@ -313,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/CornflowerBlue"
                     android:paddingBottom="6dp"
-                    android:paddingLeft="4dp"
+                    android:paddingLeft="41dp"
                     android:paddingRight="4dp"
                     android:paddingTop="6dp">
 
@@ -331,6 +333,7 @@
                         android:layout_marginLeft="24dp"
                         android:layout_weight="0.3"
                         android:text="Over"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
 
@@ -338,7 +341,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
-                        android:text="Maiden"
+                        android:text="Mdn"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
 
@@ -347,6 +351,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
                         android:text="Run"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
 
@@ -354,7 +359,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
-                        android:text="Wicket"
+                        android:text="Wckt"
+                        android:gravity="center_horizontal"
                         android:textColor="#000000"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -367,8 +373,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/lvBowlingInnings1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp" />
+                    android:layout_height="wrap_content" />
 
                 <View
                     android:layout_width="match_parent"

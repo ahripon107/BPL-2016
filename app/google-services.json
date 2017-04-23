@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "115406524067-c6224db6na3p5g8s3c9r8u86si2ng597.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tigersapp.bdcricket",
+            "certificate_hash": "ac2e463e9e46ea618950801e8592d691e340bbdf"
+          }
+        },
+        {
           "client_id": "115406524067-els28bsmtdl5v3ljpjuh7tqnr33g6avb.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -31,6 +39,50 @@
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115406524067:android:e8e112cfb6cc6d63",
+        "android_client_info": {
+          "package_name": "com.banglacricket.bdcricketteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115406524067-t3rplmirv2scltojv8lkdbhjuma60ijh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.banglacricket.bdcricketteam",
+            "certificate_hash": "ac2e463e9e46ea618950801e8592d691e340bbdf"
+          }
+        },
+        {
+          "client_id": "115406524067-els28bsmtdl5v3ljpjuh7tqnr33g6avb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByAFW5YdftFhpqTzveJObsaMACb43q0Ek"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115406524067-els28bsmtdl5v3ljpjuh7tqnr33g6avb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

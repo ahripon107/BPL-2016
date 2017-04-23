@@ -22,7 +22,7 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
-            <com.tigersapp.bdcricket.util.CircleImageView
+            <com.banglacricket.bdcricketteam.util.CircleImageView
                 android:id="@+id/civ_news_thumb"
                 android:layout_width="90dp"
                 android:layout_height="90dp"

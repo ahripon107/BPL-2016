@@ -4,13 +4,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_live_streaming"
-            android:title="লাইভ স্ট্রিমিং" />
+            android:title="ক্রিকেট লাইভ স্ট্রিমিং" />
+        <item
+            android:id="@+id/nav_live_streaming_football"
+            android:title="ফুটবল লাইভ স্ট্রিমিং" />
         <item
             android:id="@+id/nav_sports_news"
             android:title="স্পোর্টস নিউজ" />
         <item
             android:id="@+id/nav_highlights"
-            android:title="হাইলাইটস" />
+            android:title="ক্রিকেট হাইলাইটস" />
+        <item
+            android:id="@+id/nav_highlights_football"
+            android:title="ফুটবল হাইলাইটস" />
         <item
             android:id="@+id/nav_fixture"
             android:title="ফিক্সচার" />

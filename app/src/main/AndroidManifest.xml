@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tigersapp.bdcricket">
+    package="com.banglacricket.bdcricketteam">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,14 +14,14 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <application
-        android:name=".ParseApplication"
+        android:name="com.banglacricket.bdcricketteam.ParseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.FrontPage"
+            android:name="com.banglacricket.bdcricketteam.activity.FrontPage"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,120 +30,116 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.CricketNewsListActivity"
-            android:label="@string/app_name"
+            android:name="com.banglacricket.bdcricketteam.activity.CricketNewsListActivity"
+            android:label="স্পোর্টস নিউজ"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.FixtureActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.FixtureActivity"
             android:label="Fixture"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.NewsDetailsActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.NewsDetailsActivity"
+            android:label="বিস্তারিত"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.banglacricket.bdcricketteam.activity.Highlights"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.Highlights"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".videoplayers.HighlightsVids"
+            android:name="com.banglacricket.bdcricketteam.videoplayers.HighlightsVids"
             android:label="@string/app_name"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activity.LiveScore"
-            android:label="@string/app_name"
+            android:name="com.banglacricket.bdcricketteam.activity.LiveScore"
+            android:label="Details"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.LiveScoreListActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.TeamDetailsActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.TeamDetailsActivity"
             android:label="Team Profile"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.TeamProfile"
-            android:label="Team Profile"
+            android:name="com.banglacricket.bdcricketteam.activity.TeamProfile"
+            android:label="টিম প্রোফাইল"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PastMatchesActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.PastMatchesActivity"
             android:label="Past Matches"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".videoplayers.FrameStream"
+            android:name="com.banglacricket.bdcricketteam.videoplayers.FrameStream"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".videoplayers.LiveStreamView"
+            android:name="com.banglacricket.bdcricketteam.videoplayers.LiveStreamView"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".videoplayers.DMPlayerActivity"
+            android:name="com.banglacricket.bdcricketteam.videoplayers.DMPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".activity.GalleryOfMatchActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.GalleryOfMatchActivity"
             android:label="Gallery"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ActivityMatchDetails"
+            android:name="com.banglacricket.bdcricketteam.activity.ActivityMatchDetails"
             android:label="Score Details"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.FullCommentryActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.FullCommentryActivity"
             android:label="Full Commentry"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.RankingActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.RankingActivity"
             android:label="Ranking"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.RecordsActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.RecordsActivity"
             android:label="Records"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.RecordDetailsActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.RecordDetailsActivity"
             android:label="Record Details"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PointsTableActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.PointsTableActivity"
             android:label="Points Table"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.QuotesListActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.QuotesListActivity"
             android:label="Quotes"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.GalleryActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.GalleryActivity"
             android:label="Gallery"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.SeriesStatsActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.SeriesStatsActivity"
             android:label="Series Stats"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.SeriesStatsDetailsActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.SeriesStatsDetailsActivity"
             android:label="Series Stats Details"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.InsertOpinionActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.InsertOpinionActivity"
             android:label="মতামত"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.LoginActivity"
             android:label="Login"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.PlayerCareerActivity"
+            android:name="com.banglacricket.bdcricketteam.activity.PlayerCareerActivity"
             android:label="Player Profile"
             android:screenOrientation="portrait" />
 
@@ -199,13 +195,13 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
         <service
-            android:name=".util.MyFirebaseMessagingService">
+            android:name="com.banglacricket.bdcricketteam.util.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
-        <service android:name=".util.FirebaseIDService">
+        <service android:name="com.banglacricket.bdcricketteam.util.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
