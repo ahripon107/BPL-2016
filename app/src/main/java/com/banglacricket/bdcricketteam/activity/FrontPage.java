@@ -48,6 +48,8 @@ public class FrontPage extends RoboAppCompatActivity
     @Inject
     NetworkService networkService;
 
+    private boolean result = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,121 +101,44 @@ public class FrontPage extends RoboAppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_live_streaming) {
-            networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    super.onSuccess(msg);
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-                        if (response.getString("msg").equals("Successful")) {
-                            String source = response.getJSONArray("content").getJSONObject(0).getString("livestream");
-                            if (source.equals("true")) {
-                                Intent intent = new Intent(FrontPage.this, Highlights.class);
-                                intent.putExtra("cause", "livestream");
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            if (checkIsAllowed("livestream")) {
+                Intent intent = new Intent(FrontPage.this, Highlights.class);
+                intent.putExtra("cause", "livestream");
+                startActivity(intent);
+            } else {
+                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_live_streaming_football) {
-            networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    super.onSuccess(msg);
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-                        if (response.getString("msg").equals("Successful")) {
-                            String source = response.getJSONArray("content").getJSONObject(0).getString("livestream");
-                            if (source.equals("true")) {
-                                Intent intent = new Intent(FrontPage.this, Highlights.class);
-                                intent.putExtra("cause", "livestreamfootball");
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            if (checkIsAllowed("livestream")) {
+                Intent intent = new Intent(FrontPage.this, Highlights.class);
+                intent.putExtra("cause", "livestreamfootball");
+                startActivity(intent);
+            } else {
+                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_sports_news) {
-            networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    super.onSuccess(msg);
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-                        if (response.getString("msg").equals("Successful")) {
-                            String source = response.getJSONArray("content").getJSONObject(0).getString("news");
-                            if (source.equals("true")) {
-                                Intent intent = new Intent(FrontPage.this, CricketNewsListActivity.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
+            if (checkIsAllowed("news")) {
+                Intent intent = new Intent(FrontPage.this, CricketNewsListActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_highlights) {
-            networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    super.onSuccess(msg);
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-                        if (response.getString("msg").equals("Successful")) {
-                            String source = response.getJSONArray("content").getJSONObject(0).getString("highlights");
-                            if (source.equals("true")) {
-                                Intent intent = new Intent(FrontPage.this, Highlights.class);
-                                intent.putExtra("cause", "highlights");
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
+            if (checkIsAllowed("highlights")) {
+                Intent intent = new Intent(FrontPage.this, Highlights.class);
+                intent.putExtra("cause", "highlights");
+                startActivity(intent);
+            } else {
+                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_highlights_football) {
-            networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    super.onSuccess(msg);
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-                        if (response.getString("msg").equals("Successful")) {
-                            String source = response.getJSONArray("content").getJSONObject(0).getString("highlights");
-                            if (source.equals("true")) {
-                                Intent intent = new Intent(FrontPage.this, Highlights.class);
-                                intent.putExtra("cause", "highlightsfootball");
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            if (checkIsAllowed("highlights")) {
+                Intent intent = new Intent(FrontPage.this, Highlights.class);
+                intent.putExtra("cause", "highlightsfootball");
+                startActivity(intent);
+            } else {
+                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_fixture) {
             Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
             startActivity(intent);
@@ -221,28 +146,12 @@ public class FrontPage extends RoboAppCompatActivity
             Intent intent = new Intent(FrontPage.this, PastMatchesActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-            networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    super.onSuccess(msg);
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-                        if (response.getString("msg").equals("Successful")) {
-                            String source = response.getJSONArray("content").getJSONObject(0).getString("gallery");
-                            if (source.equals("true")) {
-                                Intent intent = new Intent(FrontPage.this, GalleryActivity.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
+            if (checkIsAllowed("gallery")) {
+                Intent intent = new Intent(FrontPage.this, GalleryActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_series_stats) {
             Intent intent = new Intent(FrontPage.this, SeriesStatsActivity.class);
             startActivity(intent);
@@ -256,28 +165,12 @@ public class FrontPage extends RoboAppCompatActivity
             Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_quotes) {
-            networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    super.onSuccess(msg);
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-                        if (response.getString("msg").equals("Successful")) {
-                            String source = response.getJSONArray("content").getJSONObject(0).getString("quotes");
-                            if (source.equals("true")) {
-                                Intent intent = new Intent(FrontPage.this, QuotesListActivity.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
+            if (checkIsAllowed("quotes")) {
+                Intent intent = new Intent(FrontPage.this, QuotesListActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(FrontPage.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_team_profile) {
             Intent intent = new Intent(FrontPage.this, TeamProfile.class);
             startActivity(intent);
@@ -296,5 +189,30 @@ public class FrontPage extends RoboAppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean checkIsAllowed(final String item) {
+
+        networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
+            @Override
+            public void onSuccess(Message msg) {
+                super.onSuccess(msg);
+                String string = (String) msg.obj;
+                try {
+                    JSONObject response = new JSONObject(string);
+                    if (response.getString("msg").equals("Successful")) {
+                        String source = response.getJSONArray("content").getJSONObject(0).getString(item);
+                        if (source.equals("true")) {
+                            result = true;
+                        } else {
+                            result = false;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return result;
     }
 }
