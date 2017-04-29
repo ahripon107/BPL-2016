@@ -11,7 +11,7 @@
     android:gravity="center_vertical"
     android:id="@+id/batsman_layout">
 
-    <com.banglacricket.bdcricketteam.util.CircleImageView
+    <com.allgames.sportslab.util.CircleImageView
         android:id="@+id/civ_player_image"
         android:layout_width="40dp"
         android:layout_height="40dp"

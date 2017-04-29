@@ -4,10 +4,10 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_live_streaming"
-            android:title="ক্রিকেট লাইভ স্ট্রিমিং" />
+            android:title="ক্রিকেট লাইভ" />
         <item
             android:id="@+id/nav_live_streaming_football"
-            android:title="ফুটবল লাইভ স্ট্রিমিং" />
+            android:title="ফুটবল লাইভ" />
         <item
             android:id="@+id/nav_sports_news"
             android:title="স্পোর্টস নিউজ" />

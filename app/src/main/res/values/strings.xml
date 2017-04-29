@@ -1,26 +1,26 @@
 <resources>
-    <string name="app_name">ক্রিকেট লাইভ স্ট্রিমিং</string>
+    <string name="app_name">খেলাধুলা</string>
 
-    <string name="livescorelist">ca-app-pub-9201945236996508/6548636072</string>
-    <string name="matchdetails">ca-app-pub-9201945236996508/8025369274</string>
-    <string name="fixture">ca-app-pub-9201945236996508/1978835676</string>
-    <string name="dmplayer">ca-app-pub-9201945236996508/3455568870</string>
-    <string name="playerprofile">ca-app-pub-9201945236996508/4932302076</string>
-    <string name="pointstable">ca-app-pub-9201945236996508/6409035279</string>
-    <string name="iframe">ca-app-pub-9201945236996508/7885768470</string>
-    <string name="highlights">ca-app-pub-9201945236996508/9362501679</string>
-    <string name="youtubeplayer">ca-app-pub-9201945236996508/1839234873</string>
-    <string name="newsinwebview">ca-app-pub-9201945236996508/3315968071</string>
-    <string name="m3u8">ca-app-pub-9201945236996508/4792701271</string>
-    <string name="newslist">ca-app-pub-9201945236996508/6269434473</string>
-    <string name="newsdetails">ca-app-pub-9201945236996508/7746167678</string>
-    <string name="teamprofiledetails">ca-app-pub-9201945236996508/1699634077</string>
-    <string name="frontpage"> ca-app-pub-9201945236996508/1272864879</string>
-    <string name="frontpageinterstitial">ca-app-pub-9201945236996508/3198106475</string>
-    <string name="opinion">ca-app-pub-9201945236996508/5993135677</string>
+    <string name="livescorelist">ca-app-pub-9201945236996508/3532382073</string>
+    <string name="matchdetails">ca-app-pub-9201945236996508/5009115277</string>
+    <string name="fixture">ca-app-pub-9201945236996508/6485848477</string>
+    <string name="playerprofile">ca-app-pub-9201945236996508/7962581674</string>
+    <string name="pointstable">ca-app-pub-9201945236996508/9439314876</string>
+    <string name="iframe">ca-app-pub-9201945236996508/1916048071</string>
+    <string name="highlights">ca-app-pub-9201945236996508/3392781279</string>
+    <string name="youtubeplayer">ca-app-pub-9201945236996508/4869514475</string>
+    <string name="newsinwebview">ca-app-pub-9201945236996508/6346247673</string>
+    <string name="m3u8">ca-app-pub-9201945236996508/7822980873</string>
+    <string name="newslist">ca-app-pub-9201945236996508/9299714076</string>
+    <string name="newsdetails">ca-app-pub-9201945236996508/1776447273</string>
+    <string name="teamprofiledetails">ca-app-pub-9201945236996508/3253180474</string>
+    <string name="frontpage">ca-app-pub-9201945236996508/4729913678</string>
+    <string name="frontpageinterstitial">ca-app-pub-9201945236996508/1636846478</string>
+    <string name="homepage">ca-app-pub-9201945236996508/7683380073</string>
+    <string name="opinion">ca-app-pub-9201945236996508/9160113272</string>
 
 
-    <string name="youtube">AIzaSyByAFW5YdftFhpqTzveJObsaMACb43q0Ek</string>
+    <string name="youtube">AIzaSyD3V_ZoXobEjJumcUHPZT-5WIVtomJ9T_0</string>
     <string name="load">Refresh</string>
 
     <string name="drawer_open">Open</string>
@@ -31,6 +31,6 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="facebook_app_id">1704485619862409</string>
-    <string name="fb_login_protocol_scheme">fb1704485619862409</string>
+    <string name="facebook_app_id">444601642599082</string>
+    <string name="fb_login_protocol_scheme">fb444601642599082</string>
 </resources>
