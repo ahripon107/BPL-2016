@@ -5,11 +5,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_front_page"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/pagebackground"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.allgames.sportslab.activity.FrontPage"
     tools:showIn="@layout/app_bar_front_page">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adViewFontPage"
+        android:layout_alignParentTop="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_welcome_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                android:text="Hello viewers !!"
+                android:textColor="@color/Black"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:id="@+id/tour_image"
+                android:layout_below="@id/tv_welcome_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/default_image"
+                android:visibility="gone"/>
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/menu_list"
+                android:layout_below="@id/tour_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adViewFontPage"
@@ -18,13 +60,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/menu_list"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/adViewFontPage"
-        android:layout_below="@id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 </RelativeLayout>
