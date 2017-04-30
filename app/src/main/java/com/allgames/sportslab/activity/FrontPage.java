@@ -1,22 +1,25 @@
 package com.allgames.sportslab.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allgames.sportslab.adapter.BasicListAdapter;
+import com.allgames.sportslab.util.DividerItemDecoration;
+import com.allgames.sportslab.util.ViewHolder;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -24,8 +27,6 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
-import com.allgames.sportslab.fragment.LiveScoreFragment;
-import com.allgames.sportslab.fragment.OpinionFragment;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
@@ -34,16 +35,17 @@ import com.allgames.sportslab.util.RoboAppCompatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_front_page)
-public class FrontPage extends RoboAppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class FrontPage extends RoboAppCompatActivity {
 
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
-    @InjectView(R.id.viewPager)
-    private ViewPager viewPager;
+    @InjectView(R.id.menu_list)
+    private RecyclerView menuList;
     @InjectView(R.id.adViewFontPage)
     private AdView adView;
     @InjectView(R.id.toolbar)
@@ -54,7 +56,16 @@ public class FrontPage extends RoboAppCompatActivity
 
     InterstitialAd mInterstitialAd;
 
-    NavigationView navigationView;
+    @Inject
+    ArrayList<String> allMenu;
+
+    @Inject
+    ArrayList<String> hideMenu;
+
+    @Inject
+    ArrayList<String> selectedMenu;
+
+    Typeface typeface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +73,108 @@ public class FrontPage extends RoboAppCompatActivity
 
         setSupportActionBar(toolbar);
 
-        this.viewPager.setOffscreenPageLimit(2);
-        setupViewPage(this.viewPager);
-        ((TabLayout) findViewById(R.id.tabLayout)).setupWithViewPager(this.viewPager);
+        typeface = Typeface.createFromAsset(this.getAssets(), Constants.SOLAIMAN_LIPI_FONT);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        drawer.openDrawer(Gravity.LEFT);
+        allMenu.add("ক্রিকেট লাইভ");
+        allMenu.add("ফুটবল লাইভ");
+        allMenu.add("লাইভ স্কোর");
+        allMenu.add("স্পোর্টস নিউজ");
+        allMenu.add("ক্রিকেট হাইলাইটস");
+        allMenu.add("ফুটবল হাইলাইটস");
+        allMenu.add("ফিক্সচার");
+        allMenu.add("পূর্বের খেলা");
+        allMenu.add("গ্যালারী");
+        allMenu.add("সিরিজ পরিসংখ্যান");
+        allMenu.add("রাঙ্কিং");
+        allMenu.add("ক্রিকেটের যত রেকর্ড");
+        allMenu.add("পয়েন্ট টেবিল");
+        allMenu.add("উদ্ধৃতি");
+        allMenu.add("টিম প্রোফাইল");
+        allMenu.add("লগ ইন/লগ আউট");
+        allMenu.add("অ্যাপ আপডেট করুন");
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        hideAllMenu(navigationView);
+        hideMenu.add("ফিক্সচার");
+        hideMenu.add("সিরিজ পরিসংখ্যান");
+        hideMenu.add("ক্রিকেটের যত রেকর্ড");
+        hideMenu.add("পয়েন্ট টেবিল");
+        hideMenu.add("টিম প্রোফাইল");
+        hideMenu.add("লগ ইন/লগ আউট");
+        hideMenu.add("অ্যাপ আপডেট করুন");
+
+        selectedMenu.addAll(hideMenu);
+
+        menuList.setAdapter(new BasicListAdapter<String, HomeViewHolder>(selectedMenu) {
+            @Override
+            public HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_home, parent, false);
+                return new HomeViewHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(final HomeViewHolder holder, final int position) {
+                holder.textView.setText(selectedMenu.get(position));
+
+                holder.textView.setTypeface(typeface);
+                holder.textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (selectedMenu.get(position).equals("ক্রিকেট লাইভ")) {
+                            checkIsAllowed("livestream", "com.allgames.sportslab.activity.Highlights", "livestream");
+                        } else if (selectedMenu.get(position).equals("ফুটবল লাইভ")) {
+                            checkIsAllowed("livestream", "com.allgames.sportslab.activity.Highlights", "livestreamfootball");
+                        } else if (selectedMenu.get(position).equals("লাইভ স্কোর")) {
+                            Intent intent = new Intent(FrontPage.this, LiveScoreActivity.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("স্পোর্টস নিউজ")) {
+                            checkIsAllowed("news", "com.allgames.sportslab.activity.CricketNewsListActivity", null);
+                        } else if (selectedMenu.get(position).equals("ক্রিকেট হাইলাইটস")) {
+                            checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlights");
+                        } else if (selectedMenu.get(position).equals("ফুটবল হাইলাইটস")) {
+                            checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlightsfootball");
+                        } else if (selectedMenu.get(position).equals("ফিক্সচার")) {
+                            Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("পূর্বের খেলা")) {
+                            Intent intent = new Intent(FrontPage.this, PastMatchesActivity.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("গ্যালারী")) {
+                            checkIsAllowed("gallery", "com.allgames.sportslab.activity.GalleryActivity", null);
+                        } else if (selectedMenu.get(position).equals("সিরিজ পরিসংখ্যান")) {
+                            Intent intent = new Intent(FrontPage.this, SeriesStatsActivity.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("রাঙ্কিং")) {
+                            Intent intent = new Intent(FrontPage.this, RankingActivity.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("ক্রিকেটের যত রেকর্ড")) {
+                            Intent intent = new Intent(FrontPage.this, RecordsActivity.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("পয়েন্ট টেবিল")) {
+                            Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("উদ্ধৃতি")) {
+                            checkIsAllowed("quotes", "com.allgames.sportslab.activity.QuotesListActivity", null);
+                        } else if (selectedMenu.get(position).equals("টিম প্রোফাইল")) {
+                            Intent intent = new Intent(FrontPage.this, TeamProfile.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("লগ ইন/লগ আউট")) {
+                            Intent intent = new Intent(FrontPage.this, LoginActivity.class);
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).equals("অ্যাপ আপডেট করুন")) {
+                            String appPackageName = getPackageName();
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                            } catch (android.content.ActivityNotFoundException anfe) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        menuList.setLayoutManager(new LinearLayoutManager(this));
+        menuList.addItemDecoration(new DividerItemDecoration(this));
 
         networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
             @Override
@@ -88,7 +186,9 @@ public class FrontPage extends RoboAppCompatActivity
                     if (response.getString("msg").equals("Successful")) {
                         String source = response.getJSONArray("content").getJSONObject(0).getString("showmenu");
                         if (source.equals("true")) {
-                            showAllMenu(navigationView);
+                            selectedMenu.clear();
+                            selectedMenu.addAll(allMenu);
+                            menuList.getAdapter().notifyDataSetChanged();
                         }
                     }
                 } catch (JSONException e) {
@@ -143,86 +243,20 @@ public class FrontPage extends RoboAppCompatActivity
         }
     }
 
-    public final void setupViewPage(ViewPager viewPager) {
-        this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
-        this.matchDetailsViewPagerAdapter.addFragment(new LiveScoreFragment(), "লাইভ স্কোর");
-        viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
+    private static class HomeViewHolder extends RecyclerView.ViewHolder {
+
+        protected TextView textView;
+        public HomeViewHolder(View itemView) {
+            super(itemView);
+            textView = ViewHolder.get(itemView, R.id.menu_item_text);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_live_streaming) {
-            checkIsAllowed("livestream", "com.allgames.sportslab.activity.Highlights", "livestream");
-
-        } else if (id == R.id.nav_live_streaming_football) {
-            checkIsAllowed("livestream", "com.allgames.sportslab.activity.Highlights", "livestreamfootball");
-
-        } else if (id == R.id.nav_sports_news) {
-            checkIsAllowed("news", "com.allgames.sportslab.activity.CricketNewsListActivity", null);
-
-        } else if (id == R.id.nav_highlights) {
-            checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlights");
-
-        } else if (id == R.id.nav_highlights_football) {
-            checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlightsfootball");
-
-        } else if (id == R.id.nav_fixture) {
-            Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_past_matches) {
-            Intent intent = new Intent(FrontPage.this, PastMatchesActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-            checkIsAllowed("gallery", "com.allgames.sportslab.activity.GalleryActivity", null);
-
-        } else if (id == R.id.nav_series_stats) {
-            Intent intent = new Intent(FrontPage.this, SeriesStatsActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_ranking) {
-            Intent intent = new Intent(FrontPage.this, RankingActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_records) {
-            Intent intent = new Intent(FrontPage.this, RecordsActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_points_table) {
-            Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_quotes) {
-            checkIsAllowed("quotes", "com.allgames.sportslab.activity.QuotesListActivity", null);
-
-        } else if (id == R.id.nav_team_profile) {
-            Intent intent = new Intent(FrontPage.this, TeamProfile.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_login_logout) {
-            Intent intent = new Intent(FrontPage.this, LoginActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_update_app) {
-            String appPackageName = getPackageName();
-            try {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-            } catch (android.content.ActivityNotFoundException anfe) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-            }
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     private void checkIsAllowed(final String item, final String className, final String cause) {
 
@@ -256,39 +290,5 @@ public class FrontPage extends RoboAppCompatActivity
             }
         });
 
-    }
-
-    public void hideAllMenu(NavigationView navigationView) {
-        Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.nav_live_streaming).setVisible(false);
-        menu.findItem(R.id.nav_live_streaming_football).setVisible(false);
-        menu.findItem(R.id.nav_sports_news).setVisible(false);
-        menu.findItem(R.id.nav_highlights).setVisible(false);
-        menu.findItem(R.id.nav_highlights_football).setVisible(false);
-        menu.findItem(R.id.nav_gallery).setVisible(false);
-        menu.findItem(R.id.nav_ranking).setVisible(false);
-        menu.findItem(R.id.nav_quotes).setVisible(false);
-        menu.findItem(R.id.nav_past_matches).setVisible(false);
-        menu.findItem(R.id.nav_fixture).setVisible(false);
-    }
-
-    public void showAllMenu(NavigationView navigationView) {
-        Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.nav_live_streaming).setVisible(true);
-        menu.findItem(R.id.nav_live_streaming_football).setVisible(true);
-        menu.findItem(R.id.nav_sports_news).setVisible(true);
-        menu.findItem(R.id.nav_highlights).setVisible(true);
-        menu.findItem(R.id.nav_highlights_football).setVisible(true);
-        menu.findItem(R.id.nav_fixture).setVisible(true);
-        menu.findItem(R.id.nav_gallery).setVisible(true);
-        menu.findItem(R.id.nav_series_stats).setVisible(true);
-        menu.findItem(R.id.nav_ranking).setVisible(true);
-        menu.findItem(R.id.nav_records).setVisible(true);
-        menu.findItem(R.id.nav_points_table).setVisible(true);
-        menu.findItem(R.id.nav_quotes).setVisible(true);
-        menu.findItem(R.id.nav_team_profile).setVisible(true);
-        menu.findItem(R.id.nav_login_logout).setVisible(true);
-        menu.findItem(R.id.nav_update_app).setVisible(true);
-        menu.findItem(R.id.nav_past_matches).setVisible(true);
     }
 }
