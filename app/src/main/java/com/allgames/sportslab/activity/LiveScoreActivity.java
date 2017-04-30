@@ -1,17 +1,8 @@
 package com.allgames.sportslab.activity;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -19,17 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.allgames.sportslab.util.RoboAppCompatActivity;
-import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
-import com.allgames.sportslab.activity.ActivityMatchDetails;
-import com.allgames.sportslab.activity.LiveScore;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Match;
 import com.allgames.sportslab.util.CircleImageView;
@@ -39,7 +23,11 @@ import com.allgames.sportslab.util.Dialogs;
 import com.allgames.sportslab.util.FetchFromWeb;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.RecyclerItemClickListener;
+import com.allgames.sportslab.util.RoboAppCompatActivity;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.inject.Inject;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +36,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import roboguice.fragment.RoboFragment;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -58,12 +45,10 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.fragment_front_page)
 public class LiveScoreActivity extends RoboAppCompatActivity {
 
-    @InjectView(R.id.tv_welcome_text)
-    private TextView welcomeText;
+
     @InjectView(R.id.live_matches)
     private RecyclerView recyclerView;
-    @InjectView(R.id.tour_image)
-    private ImageView imageView;
+
     @InjectView(R.id.tv_empty_view)
     private TextView emptyView;
 
@@ -73,92 +58,20 @@ public class LiveScoreActivity extends RoboAppCompatActivity {
     private NetworkService networkService;
 
     private Dialogs dialogs;
-    private PackageInfo pInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         dialogs = new Dialogs(this);
-        try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
-        Log.d(Constants.TAG, welcomeTextUrl);
 
         networkService.fetchWelcomeText(new DefaultMessageHandler(this, true) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
                 try {
-                    final JSONObject response = new JSONObject(string);
+                    JSONObject response = new JSONObject(string);
 
-                    Constants.SHOW_PLAYER_IMAGE = response.getJSONArray("content").getJSONObject(0).getString("playerimage");
-                    welcomeText.setText(Html.fromHtml(response.getJSONArray("content").getJSONObject(0).getString("description")));
-                    if (response.getJSONArray("content").getJSONObject(0).getString("clickable").equals("true")) {
-                        welcomeText.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                try {
-                                    Uri uriUrl = Uri.parse(String.valueOf(response.getJSONArray("content").getJSONObject(0).getString("link")));
-                                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-                                    startActivity(launchBrowser);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    }
-
-                    if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("appimage").equals("true")) {
-                        imageView.setVisibility(View.VISIBLE);
-                        Picasso.with(LiveScoreActivity.this)
-                                .load(response.getJSONArray("content").getJSONObject(0).getString("appimageurl"))
-                                .placeholder(R.drawable.default_image)
-                                .into(imageView);
-                        imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                try {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("applink"))));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    } else {
-                        imageView.setVisibility(View.GONE);
-                    }
-
-                    if (!response.getJSONArray("content").getJSONObject(0).getString("checkversion").contains(pInfo.versionName)) {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LiveScoreActivity.this);
-                        alertDialogBuilder.setMessage(response.getJSONArray("content").getJSONObject(0).getString("popupmessage"));
-                        alertDialogBuilder.setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        try {
-                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("popuplink"))));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                });
-
-                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                    }
                     if (response.getJSONArray("content").getJSONObject(0).getString("showlivescore").equals("false")) {
                         recyclerView.setVisibility(View.GONE);
                     } else {
@@ -371,20 +284,7 @@ public class LiveScoreActivity extends RoboAppCompatActivity {
                 }
             }
         });
-
-        Log.d(Constants.TAG, Constants.LIVE_SCORE_SOURCE_URL);
-
-        recyclerView.setNestedScrollingEnabled(false);
-
     }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
 
     private static class LiveScoreViewHolder extends RecyclerView.ViewHolder {
         protected CircleImageView imgteam1;

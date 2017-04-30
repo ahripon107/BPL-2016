@@ -1,19 +1,29 @@
 package com.allgames.sportslab.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +41,7 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.RoboAppCompatActivity;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +54,6 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_front_page)
 public class FrontPage extends RoboAppCompatActivity {
 
-    private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
     @InjectView(R.id.menu_list)
     private RecyclerView menuList;
     @InjectView(R.id.adViewFontPage)
@@ -64,6 +74,14 @@ public class FrontPage extends RoboAppCompatActivity {
 
     @Inject
     ArrayList<String> selectedMenu;
+
+    @InjectView(R.id.tour_image)
+    private ImageView imageView;
+
+    @InjectView(R.id.tv_welcome_text)
+    private TextView welcomeText;
+
+    private PackageInfo pInfo;
 
     Typeface typeface;
 
@@ -219,6 +237,97 @@ public class FrontPage extends RoboAppCompatActivity {
             }
         });
 
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
+        Log.d(Constants.TAG, welcomeTextUrl);
+
+        networkService.fetchWelcomeText(new DefaultMessageHandler(this, true) {
+            @Override
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
+                try {
+                    final JSONObject response = new JSONObject(string);
+
+                    Constants.SHOW_PLAYER_IMAGE = response.getJSONArray("content").getJSONObject(0).getString("playerimage");
+                    welcomeText.setText(Html.fromHtml(response.getJSONArray("content").getJSONObject(0).getString("description")));
+                    if (response.getJSONArray("content").getJSONObject(0).getString("clickable").equals("true")) {
+                        welcomeText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    Uri uriUrl = Uri.parse(String.valueOf(response.getJSONArray("content").getJSONObject(0).getString("link")));
+                                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                                    startActivity(launchBrowser);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+
+                    if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("appimage").equals("true")) {
+                        imageView.setVisibility(View.VISIBLE);
+                        Picasso.with(FrontPage.this)
+                                .load(response.getJSONArray("content").getJSONObject(0).getString("appimageurl"))
+                                .placeholder(R.drawable.default_image)
+                                .into(imageView);
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("applink"))));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } else {
+                        imageView.setVisibility(View.GONE);
+                    }
+
+                    if (!response.getJSONArray("content").getJSONObject(0).getString("checkversion").contains(pInfo.versionName)) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(FrontPage.this);
+                        alertDialogBuilder.setMessage(response.getJSONArray("content").getJSONObject(0).getString("popupmessage"));
+                        alertDialogBuilder.setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        try {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("popuplink"))));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+
+                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override
