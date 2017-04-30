@@ -1,4 +1,4 @@
-package com.allgames.sportslab.fragment;
+package com.allgames.sportslab.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allgames.sportslab.util.RoboAppCompatActivity;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -48,13 +49,14 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import roboguice.fragment.RoboFragment;
+import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
-
-public class LiveScoreFragment extends RoboFragment {
+@ContentView(R.layout.fragment_front_page)
+public class LiveScoreActivity extends RoboAppCompatActivity {
 
     @InjectView(R.id.tv_welcome_text)
     private TextView welcomeText;
@@ -73,19 +75,13 @@ public class LiveScoreFragment extends RoboFragment {
     private Dialogs dialogs;
     private PackageInfo pInfo;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_front_page, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        dialogs = new Dialogs(getContext());
+        dialogs = new Dialogs(this);
         try {
-            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -93,7 +89,7 @@ public class LiveScoreFragment extends RoboFragment {
         String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
         Log.d(Constants.TAG, welcomeTextUrl);
 
-        networkService.fetchWelcomeText(new DefaultMessageHandler(getContext(), true) {
+        networkService.fetchWelcomeText(new DefaultMessageHandler(this, true) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -119,7 +115,7 @@ public class LiveScoreFragment extends RoboFragment {
 
                     if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("appimage").equals("true")) {
                         imageView.setVisibility(View.VISIBLE);
-                        Picasso.with(getContext())
+                        Picasso.with(LiveScoreActivity.this)
                                 .load(response.getJSONArray("content").getJSONObject(0).getString("appimageurl"))
                                 .placeholder(R.drawable.default_image)
                                 .into(imageView);
@@ -138,7 +134,7 @@ public class LiveScoreFragment extends RoboFragment {
                     }
 
                     if (!response.getJSONArray("content").getJSONObject(0).getString("checkversion").contains(pInfo.versionName)) {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LiveScoreActivity.this);
                         alertDialogBuilder.setMessage(response.getJSONArray("content").getJSONObject(0).getString("popupmessage"));
                         alertDialogBuilder.setPositiveButton("Yes",
                                 new DialogInterface.OnClickListener() {
@@ -175,7 +171,7 @@ public class LiveScoreFragment extends RoboFragment {
         });
 
 
-        networkService.fetchLiveScoreSource(new DefaultMessageHandler(getContext(), true) {
+        networkService.fetchLiveScoreSource(new DefaultMessageHandler(this, true) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -197,12 +193,12 @@ public class LiveScoreFragment extends RoboFragment {
                                 public void onBindViewHolder(LiveScoreViewHolder holder, final int position) {
 
                                     if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
-                                        Picasso.with(getContext())
+                                        Picasso.with(LiveScoreActivity.this)
                                                 .load(Constants.resolveLogo(datas.get(position).getTeam1()))
                                                 .placeholder(R.drawable.default_image)
                                                 .into(holder.imgteam1);
 
-                                        Picasso.with(getContext())
+                                        Picasso.with(LiveScoreActivity.this)
                                                 .load(Constants.resolveLogo(datas.get(position).getTeam2()))
                                                 .placeholder(R.drawable.default_image)
                                                 .into(holder.imgteam2);
@@ -214,18 +210,18 @@ public class LiveScoreFragment extends RoboFragment {
                                     holder.time.setText(datas.get(position).getTime());
                                 }
                             });
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            recyclerView.setLayoutManager(new LinearLayoutManager(LiveScoreActivity.this));
 
                             recyclerView.addOnItemTouchListener(
-                                    new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                                    new RecyclerItemClickListener(LiveScoreActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
                                         @Override
                                         public void onItemClick(View view, int position) {
                                             if (source.equals("webview")) {
-                                                Intent intent = new Intent(getContext(), LiveScore.class);
+                                                Intent intent = new Intent(LiveScoreActivity.this, LiveScore.class);
                                                 intent.putExtra("url", "http://www.criconly.com/ipl/2013/get__summary.php?id=" + datas.get(position).getMatchId());
                                                 startActivity(intent);
                                             } else {
-                                                Intent intent = new Intent(getContext(), ActivityMatchDetails.class);
+                                                Intent intent = new Intent(LiveScoreActivity.this, ActivityMatchDetails.class);
                                                 intent.putExtra("matchID", datas.get(position).getMatchId());
                                                 startActivity(intent);
                                             }
@@ -266,13 +262,13 @@ public class LiveScoreFragment extends RoboFragment {
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                                         dialogs.dismissDialog();
-                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LiveScoreActivity.this, "Failed", Toast.LENGTH_LONG).show();
                                     }
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                                         dialogs.dismissDialog();
-                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LiveScoreActivity.this, "Failed", Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -308,13 +304,13 @@ public class LiveScoreFragment extends RoboFragment {
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                                         dialogs.dismissDialog();
-                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LiveScoreActivity.this, "Failed", Toast.LENGTH_LONG).show();
                                     }
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                                         dialogs.dismissDialog();
-                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LiveScoreActivity.this, "Failed", Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -365,7 +361,7 @@ public class LiveScoreFragment extends RoboFragment {
                                 });
                             }
                         } else {
-                            Toast.makeText(getContext(), "Please Update App", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LiveScoreActivity.this, "Please Update App", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -384,7 +380,7 @@ public class LiveScoreFragment extends RoboFragment {
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

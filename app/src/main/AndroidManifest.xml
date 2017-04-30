@@ -138,6 +138,11 @@
             android:label="Player Profile"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name="com.allgames.sportslab.activity.LiveScoreActivity"
+            android:label="Live Score"
+            android:screenOrientation="portrait" />
+
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
