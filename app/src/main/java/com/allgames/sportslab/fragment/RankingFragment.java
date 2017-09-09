@@ -33,12 +33,12 @@ import java.util.ArrayList;
  */
 public class RankingFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    ArrayList<RankingPlayer> rankingPlayers = new ArrayList<>();
-    ArrayList<RankingTeam> rankingTeams = new ArrayList<>();
-    LinearLayout teamLayout, playerLayout;
-    Gson gson = new Gson();
-    Typeface tf;
+    private RecyclerView recyclerView;
+    private ArrayList<RankingPlayer> rankingPlayers = new ArrayList<>();
+    private ArrayList<RankingTeam> rankingTeams = new ArrayList<>();
+    private LinearLayout teamLayout, playerLayout;
+    private Gson gson = new Gson();
+    private Typeface tf;
 
     @Nullable
     @Override
@@ -61,7 +61,6 @@ public class RankingFragment extends Fragment {
         protected TextView playerName;
         protected TextView playerAverage;
         protected TextView playerRating;
-        protected ImageView playerImage;
         protected ImageView countryImage;
 
         public PlayerViewHolder(View itemView) {
@@ -70,7 +69,6 @@ public class RankingFragment extends Fragment {
             playerName = ViewHolder.get(itemView, R.id.tv_player_name);
             playerAverage = ViewHolder.get(itemView, R.id.tv_player_average);
             playerRating = ViewHolder.get(itemView, R.id.tv_player_rating);
-            playerImage = ViewHolder.get(itemView, R.id.player_image);
             countryImage = ViewHolder.get(itemView, R.id.player_country_image);
         }
     }
@@ -119,10 +117,6 @@ public class RankingFragment extends Fragment {
                     holder.playerAverage.setText("গড়: " + rankingPlayers.get(position).getAvg());
                     holder.playerRating.setText(rankingPlayers.get(position).getRating());
 
-                    Picasso.with(getContext())
-                            .load(Constants.FACE_IMAGE + rankingPlayers.get(position).getId() + ".jpg")
-                            .placeholder(R.drawable.default_image)
-                            .into(holder.playerImage);
 
                     Picasso.with(getContext())
                             .load(Constants.TEAM_IMAGE_FIRST_PART + rankingPlayers.get(position).getCountry_id() + Constants.TEAM_IMAGE_LAST_PART)

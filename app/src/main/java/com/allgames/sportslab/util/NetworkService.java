@@ -83,6 +83,14 @@ public class NetworkService {
         httpClient.get(Constants.FIXTURE_URL, new DefaultAsyncHttpResponseHandler(handler));
     }
 
+    public void fetchTriNationSchedule(Handler handler) {
+        httpClient.get("http://get.yesdhaka.com/cricket/crickettv/tri_schedule.json", null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchCTSchedule(Handler handler) {
+        httpClient.get("http://get.yesdhaka.com/cricket/champ_schedule.json", null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
     public void fetchAllPointTables(String url, Handler handler) {
         httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
     }

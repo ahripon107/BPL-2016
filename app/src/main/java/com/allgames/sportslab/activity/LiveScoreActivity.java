@@ -43,7 +43,7 @@ import roboguice.inject.InjectView;
  * @author Ripon
  */
 @ContentView(R.layout.fragment_front_page)
-public class LiveScoreActivity extends RoboAppCompatActivity {
+public class LiveScoreActivity extends CommonActivity {
 
 
     @InjectView(R.id.live_matches)
@@ -65,6 +65,8 @@ public class LiveScoreActivity extends RoboAppCompatActivity {
 
         dialogs = new Dialogs(this);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         networkService.fetchWelcomeText(new DefaultMessageHandler(this, true) {
             @Override
             public void onSuccess(Message msg) {
@@ -82,6 +84,8 @@ public class LiveScoreActivity extends RoboAppCompatActivity {
                 }
             }
         });
+
+        recyclerView.setNestedScrollingEnabled(false);
 
 
         networkService.fetchLiveScoreSource(new DefaultMessageHandler(this, true) {
@@ -106,6 +110,9 @@ public class LiveScoreActivity extends RoboAppCompatActivity {
                                 public void onBindViewHolder(LiveScoreViewHolder holder, final int position) {
 
                                     if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
+                                        holder.imgteam1.setVisibility(View.VISIBLE);
+                                        holder.imgteam2.setVisibility(View.VISIBLE);
+
                                         Picasso.with(LiveScoreActivity.this)
                                                 .load(Constants.resolveLogo(datas.get(position).getTeam1()))
                                                 .placeholder(R.drawable.default_image)
@@ -115,6 +122,9 @@ public class LiveScoreActivity extends RoboAppCompatActivity {
                                                 .load(Constants.resolveLogo(datas.get(position).getTeam2()))
                                                 .placeholder(R.drawable.default_image)
                                                 .into(holder.imgteam2);
+                                    } else {
+                                        holder.imgteam1.setVisibility(View.GONE);
+                                        holder.imgteam2.setVisibility(View.GONE);
                                     }
 
                                     holder.textteam1.setText(datas.get(position).getTeam1());

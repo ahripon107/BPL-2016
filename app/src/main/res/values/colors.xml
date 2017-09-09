@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#CDDC39</color>
+    <color name="colorPrimaryDark">#AFB42B</color>
     <color name="colorAccent">#FF4081</color>
     <color name="light_blue">#B3E5FC</color>
     <color name="dark">#FF222222</color>
@@ -10,9 +10,9 @@
     <color name="title">#777777</color>
 
     <color name="cardbackground">#FFFFFF</color>
-    <color name="pagebackground">#E3F2FD</color>
+    <color name="pagebackground">#F0F4C3</color>
 
-    <color name="batsmanbowlerbackground">#BBDEFB</color>
+    <color name="batsmanbowlerbackground">#E6EE9C</color>
 
     <color name="tabsScrollColor">#8a140e</color>
     <color name="NiceButtonStartColor">#4AA02C</color>

@@ -24,10 +24,10 @@
 
         <Button
             android:id="@+id/btn_watch"
-            android:paddingTop="10dp"
-            android:textColor="@color/colorPrimary"
-            android:background="@android:color/transparent"
-            android:text="Watch Live"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/Black"
+            android:background="@drawable/edit_text_background"
+            android:text="দেখুন সরাসরি"
             android:layout_gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
