@@ -68,15 +68,23 @@ public class PastMatchesActivity extends CommonActivity {
 
             @Override
             public void onBindViewHolder(PastMatchesViewHolder holder, int position) {
-                Picasso.with(PastMatchesActivity.this)
-                        .load(Constants.resolveLogo(data.get(position).getTeam1()))
-                        .placeholder(R.drawable.default_image)
-                        .into(holder.imgteam1);
+                if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
+                    holder.imgteam1.setVisibility(View.VISIBLE);
+                    holder.imgteam2.setVisibility(View.VISIBLE);
 
-                Picasso.with(PastMatchesActivity.this)
-                        .load(Constants.resolveLogo(data.get(position).getTeam2()))
-                        .placeholder(R.drawable.default_image)
-                        .into(holder.imgteam2);
+                    Picasso.with(PastMatchesActivity.this)
+                            .load(Constants.resolveLogo(data.get(position).getTeam1()))
+                            .placeholder(R.drawable.default_image)
+                            .into(holder.imgteam1);
+
+                    Picasso.with(PastMatchesActivity.this)
+                            .load(Constants.resolveLogo(data.get(position).getTeam2()))
+                            .placeholder(R.drawable.default_image)
+                            .into(holder.imgteam2);
+                } else {
+                    holder.imgteam1.setVisibility(View.GONE);
+                    holder.imgteam2.setVisibility(View.GONE);
+                }
 
                 holder.textteam1.setText(data.get(position).getTeam1());
                 holder.textteam2.setText(data.get(position).getTeam2());

@@ -50,23 +50,23 @@ import roboguice.inject.InjectView;
 public class Highlights extends RoboAppCompatActivity {
 
     @InjectView(R.id.lvHighlights)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @InjectView(R.id.adViewHighlights)
-    AdView adView;
+    private AdView adView;
 
     @InjectView(R.id.empty_view)
-    TextView emptyView;
-
-    ArrayList<LivestreamAndHighlights> objects;
-    InterstitialAd mInterstitialAd;
+    private TextView emptyView;
 
     @Inject
-    Gson gson;
+    private Gson gson;
 
     @Inject
-    NetworkService networkService;
+    private NetworkService networkService;
+
     String cause, url;
+    private ArrayList<LivestreamAndHighlights> objects;
+    private InterstitialAd mInterstitialAd;
 
 
     @Override
@@ -107,9 +107,9 @@ public class Highlights extends RoboAppCompatActivity {
                 holder.teamName.setText(objects.get(position).getTitle());
 
                 if (cause.equals("highlights") || cause.equals("highlightsfootball")) {
-                    holder.watchLive.setText("Watch");
+                    holder.watchLive.setText("দেখুন হাইলাইটস");
                 } else {
-                    holder.watchLive.setText("Watch Live");
+                    holder.watchLive.setText("দেখুন সরাসরি");
                 }
 
                 holder.watchLive.setOnClickListener(new View.OnClickListener() {

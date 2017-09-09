@@ -35,7 +35,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.allgames.sportslab.activity.FixtureActivity"
-            android:label="Fixture"
+            android:label="ফিক্সচার"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.allgames.sportslab.activity.NewsDetailsActivity"
@@ -63,7 +63,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.allgames.sportslab.activity.PastMatchesActivity"
-            android:label="Past Matches"
+            android:label="পূর্বের খেলা"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.allgames.sportslab.videoplayers.FrameStream"
@@ -140,7 +140,7 @@
 
         <activity
             android:name="com.allgames.sportslab.activity.LiveScoreActivity"
-            android:label="Live Score"
+            android:label="লাইভ স্কোর"
             android:screenOrientation="portrait" />
 
 
@@ -161,10 +161,6 @@
             </intent-filter>
         </activity>
 
-        <!--
-          Optionally, register AnalyticsReceiver and AnalyticsService to support background
-          dispatching on non-Google Play devices
-        -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
@@ -178,10 +174,6 @@
             android:enabled="true"
             android:exported="false" />
 
-        <!--
-             Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-             installation campaign reporting
-        -->
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:exported="true">

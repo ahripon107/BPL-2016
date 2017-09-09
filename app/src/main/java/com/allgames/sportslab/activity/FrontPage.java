@@ -43,6 +43,7 @@ import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.RoboAppCompatActivity;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,12 +68,6 @@ public class FrontPage extends RoboAppCompatActivity {
     InterstitialAd mInterstitialAd;
 
     @Inject
-    ArrayList<String> allMenu;
-
-    @Inject
-    ArrayList<String> hideMenu;
-
-    @Inject
     ArrayList<String> selectedMenu;
 
     @InjectView(R.id.tour_image)
@@ -93,35 +88,6 @@ public class FrontPage extends RoboAppCompatActivity {
 
         typeface = Typeface.createFromAsset(this.getAssets(), Constants.SOLAIMAN_LIPI_FONT);
 
-        allMenu.add("ক্রিকেট লাইভ");
-        allMenu.add("ফুটবল লাইভ");
-        allMenu.add("লাইভ স্কোর");
-        allMenu.add("স্পোর্টস নিউজ");
-        allMenu.add("ক্রিকেট হাইলাইটস");
-        allMenu.add("ফুটবল হাইলাইটস");
-        allMenu.add("ফিক্সচার");
-        allMenu.add("পূর্বের খেলা");
-        allMenu.add("গ্যালারী");
-        allMenu.add("সিরিজ পরিসংখ্যান");
-        allMenu.add("রাঙ্কিং");
-        allMenu.add("ক্রিকেটের যত রেকর্ড");
-        allMenu.add("পয়েন্ট টেবিল");
-        allMenu.add("উদ্ধৃতি");
-        allMenu.add("টিম প্রোফাইল");
-        allMenu.add("লগ ইন/লগ আউট");
-        allMenu.add("অ্যাপ আপডেট করুন");
-
-
-        hideMenu.add("ফিক্সচার");
-        hideMenu.add("সিরিজ পরিসংখ্যান");
-        hideMenu.add("ক্রিকেটের যত রেকর্ড");
-        hideMenu.add("পয়েন্ট টেবিল");
-        hideMenu.add("টিম প্রোফাইল");
-        hideMenu.add("লগ ইন/লগ আউট");
-        hideMenu.add("অ্যাপ আপডেট করুন");
-
-        selectedMenu.addAll(hideMenu);
-
         menuList.setAdapter(new BasicListAdapter<String, HomeViewHolder>(selectedMenu) {
             @Override
             public HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -137,48 +103,55 @@ public class FrontPage extends RoboAppCompatActivity {
                 holder.textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (selectedMenu.get(position).equals("ক্রিকেট লাইভ")) {
+                        if (selectedMenu.get(position).contains("ক্রিকেট লাইভ")) {
                             checkIsAllowed("livestream", "com.allgames.sportslab.activity.Highlights", "livestream");
-                        } else if (selectedMenu.get(position).equals("ফুটবল লাইভ")) {
+                        } else if (selectedMenu.get(position).contains("ফুটবল লাইভ")) {
                             checkIsAllowed("livestream", "com.allgames.sportslab.activity.Highlights", "livestreamfootball");
-                        } else if (selectedMenu.get(position).equals("লাইভ স্কোর")) {
+                        } else if (selectedMenu.get(position).contains("লাইভ স্কোর")) {
                             Intent intent = new Intent(FrontPage.this, LiveScoreActivity.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("স্পোর্টস নিউজ")) {
+                        } else if (selectedMenu.get(position).contains("স্পোর্টস নিউজ")) {
                             checkIsAllowed("news", "com.allgames.sportslab.activity.CricketNewsListActivity", null);
-                        } else if (selectedMenu.get(position).equals("ক্রিকেট হাইলাইটস")) {
+                        } else if (selectedMenu.get(position).contains("ক্রিকেট হাইলাইটস")) {
                             checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlights");
-                        } else if (selectedMenu.get(position).equals("ফুটবল হাইলাইটস")) {
+                        } else if (selectedMenu.get(position).contains("ফুটবল হাইলাইটস")) {
                             checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlightsfootball");
-                        } else if (selectedMenu.get(position).equals("ফিক্সচার")) {
+                        } else if (selectedMenu.get(position).contains("সিরিজ")) {
                             Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
+                            intent.putExtra("series", "trination");
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("পূর্বের খেলা")) {
+                        } else if (selectedMenu.get(position).contains("ট্রফি")) {
+                            Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
+                            intent.putExtra("series", "championstrophy");
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).contains("ফিক্সচার")) {
+                            Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
+                            intent.putExtra("series", "fixture");
+                            startActivity(intent);
+                        } else if (selectedMenu.get(position).contains("পূর্বের খেলা")) {
                             Intent intent = new Intent(FrontPage.this, PastMatchesActivity.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("গ্যালারী")) {
+                        } else if (selectedMenu.get(position).contains("গ্যালারী")) {
                             checkIsAllowed("gallery", "com.allgames.sportslab.activity.GalleryActivity", null);
-                        } else if (selectedMenu.get(position).equals("সিরিজ পরিসংখ্যান")) {
+                        } else if (selectedMenu.get(position).contains("সিরিজ পরিসংখ্যান")) {
                             Intent intent = new Intent(FrontPage.this, SeriesStatsActivity.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("রাঙ্কিং")) {
+                        } else if (selectedMenu.get(position).contains("রাঙ্কিং")) {
                             Intent intent = new Intent(FrontPage.this, RankingActivity.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("ক্রিকেটের যত রেকর্ড")) {
+                        } else if (selectedMenu.get(position).contains("ক্রিকেটের যত রেকর্ড")) {
                             Intent intent = new Intent(FrontPage.this, RecordsActivity.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("পয়েন্ট টেবিল")) {
+                        } else if (selectedMenu.get(position).contains("পয়েন্ট টেবিল")) {
                             Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("উদ্ধৃতি")) {
-                            checkIsAllowed("quotes", "com.allgames.sportslab.activity.QuotesListActivity", null);
-                        } else if (selectedMenu.get(position).equals("টিম প্রোফাইল")) {
+                        } else if (selectedMenu.get(position).contains("টিম প্রোফাইল")) {
                             Intent intent = new Intent(FrontPage.this, TeamProfile.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("লগ ইন/লগ আউট")) {
+                        } else if (selectedMenu.get(position).contains("লগ ইন/লগ আউট")) {
                             Intent intent = new Intent(FrontPage.this, LoginActivity.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).equals("অ্যাপ আপডেট করুন")) {
+                        }  else if (selectedMenu.get(position).contains("অ্যাপ আপডেট করুন")) {
                             String appPackageName = getPackageName();
                             try {
                                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
@@ -192,28 +165,7 @@ public class FrontPage extends RoboAppCompatActivity {
         });
 
         menuList.setLayoutManager(new LinearLayoutManager(this));
-        menuList.addItemDecoration(new DividerItemDecoration(this));
-
-        networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-            @Override
-            public void onSuccess(Message msg) {
-                super.onSuccess(msg);
-                String string = (String) msg.obj;
-                try {
-                    JSONObject response = new JSONObject(string);
-                    if (response.getString("msg").equals("Successful")) {
-                        String source = response.getJSONArray("content").getJSONObject(0).getString("showmenu");
-                        if (source.equals("true")) {
-                            selectedMenu.clear();
-                            selectedMenu.addAll(allMenu);
-                            menuList.getAdapter().notifyDataSetChanged();
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        menuList.setNestedScrollingEnabled(false);
 
         AdRequest adRequest1 = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
@@ -316,6 +268,12 @@ public class FrontPage extends RoboAppCompatActivity {
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
                     }
+
+                    JSONArray menus = response.getJSONArray("content").getJSONObject(0).getJSONArray("menus");
+                    for (int i=0; i< menus.length(); i++) {
+                        selectedMenu.add(menus.getJSONObject(i).getString("name"));
+                    }
+                    menuList.getAdapter().notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
