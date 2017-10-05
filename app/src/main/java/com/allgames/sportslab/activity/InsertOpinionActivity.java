@@ -16,12 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
-import com.facebook.Profile;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.inject.Inject;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Comment;
@@ -29,6 +23,12 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,29 +36,23 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
-
 /**
  * @author Ripon
  */
-@ContentView(R.layout.activity_opinions)
 public class InsertOpinionActivity extends CommonActivity {
 
     Typeface tf;
     String id;
     Profile profile;
+
     @Inject
     private ArrayList<Comment> comments;
-    @InjectView(R.id.rvComments)
+
     private RecyclerView recyclerView;
-    @InjectView(R.id.adViewOpinions)
     private AdView adView;
-    @InjectView(R.id.commentBody)
     private EditText commentBody;
-    @InjectView(R.id.btnSubmitComment)
     private ImageButton sendComment;
-    @InjectView(R.id.opinion_question)
+
     private TextView question;
     @Inject
     private NetworkService networkService;
@@ -66,7 +60,8 @@ public class InsertOpinionActivity extends CommonActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        initialize();
 
         recyclerView.setHasFixedSize(true);
 
@@ -75,8 +70,6 @@ public class InsertOpinionActivity extends CommonActivity {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);
-
-        tf = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
 
         recyclerView.setAdapter(new BasicListAdapter<Comment, OpinionViewHolder>(comments) {
             @Override
@@ -99,7 +92,6 @@ public class InsertOpinionActivity extends CommonActivity {
 
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         networkService.fetchOpinionComments(id, new DefaultMessageHandler(this, true) {
             @Override
@@ -165,7 +157,6 @@ public class InsertOpinionActivity extends CommonActivity {
                             recyclerView.smoothScrollToPosition(comments.size() - 1);
                         }
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -186,5 +177,18 @@ public class InsertOpinionActivity extends CommonActivity {
             timestamp = ViewHolder.get(v, R.id.tv_time_stamp);
             imageView = ViewHolder.get(v, R.id.profile_image);
         }
+    }
+
+    private void initialize() {
+        setContentView(R.layout.activity_opinions);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        recyclerView = (RecyclerView) findViewById(R.id.rvComments);
+        adView = (AdView) findViewById(R.id.adViewOpinions);
+        commentBody = (EditText) findViewById(R.id.commentBody);
+        sendComment = (ImageButton) findViewById(R.id.btnSubmitComment);
+        question = (TextView) findViewById(R.id.opinion_question);
+
+        tf = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
     }
 }

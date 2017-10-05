@@ -4,35 +4,31 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.FullCommentryFragment;
 import com.allgames.sportslab.util.Constants;
-
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
  * @author Ripon
  */
-@ContentView(R.layout.activity_match_details)
+
 public class FullCommentryActivity extends CommonActivity {
 
     int numberOfInnings;
     String id;
-    @InjectView(R.id.adViewMatchDetails)
     AdView adView;
-    @InjectView(R.id.viewPager)
     private ViewPager viewPager;
-    @InjectView(R.id.tabLayout)
     private TabLayout tabLayout;
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initialize();
 
         numberOfInnings = getIntent().getIntExtra("numberofinnings", 0);
         id = getIntent().getStringExtra("id");
@@ -55,5 +51,12 @@ public class FullCommentryActivity extends CommonActivity {
             this.matchDetailsViewPagerAdapter.addFragment(fullCommentryFragment, "Innings " + i);
         }
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
+    }
+
+    private void initialize() {
+        setContentView(R.layout.activity_match_details);
+        adView = (AdView) findViewById(R.id.adViewMatchDetails);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
     }
 }

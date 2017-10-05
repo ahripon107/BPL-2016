@@ -11,10 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.inject.Inject;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Match;
@@ -23,6 +19,10 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,23 +30,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
-
 /**
  * @author ripon
  */
-@ContentView(R.layout.fixture)
 public class FixtureActivity extends CommonActivity {
 
-    @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
+    private AdView adView;
 
     @Inject
     private ArrayList<Match> data;
-
-    @InjectView(R.id.adViewFixture)
-    private AdView adView;
 
     @Inject
     private NetworkService networkService;
@@ -56,6 +49,7 @@ public class FixtureActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initialize();
 
         series = getIntent().getStringExtra("series");
 
@@ -85,8 +79,6 @@ public class FixtureActivity extends CommonActivity {
                     holder.imgteam1.setVisibility(View.GONE);
                     holder.imgteam2.setVisibility(View.GONE);
                 }
-
-
 
 
                 holder.textteam1.setText(data.get(position).getTeam1());
@@ -239,5 +231,13 @@ public class FixtureActivity extends CommonActivity {
             matchNo = ViewHolder.get(itemView, R.id.tvMatchNo);
             linearLayout = ViewHolder.get(itemView, R.id.match_layout);
         }
+    }
+
+    private void initialize() {
+        setContentView(R.layout.fixture);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        adView = (AdView) findViewById(R.id.adViewFixture);
+
     }
 }

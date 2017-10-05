@@ -13,14 +13,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.inject.Inject;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Gallery;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.inject.Inject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,16 +28,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
-
 /**
  * @author Ripon
  */
-@ContentView(R.layout.playersfragment)
 public class GalleryActivity extends CommonActivity {
 
-    @InjectView(R.id.recycler_view)
     RecyclerView recyclerView;
 
     @Inject
@@ -46,10 +41,11 @@ public class GalleryActivity extends CommonActivity {
     @Inject
     NetworkService networkService;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initialize();
 
         networkService.fetchGallery(new DefaultMessageHandler(this, true) {
             @Override
@@ -124,5 +120,10 @@ public class GalleryActivity extends CommonActivity {
             author = ViewHolder.get(itemView, R.id.tv_author);
             linearLayout = ViewHolder.get(itemView, R.id.news_item_container);
         }
+    }
+
+    private void initialize() {
+        setContentView(R.layout.playersfragment);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     }
 }

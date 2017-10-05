@@ -15,12 +15,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.LivestreamAndHighlights;
@@ -33,6 +27,12 @@ import com.allgames.sportslab.util.ViewHolder;
 import com.allgames.sportslab.videoplayers.FrameStream;
 import com.allgames.sportslab.videoplayers.HighlightsVids;
 import com.allgames.sportslab.videoplayers.LiveStreamView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,22 +40,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
-
 /**
  * @author ripon
  */
-@ContentView(R.layout.highlights)
 public class Highlights extends RoboAppCompatActivity {
 
-    @InjectView(R.id.lvHighlights)
     private RecyclerView recyclerView;
-
-    @InjectView(R.id.adViewHighlights)
     private AdView adView;
-
-    @InjectView(R.id.empty_view)
     private TextView emptyView;
 
     @Inject
@@ -68,10 +59,11 @@ public class Highlights extends RoboAppCompatActivity {
     private ArrayList<LivestreamAndHighlights> objects;
     private InterstitialAd mInterstitialAd;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initialize();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -224,5 +216,12 @@ public class Highlights extends RoboAppCompatActivity {
                 emptyView.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void initialize() {
+        setContentView(R.layout.highlights);
+        recyclerView = (RecyclerView) findViewById(R.id.lvHighlights);
+        adView = (AdView) findViewById(R.id.adViewHighlights);
+        emptyView = (TextView) findViewById(R.id.empty_view);
     }
 }

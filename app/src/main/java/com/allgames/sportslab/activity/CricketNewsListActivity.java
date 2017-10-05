@@ -39,13 +39,9 @@ import roboguice.inject.InjectView;
 /**
  * @author ripon
  */
-@ContentView(R.layout.news)
 public class CricketNewsListActivity extends CommonActivity {
 
-    @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
-
-    @InjectView(R.id.adViewNews)
     private AdView adView;
 
     @Inject
@@ -56,12 +52,11 @@ public class CricketNewsListActivity extends CommonActivity {
 
     private Typeface typeface;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        typeface = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
+        initialize();
 
         recyclerView.setAdapter(new BasicListAdapter<CricketNews, NewsViewHolder>(cricketNewses) {
             @Override
@@ -216,5 +211,13 @@ public class CricketNewsListActivity extends CommonActivity {
             time = ViewHolder.get(itemView, R.id.tv_times_ago);
             circleImageView = ViewHolder.get(itemView, R.id.civ_news_thumb);
         }
+    }
+
+    private void initialize() {
+        setContentView(R.layout.news);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        adView = (AdView) findViewById(R.id.adViewNews);
+
+        typeface = Typeface.createFromAsset(getAssets(), Constants.SOLAIMAN_LIPI_FONT);
     }
 }

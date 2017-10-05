@@ -27,20 +27,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
-import com.allgames.sportslab.util.DividerItemDecoration;
+import com.allgames.sportslab.util.Constants;
+import com.allgames.sportslab.util.DefaultMessageHandler;
+import com.allgames.sportslab.util.NetworkService;
+import com.allgames.sportslab.util.RoboAppCompatActivity;
 import com.allgames.sportslab.util.ViewHolder;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.inject.Inject;
-import com.allgames.sportslab.R;
-import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
-import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.DefaultMessageHandler;
-import com.allgames.sportslab.util.NetworkService;
-import com.allgames.sportslab.util.RoboAppCompatActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -49,44 +47,28 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
-
-@ContentView(R.layout.activity_front_page)
 public class FrontPage extends RoboAppCompatActivity {
 
-    @InjectView(R.id.menu_list)
     private RecyclerView menuList;
-    @InjectView(R.id.adViewFontPage)
     private AdView adView;
-    @InjectView(R.id.toolbar)
     private Toolbar toolbar;
+    private ImageView imageView;
+    private TextView welcomeText;
 
     @Inject
     NetworkService networkService;
-
-    InterstitialAd mInterstitialAd;
-
     @Inject
     ArrayList<String> selectedMenu;
 
-    @InjectView(R.id.tour_image)
-    private ImageView imageView;
-
-    @InjectView(R.id.tv_welcome_text)
-    private TextView welcomeText;
-
     private PackageInfo pInfo;
-
     Typeface typeface;
+    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setSupportActionBar(toolbar);
-
-        typeface = Typeface.createFromAsset(this.getAssets(), Constants.SOLAIMAN_LIPI_FONT);
+        initialize();
 
         menuList.setAdapter(new BasicListAdapter<String, HomeViewHolder>(selectedMenu) {
             @Override
@@ -151,7 +133,7 @@ public class FrontPage extends RoboAppCompatActivity {
                         } else if (selectedMenu.get(position).contains("লগ ইন/লগ আউট")) {
                             Intent intent = new Intent(FrontPage.this, LoginActivity.class);
                             startActivity(intent);
-                        }  else if (selectedMenu.get(position).contains("অ্যাপ আপডেট করুন")) {
+                        } else if (selectedMenu.get(position).contains("অ্যাপ আপডেট করুন")) {
                             String appPackageName = getPackageName();
                             try {
                                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
@@ -243,10 +225,9 @@ public class FrontPage extends RoboAppCompatActivity {
                     }
 
                     if (!response.getJSONArray("content").getJSONObject(0).getString("checkversion").contains(pInfo.versionName)) {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(FrontPage.this);
-                        alertDialogBuilder.setMessage(response.getJSONArray("content").getJSONObject(0).getString("popupmessage"));
-                        alertDialogBuilder.setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
+                        new AlertDialog.Builder(FrontPage.this)
+                                .setMessage(response.getJSONArray("content").getJSONObject(0).getString("popupmessage"))
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface arg0, int arg1) {
                                         try {
@@ -254,23 +235,20 @@ public class FrontPage extends RoboAppCompatActivity {
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-
                                     }
-                                });
-
-                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .create()
+                                .show();
                     }
 
                     JSONArray menus = response.getJSONArray("content").getJSONObject(0).getJSONArray("menus");
-                    for (int i=0; i< menus.length(); i++) {
+                    for (int i = 0; i < menus.length(); i++) {
                         selectedMenu.add(menus.getJSONObject(i).getString("name"));
                     }
                     menuList.getAdapter().notifyDataSetChanged();
@@ -299,11 +277,11 @@ public class FrontPage extends RoboAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-                Intent i=new Intent(android.content.Intent.ACTION_SEND);
+                Intent i = new Intent(android.content.Intent.ACTION_SEND);
                 i.setType("text/plain");
-                i.putExtra(android.content.Intent.EXTRA_SUBJECT,"Share App");
-                i.putExtra(android.content.Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id="+getPackageName());
-                startActivity(Intent.createChooser(i,"Share via"));
+                i.putExtra(android.content.Intent.EXTRA_SUBJECT, "Share App");
+                i.putExtra(android.content.Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=" + getPackageName());
+                startActivity(Intent.createChooser(i, "Share via"));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -313,6 +291,7 @@ public class FrontPage extends RoboAppCompatActivity {
     private static class HomeViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView textView;
+
         public HomeViewHolder(View itemView) {
             super(itemView);
             textView = ViewHolder.get(itemView, R.id.menu_item_text);
@@ -357,5 +336,18 @@ public class FrontPage extends RoboAppCompatActivity {
             }
         });
 
+    }
+
+    private void initialize() {
+        setContentView(R.layout.activity_front_page);
+
+        menuList = (RecyclerView) findViewById(R.id.menu_list);
+        adView = (AdView) findViewById(R.id.adViewFontPage);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        imageView = (ImageView) findViewById(R.id.tour_image);
+        welcomeText = (TextView) findViewById(R.id.tv_welcome_text);
+
+        setSupportActionBar(toolbar);
+        typeface = Typeface.createFromAsset(this.getAssets(), Constants.SOLAIMAN_LIPI_FONT);
     }
 }

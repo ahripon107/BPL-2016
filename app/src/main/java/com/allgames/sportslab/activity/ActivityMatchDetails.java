@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.FragmentMatchSummary;
@@ -13,33 +11,29 @@ import com.allgames.sportslab.fragment.FragmentScoreBoard;
 import com.allgames.sportslab.fragment.GossipFragment;
 import com.allgames.sportslab.fragment.PlayingXIFragment;
 import com.allgames.sportslab.util.Constants;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import org.json.JSONArray;
-
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
 /**
  * @author ripon
  */
-@ContentView(R.layout.activity_match_details)
 public class ActivityMatchDetails extends CommonActivity {
 
-    @InjectView(R.id.viewPager)
+
     private ViewPager viewPager;
-
-    @InjectView(R.id.adViewMatchDetails)
     private AdView adView;
-
-    @InjectView(R.id.tabLayout)
     private TabLayout tabLayout;
 
     private String liveMatchID;
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
 
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initialize();
+
         this.liveMatchID = getIntent().getStringExtra("matchID");
 
         viewPager.setOffscreenPageLimit(4);
@@ -73,5 +67,12 @@ public class ActivityMatchDetails extends CommonActivity {
 
     public void setPlayingXI(JSONArray batTeam1, JSONArray dnbTeam1, JSONArray batTeam2, JSONArray dnbTeam2, String team1Name, String team2Name) {
         ((PlayingXIFragment) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(2)).setPlayingXI(batTeam1, dnbTeam1, batTeam2, dnbTeam2, team1Name, team2Name);
+    }
+
+    private void initialize() {
+        setContentView(R.layout.activity_match_details);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        adView = (AdView) findViewById(R.id.adViewMatchDetails);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
     }
 }

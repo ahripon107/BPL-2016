@@ -23,7 +23,6 @@ import com.allgames.sportslab.util.Dialogs;
 import com.allgames.sportslab.util.FetchFromWeb;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.RecyclerItemClickListener;
-import com.allgames.sportslab.util.RoboAppCompatActivity;
 import com.allgames.sportslab.util.ViewHolder;
 import com.google.inject.Inject;
 import com.loopj.android.http.JsonHttpResponseHandler;
