@@ -10,9 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.RecordsDetailsFragment;
@@ -22,6 +19,9 @@ import com.allgames.sportslab.model.RecordDetailsModel3;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.Dialogs;
 import com.allgames.sportslab.util.FetchFromWeb;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,12 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import roboguice.inject.ContentView;
 
 /**
  * @author Ripon
  */
-@ContentView(R.layout.activity_ranking)
 public class SeriesStatsDetailsActivity extends CommonActivity {
 
     TabLayout tabLayout;
@@ -54,6 +52,7 @@ public class SeriesStatsDetailsActivity extends CommonActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ranking);
 
         setTitle(getIntent().getStringExtra("title"));
         seriesId = getIntent().getStringExtra("seriesId");

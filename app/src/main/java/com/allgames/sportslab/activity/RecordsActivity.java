@@ -6,26 +6,23 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.RecordsFragment;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import roboguice.inject.ContentView;
-
 /**
  * @author Ripon
  */
-@ContentView(R.layout.activity_match_details)
 public class RecordsActivity extends CommonActivity {
 
     MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
@@ -41,6 +38,7 @@ public class RecordsActivity extends CommonActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_match_details);
 
         battingRecordsFragment = new RecordsFragment();
         bowlingRecordsFragment = new RecordsFragment();

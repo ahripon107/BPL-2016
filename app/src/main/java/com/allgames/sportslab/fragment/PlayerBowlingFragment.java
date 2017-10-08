@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.ProfileBattingBowlingRow;
 import com.allgames.sportslab.model.ProfileBowling;
 import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.inject.Inject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
@@ -33,8 +32,6 @@ import roboguice.inject.InjectView;
 
 public class PlayerBowlingFragment extends RoboFragment {
 
-
-    @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
 
     @Inject
@@ -55,7 +52,7 @@ public class PlayerBowlingFragment extends RoboFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         data = getArguments().getString("data");
 
         matches = new ProfileBattingBowlingRow();
@@ -335,29 +332,6 @@ public class PlayerBowlingFragment extends RoboFragment {
         }
     }
 
-    private static class ProfileBowlingViewHolder extends RecyclerView.ViewHolder {
-        protected TextView property;
-        protected TextView test;
-        protected TextView odi;
-        protected TextView t20i;
-        protected TextView fc;
-        protected TextView lista;
-        protected TextView t20;
-        protected LinearLayout linearlayout;
-
-        public ProfileBowlingViewHolder(View itemView) {
-            super(itemView);
-            property = ViewHolder.get(itemView, R.id.game_type);
-            test = ViewHolder.get(itemView, R.id.tv_test);
-            odi = ViewHolder.get(itemView, R.id.tv_odi);
-            t20i = ViewHolder.get(itemView, R.id.tv_t20i);
-            fc = ViewHolder.get(itemView, R.id.tv_fc);
-            lista = ViewHolder.get(itemView, R.id.tv_lista);
-            t20 = ViewHolder.get(itemView, R.id.tv_t20);
-            linearlayout = ViewHolder.get(itemView, R.id.layout);
-        }
-    }
-
     public ProfileBowling processProfileBowling(JSONObject jsonObject) {
         ProfileBowling profileBowling = null;
         try {
@@ -379,5 +353,28 @@ public class PlayerBowlingFragment extends RoboFragment {
             e.printStackTrace();
         }
         return profileBowling;
+    }
+
+    private static class ProfileBowlingViewHolder extends RecyclerView.ViewHolder {
+        protected TextView property;
+        protected TextView test;
+        protected TextView odi;
+        protected TextView t20i;
+        protected TextView fc;
+        protected TextView lista;
+        protected TextView t20;
+        protected LinearLayout linearlayout;
+
+        public ProfileBowlingViewHolder(View itemView) {
+            super(itemView);
+            property = ViewHolder.get(itemView, R.id.game_type);
+            test = ViewHolder.get(itemView, R.id.tv_test);
+            odi = ViewHolder.get(itemView, R.id.tv_odi);
+            t20i = ViewHolder.get(itemView, R.id.tv_t20i);
+            fc = ViewHolder.get(itemView, R.id.tv_fc);
+            lista = ViewHolder.get(itemView, R.id.tv_lista);
+            t20 = ViewHolder.get(itemView, R.id.tv_t20);
+            linearlayout = ViewHolder.get(itemView, R.id.layout);
+        }
     }
 }

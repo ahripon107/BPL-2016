@@ -12,10 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.inject.Inject;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.CricketNews;
@@ -23,6 +19,10 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,18 +30,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
-
 /**
  * @author Ripon
  */
-@ContentView(R.layout.news)
 public class QuotesListActivity extends CommonActivity {
 
-    @InjectView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @InjectView(R.id.adViewNews)
     AdView adView;
 
     @Inject
@@ -53,6 +47,8 @@ public class QuotesListActivity extends CommonActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initialize();
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
@@ -100,6 +96,12 @@ public class QuotesListActivity extends CommonActivity {
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
         });
+    }
+
+    private void initialize() {
+        setContentView(R.layout.news);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        adView = (AdView) findViewById(R.id.adViewNews);
     }
 
     private static class QuotesViewHolder extends RecyclerView.ViewHolder {

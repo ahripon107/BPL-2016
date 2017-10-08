@@ -14,14 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.RecordModel;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,12 +30,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import roboguice.inject.ContentView;
-
 /**
  * @author Ripon
  */
-@ContentView(R.layout.activity_series_stats)
 public class SeriesStatsActivity extends CommonActivity {
 
     Spinner spinner;
@@ -44,13 +41,13 @@ public class SeriesStatsActivity extends CommonActivity {
     ArrayList<RecordModel> seriesStatsModels;
     Gson gson;
 
-
     @Inject
     NetworkService networkService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_series_stats);
 
         spinner = (Spinner) findViewById(R.id.spinner);
         recyclerView = (RecyclerView) findViewById(R.id.series_stats);

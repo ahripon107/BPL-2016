@@ -127,10 +127,7 @@ public class FrontPage extends RoboAppCompatActivity {
                         } else if (selectedMenu.get(position).contains("পয়েন্ট টেবিল")) {
                             Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
                             startActivity(intent);
-                        } else if (selectedMenu.get(position).contains("টিম প্রোফাইল")) {
-                            Intent intent = new Intent(FrontPage.this, TeamProfile.class);
-                            startActivity(intent);
-                        } else if (selectedMenu.get(position).contains("লগ ইন/লগ আউট")) {
+                        }  else if (selectedMenu.get(position).contains("লগ ইন/লগ আউট")) {
                             Intent intent = new Intent(FrontPage.this, LoginActivity.class);
                             startActivity(intent);
                         } else if (selectedMenu.get(position).contains("অ্যাপ আপডেট করুন")) {

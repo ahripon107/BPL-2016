@@ -13,10 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.PointsTable;
@@ -25,6 +21,10 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,20 +34,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
-
 /**
  * @author Ripon
  */
-@ContentView(R.layout.activity_points_table)
 public class PointsTableActivity extends CommonActivity {
 
-    @InjectView(R.id.adViewpointsTable)
     private AdView adView;
-    @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
-    @InjectView(R.id.spn_tournaments)
     private Spinner spinner;
 
     @Inject
@@ -59,10 +52,11 @@ public class PointsTableActivity extends CommonActivity {
     @Inject
     private NetworkService networkService;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initialize();
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
@@ -172,6 +166,13 @@ public class PointsTableActivity extends CommonActivity {
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initialize() {
+        setContentView(R.layout.activity_points_table);
+        adView = (AdView) findViewById(R.id.adViewpointsTable);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        spinner = (Spinner) findViewById(R.id.spinner);
     }
 
     private static class PointsTableViewHolder extends RecyclerView.ViewHolder {

@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.ProfileBatting;
 import com.allgames.sportslab.model.ProfileBattingBowlingRow;
 import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.inject.Inject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
@@ -33,7 +32,6 @@ import roboguice.inject.InjectView;
 
 public class PlayerBattingFragment extends RoboFragment {
 
-    @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
 
     @Inject
@@ -54,6 +52,7 @@ public class PlayerBattingFragment extends RoboFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         data = getArguments().getString("data");
 
@@ -324,6 +323,28 @@ public class PlayerBattingFragment extends RoboFragment {
         }
     }
 
+    public ProfileBatting processProfileBatting(JSONObject jsonObject) {
+        ProfileBatting profileBatting = null;
+        try {
+            String fifty = jsonObject.getString("50");
+            String hundred = jsonObject.getString("100");
+            String Mat = jsonObject.getString("Mat");
+            String Inns = jsonObject.getString("Inns");
+            String NO = jsonObject.getString("NO");
+            String Runs = jsonObject.getString("Runs");
+            String HS = jsonObject.getString("HS");
+            String Ave = jsonObject.getString("Ave");
+            String BF = jsonObject.getString("BF");
+            String SR = jsonObject.getString("SR");
+            String fours = jsonObject.getString("4s");
+            String sixes = jsonObject.getString("6s");
+            profileBatting = new ProfileBatting(fifty, hundred, Mat, Inns, NO, Runs, HS, Ave, BF, SR, fours, sixes);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return profileBatting;
+    }
+
     private static class ProfileBowlingViewHolder extends RecyclerView.ViewHolder {
         protected TextView property;
         protected TextView test;
@@ -345,27 +366,5 @@ public class PlayerBattingFragment extends RoboFragment {
             t20 = ViewHolder.get(itemView, R.id.tv_t20);
             linearlayout = ViewHolder.get(itemView, R.id.layout);
         }
-    }
-
-    public ProfileBatting processProfileBatting(JSONObject jsonObject) {
-        ProfileBatting profileBatting = null;
-        try {
-            String fifty = jsonObject.getString("50");
-            String hundred = jsonObject.getString("100");
-            String Mat = jsonObject.getString("Mat");
-            String Inns = jsonObject.getString("Inns");
-            String NO = jsonObject.getString("NO");
-            String Runs = jsonObject.getString("Runs");
-            String HS = jsonObject.getString("HS");
-            String Ave = jsonObject.getString("Ave");
-            String BF = jsonObject.getString("BF");
-            String SR = jsonObject.getString("SR");
-            String fours = jsonObject.getString("4s");
-            String sixes = jsonObject.getString("6s");
-            profileBatting = new ProfileBatting(fifty, hundred, Mat, Inns, NO, Runs, HS, Ave, BF, SR, fours, sixes);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return profileBatting;
     }
 }

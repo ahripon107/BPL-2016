@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Commentry;
@@ -24,6 +22,8 @@ import com.allgames.sportslab.util.Dialogs;
 import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.FetchFromWeb;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.inject.Inject;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,20 +33,16 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
 public class FullCommentryFragment extends RoboFragment {
 
-    @InjectView(R.id.recycler_view)
+    Dialogs dialogs;
     private RecyclerView recyclerView;
-
     @Inject
     private ArrayList<Commentry> commentries;
-
-    Dialogs dialogs;
 
     @Nullable
     @Override
@@ -58,6 +54,7 @@ public class FullCommentryFragment extends RoboFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         dialogs = new Dialogs(getContext());
         recyclerView.setAdapter(new BasicListAdapter<Commentry, CommentryViewHolder>(commentries) {
             @Override

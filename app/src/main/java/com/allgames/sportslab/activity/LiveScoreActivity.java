@@ -35,20 +35,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
-@ContentView(R.layout.fragment_front_page)
 public class LiveScoreActivity extends CommonActivity {
 
-
-    @InjectView(R.id.live_matches)
     private RecyclerView recyclerView;
-
-    @InjectView(R.id.tv_empty_view)
     private TextView emptyView;
 
     @Inject
@@ -62,6 +55,7 @@ public class LiveScoreActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initialize();
         dialogs = new Dialogs(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -293,6 +287,12 @@ public class LiveScoreActivity extends CommonActivity {
                 }
             }
         });
+    }
+
+    private void initialize() {
+        setContentView(R.layout.fragment_front_page);
+        recyclerView = (RecyclerView) findViewById(R.id.live_matches);
+        emptyView = (TextView) findViewById(R.id.empty_view);
     }
 
     private static class LiveScoreViewHolder extends RecyclerView.ViewHolder {

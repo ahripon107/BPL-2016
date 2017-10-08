@@ -18,9 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Profile;
-import com.google.inject.Inject;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.activity.LoginActivity;
 import com.allgames.sportslab.adapter.BasicListAdapter;
@@ -29,6 +26,9 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.facebook.Profile;
+import com.google.inject.Inject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +37,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
@@ -45,16 +44,9 @@ import roboguice.inject.InjectView;
 
 public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    @InjectView(R.id.rvComments)
     private RecyclerView recyclerView;
-
-    @InjectView(R.id.btnSubmitComment)
     private ImageButton sendComment;
-
-    @InjectView(R.id.commentBody)
     private EditText commentBody;
-
-    @InjectView(R.id.refresh)
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Inject
@@ -107,6 +99,7 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initialize(view);
         recyclerView.setHasFixedSize(true);
 
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -206,6 +199,13 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
         swipeRefreshLayout.setRefreshing(true);
         fetchContents();
 
+    }
+
+    private void initialize(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.rvComments);
+        sendComment = (ImageButton) view.findViewById(R.id.btnSubmitComment);
+        commentBody = (EditText) view.findViewById(R.id.commentBody);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
     }
 
     public static class GossipViewHolder extends RecyclerView.ViewHolder {

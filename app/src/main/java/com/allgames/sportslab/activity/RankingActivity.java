@@ -10,15 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.RankingFragment;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.Dialogs;
 import com.allgames.sportslab.util.FetchFromWeb;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,12 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import roboguice.inject.ContentView;
 
 /**
  * @author Ripon
  */
-@ContentView(R.layout.activity_ranking)
 public class RankingActivity extends CommonActivity {
 
     TabLayout tabLayout;
@@ -50,6 +48,7 @@ public class RankingActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_ranking);
         tabLayout = (TabLayout) findViewById(R.id.tab_ranking);
         viewPager = (ViewPager) findViewById(R.id.view_pager_ranking);
         spinner = (Spinner) findViewById(R.id.spinner);

@@ -12,12 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Match;
@@ -27,6 +21,12 @@ import com.allgames.sportslab.util.Dialogs;
 import com.allgames.sportslab.util.FetchFromWeb;
 import com.allgames.sportslab.util.RecyclerItemClickListener;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,27 +35,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
 /**
  * @author ripon
  */
-@ContentView(R.layout.fixture)
 public class PastMatchesActivity extends CommonActivity {
 
     Dialogs dialogs;
-    @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
+    private AdView adView;
     @Inject
     private ArrayList<Match> data;
-    @InjectView(R.id.adViewFixture)
-    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        initialize();
 
         dialogs = new Dialogs(this);
 
@@ -203,6 +198,12 @@ public class PastMatchesActivity extends CommonActivity {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);
+    }
+
+    private void initialize() {
+        setContentView(R.layout.fixture);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        adView = (AdView) findViewById(R.id.adViewFixture);
     }
 
     private static class PastMatchesViewHolder extends RecyclerView.ViewHolder {

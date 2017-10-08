@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.activity.FullCommentryActivity;
 import com.allgames.sportslab.adapter.BasicListAdapter;
@@ -27,6 +26,7 @@ import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +35,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
@@ -53,7 +52,6 @@ public class FragmentMatchSummary extends RoboFragment {
     @Inject
     private NetworkService networkService;
 
-    @InjectView(R.id.refresh)
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
@@ -63,9 +61,10 @@ public class FragmentMatchSummary extends RoboFragment {
 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.commentryList = (RecyclerView) view.findViewById(R.id.commentry_list);
-        this.noCommentry = (TextView) view.findViewById(R.id.no_commentry);
-        this.fullCommentry = (Button) view.findViewById(R.id.btn_full_commentry);
+        commentryList = (RecyclerView) view.findViewById(R.id.commentry_list);
+        noCommentry = (TextView) view.findViewById(R.id.no_commentry);
+        fullCommentry = (Button) view.findViewById(R.id.btn_full_commentry);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
         liveMatchID = getArguments().getString("liveMatchID");
 
         Log.d(Constants.TAG, liveMatchID);

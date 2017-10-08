@@ -4,34 +4,29 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.NewsCommentsFragment;
 import com.allgames.sportslab.fragment.NewsDetailsFragment;
 import com.allgames.sportslab.util.Constants;
-
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
  * @author ripon
  */
-@ContentView(R.layout.newsdetails)
 public class NewsDetailsActivity extends CommonActivity {
 
     public static final String EXTRA_NEWS_OBJECT = "newsobject";
 
-    @InjectView(R.id.adViewNewsDetails)
     private AdView adView;
-
-    @InjectView(R.id.viewPager)
     private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initialize();
 
         this.viewPager.setOffscreenPageLimit(2);
         setupViewPage(this.viewPager);
@@ -47,5 +42,11 @@ public class NewsDetailsActivity extends CommonActivity {
         matchDetailsViewPagerAdapter.addFragment(new NewsDetailsFragment(), "বিস্তারিত");
         matchDetailsViewPagerAdapter.addFragment(new NewsCommentsFragment(), "কমেন্ট");
         viewPager.setAdapter(matchDetailsViewPagerAdapter);
+    }
+
+    private void initialize() {
+        setContentView(R.layout.newsdetails);
+        adView = (AdView) findViewById(R.id.adViewNewsDetails);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
     }
 }

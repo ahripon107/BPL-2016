@@ -18,9 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.activity.ActivityMatchDetails;
 import com.allgames.sportslab.adapter.BatsmanAdapter;
@@ -32,6 +29,9 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.FetchFromWeb;
 import com.allgames.sportslab.util.NetworkService;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,75 +41,36 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
 public class FragmentScoreBoard extends RoboFragment {
 
-    @InjectView(R.id.lvBattingInnings1)
+    public static int numberOfInnings = 0;
     private RecyclerView battingInnings1;
-
-    @InjectView(R.id.lvBowlingInnings1)
     private RecyclerView bowlingInnings1;
-
-    @InjectView(R.id.innings1extra)
     private TextView innings1extra;
-
-    @InjectView(R.id.innings1total)
     private TextView innings1total;
-
-    @InjectView(R.id.innings1fow)
     private TextView innings1fallofwickets;
-
-    @InjectView(R.id.innings1DNB)
     private TextView innings1dnb;
-
-    @InjectView(R.id.firstinningscontainer)
     private LinearLayout firstInningsContainer;
-
-    @InjectView(R.id.labelGround)
     private TextView labelGround;
-
-    @InjectView(R.id.labelInfo)
     private TextView labelInfo;
-
-    @InjectView(R.id.labelMatchStatus)
     private TextView labelMatchStatus;
-
-    @InjectView(R.id.labelTeam1)
     private TextView labelTeam1;
-
-    @InjectView(R.id.labelTeam2)
     private TextView labelTeam2;
-
-    @InjectView(R.id.labelTournament)
     private TextView labelTournament;
-
-    @InjectView(R.id.btn_first_inns)
     private Button firstInnings;
-
-    @InjectView(R.id.btn_second_inns)
     private Button secondInnings;
-
-    @InjectView(R.id.btn_third_inns)
     private Button thirdInnings;
-
-    @InjectView(R.id.btn_fourth_inns)
     private Button fourthInnings;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Inject
     private NetworkService networkService;
-
-    @InjectView(R.id.refresh)
-    private SwipeRefreshLayout swipeRefreshLayout;
-
     @Inject
     private Gson gson;
-
     private JSONObject response;
-    public static int numberOfInnings = 0;
 
     @Nullable
     @Override
@@ -120,6 +81,8 @@ public class FragmentScoreBoard extends RoboFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        initialize(view);
 
         battingInnings1.setNestedScrollingEnabled(false);
         bowlingInnings1.setNestedScrollingEnabled(false);
@@ -551,5 +514,26 @@ public class FragmentScoreBoard extends RoboFragment {
 
             }
         });
+    }
+
+    private void initialize(View view) {
+        battingInnings1 = (RecyclerView) view.findViewById(R.id.lvBattingInnings1);
+        bowlingInnings1 = (RecyclerView) view.findViewById(R.id.lvBowlingInnings1);
+        innings1extra = (TextView) view.findViewById(R.id.innings1extra);
+        innings1total = (TextView) view.findViewById(R.id.innings1total);
+        innings1fallofwickets = (TextView) view.findViewById(R.id.innings1fow);
+        innings1dnb = (TextView) view.findViewById(R.id.innings1DNB);
+        firstInningsContainer = (LinearLayout) view.findViewById(R.id.firstinningscontainer);
+        labelGround = (TextView) view.findViewById(R.id.labelGround);
+        labelInfo = (TextView) view.findViewById(R.id.labelInfo);
+        labelMatchStatus = (TextView) view.findViewById(R.id.labelMatchStatus);
+        labelTeam1 = (TextView) view.findViewById(R.id.labelTeam1);
+        labelTeam2 = (TextView) view.findViewById(R.id.labelTeam2);
+        labelTournament = (TextView) view.findViewById(R.id.labelTournament);
+        firstInnings = (Button) view.findViewById(R.id.btn_first_inns);
+        secondInnings = (Button) view.findViewById(R.id.btn_second_inns);
+        thirdInnings = (Button) view.findViewById(R.id.btn_third_inns);
+        fourthInnings = (Button) view.findViewById(R.id.btn_fourth_inns);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
     }
 }

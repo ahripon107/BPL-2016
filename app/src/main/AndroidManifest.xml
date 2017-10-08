@@ -54,14 +54,6 @@
             android:label="Details"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.allgames.sportslab.activity.TeamDetailsActivity"
-            android:label="Team Profile"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.allgames.sportslab.activity.TeamProfile"
-            android:label="টিম প্রোফাইল"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.allgames.sportslab.activity.PastMatchesActivity"
             android:label="পূর্বের খেলা"
             android:screenOrientation="portrait" />

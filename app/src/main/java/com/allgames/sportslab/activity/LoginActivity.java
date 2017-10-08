@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allgames.sportslab.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -14,20 +15,13 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.allgames.sportslab.R;
-
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
-@ContentView(R.layout.activity_login)
 public class LoginActivity extends CommonActivity {
 
-    @InjectView(R.id.login_button)
     LoginButton loginButton;
-    @InjectView(R.id.login_text)
     TextView textView;
 
     CallbackManager callbackManager;
@@ -37,6 +31,8 @@ public class LoginActivity extends CommonActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initialize();
+
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         loginButton.setReadPermissions("public_profile");
@@ -81,10 +77,15 @@ public class LoginActivity extends CommonActivity {
         };
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void initialize() {
+        setContentView(R.layout.activity_login);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        textView = (TextView) findViewById(R.id.login_text);
     }
 }

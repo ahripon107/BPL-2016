@@ -18,9 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Profile;
-import com.google.inject.Inject;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.activity.LoginActivity;
 import com.allgames.sportslab.adapter.BasicListAdapter;
@@ -30,6 +27,9 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.ViewHolder;
+import com.facebook.Profile;
+import com.google.inject.Inject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +38,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 import static com.allgames.sportslab.activity.NewsDetailsActivity.EXTRA_NEWS_OBJECT;
 
@@ -48,30 +47,22 @@ import static com.allgames.sportslab.activity.NewsDetailsActivity.EXTRA_NEWS_OBJ
 
 public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private RecyclerView recyclerView;
+    private ImageButton sendComment;
+    private EditText commentBody;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private Typeface tf;
+    private Profile profile;
+    private CricketNews cricketNews;
+
     @Inject
     private ArrayList<Comment> comments;
-
-    private String url;
-
-    @InjectView(R.id.rvComments)
-    private RecyclerView recyclerView;
-
     @Inject
     private NetworkService networkService;
 
-    private Typeface tf;
-    private CricketNews cricketNews;
 
-    @InjectView(R.id.btnSubmitComment)
-    private ImageButton sendComment;
-
-    @InjectView(R.id.commentBody)
-    private EditText commentBody;
-
-    @InjectView(R.id.refresh)
-    private SwipeRefreshLayout swipeRefreshLayout;
-
-    private Profile profile;
+    private String url;
 
     @Nullable
     @Override
@@ -83,6 +74,7 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initialize(view);
         recyclerView.setHasFixedSize(true);
         cricketNews = (CricketNews) getActivity().getIntent().getSerializableExtra(EXTRA_NEWS_OBJECT);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -189,6 +181,13 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
         fetchContents();
+    }
+
+    private void initialize(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.rvComments);
+        sendComment = (ImageButton) view.findViewById(R.id.btnSubmitComment);
+        commentBody = (EditText) view.findViewById(R.id.commentBody);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {

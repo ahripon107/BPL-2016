@@ -2,63 +2,39 @@ package com.allgames.sportslab.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.util.CircleImageView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 /**
  * @author Ripon
  */
 
-public class PlayerBasicInfoFragment extends RoboFragment {
+public class PlayerBasicInfoFragment extends Fragment {
 
-    @InjectView(R.id.player_image)
     private CircleImageView playerImage;
-
-    @InjectView(R.id.tv_player_name)
     private TextView playerName;
-
-    @InjectView(R.id.tv_player_country)
     private TextView playerCountry;
-
-    @InjectView(R.id.tv_full_name)
     private TextView fullName;
-
-    @InjectView(R.id.tv_born)
     private TextView born;
-
-    @InjectView(R.id.tv_current_age)
     private TextView currentAge;
-
-    @InjectView(R.id.tv_playing_role)
     private TextView playingRole;
-
-    @InjectView(R.id.tv_batting_style)
     private TextView battingStyle;
-
-    @InjectView(R.id.tv_bowling_style)
     private TextView bowlingStyle;
-
-    @InjectView(R.id.tv_major_teams)
     private TextView majorTeams;
-
-    @InjectView(R.id.tv_profile)
     private TextView profile;
 
     private String data;
     private JSONObject response;
-
 
     @Nullable
     @Override
@@ -70,6 +46,7 @@ public class PlayerBasicInfoFragment extends RoboFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initialize(view);
         data = getArguments().getString("data");
 
         try {
@@ -118,5 +95,19 @@ public class PlayerBasicInfoFragment extends RoboFragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initialize(View view) {
+        playerImage = (CircleImageView) view.findViewById(R.id.player_image);
+        playerName = (TextView) view.findViewById(R.id.tv_player_name);
+        playerCountry = (TextView) view.findViewById(R.id.tv_player_country);
+        fullName = (TextView) view.findViewById(R.id.tv_full_name);
+        born = (TextView) view.findViewById(R.id.tv_born);
+        currentAge = (TextView) view.findViewById(R.id.tv_current_age);
+        playingRole = (TextView) view.findViewById(R.id.tv_playing_role);
+        battingStyle = (TextView) view.findViewById(R.id.tv_batting_style);
+        bowlingStyle = (TextView) view.findViewById(R.id.tv_bowling_style);
+        majorTeams = (TextView) view.findViewById(R.id.tv_major_teams);
+        profile = (TextView) view.findViewById(R.id.tv_profile);
     }
 }
