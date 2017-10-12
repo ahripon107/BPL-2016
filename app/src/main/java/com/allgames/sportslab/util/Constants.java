@@ -24,7 +24,7 @@ public class Constants {
     //public static final String XIAOMI_TEST_DEVICE = "EE613118FFB77F457D6DBDAC46C3658C";
     public static final String XIAOMI_TEST_DEVICE = "F5C90B562D482744906FD29363CF595C";
     public static final String NEWS_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.news(0,50)%20where%20region=%22IN%22&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
-    public static final String FIXTURE_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.upcoming_matches(0,50)&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
+    public static final String FIXTURE_URL = "http://www.totalcricinfo.com/cricket/getFeed?status=upcoming";
     public static final String COMMENTARY_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id=193958%20limit%205&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
     public static final String PAST_MATCHES_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.past_matches%20(0,30)&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
     public static final String RANKING_URL = "http://mapps.cricbuzz.com/cbzvernacular/bengali/stats/rankings";

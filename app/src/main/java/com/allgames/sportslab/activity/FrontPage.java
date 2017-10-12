@@ -1,5 +1,6 @@
 package com.allgames.sportslab.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +49,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+
+import static com.allgames.sportslab.util.ReactiveNetworkHelper.sampleObservable;
+
 public class FrontPage extends RoboAppCompatActivity {
 
     private RecyclerView menuList;
@@ -54,6 +63,8 @@ public class FrontPage extends RoboAppCompatActivity {
     private Toolbar toolbar;
     private ImageView imageView;
     private TextView welcomeText;
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private ProgressDialog progressDialog;
 
     @Inject
     NetworkService networkService;
@@ -70,6 +81,7 @@ public class FrontPage extends RoboAppCompatActivity {
 
         initialize();
 
+        progressDialog = new ProgressDialog(this);
         menuList.setAdapter(new BasicListAdapter<String, HomeViewHolder>(selectedMenu) {
             @Override
             public HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -98,14 +110,6 @@ public class FrontPage extends RoboAppCompatActivity {
                             checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlights");
                         } else if (selectedMenu.get(position).contains("ফুটবল হাইলাইটস")) {
                             checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlightsfootball");
-                        } else if (selectedMenu.get(position).contains("সিরিজ")) {
-                            Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
-                            intent.putExtra("series", "trination");
-                            startActivity(intent);
-                        } else if (selectedMenu.get(position).contains("ট্রফি")) {
-                            Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
-                            intent.putExtra("series", "championstrophy");
-                            startActivity(intent);
                         } else if (selectedMenu.get(position).contains("ফিক্সচার")) {
                             Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
                             intent.putExtra("series", "fixture");
@@ -176,84 +180,102 @@ public class FrontPage extends RoboAppCompatActivity {
 
         String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
         Log.d(Constants.TAG, welcomeTextUrl);
+        progressDialog.show();
 
-        networkService.fetchWelcomeText(new DefaultMessageHandler(this, true) {
-            @Override
-            public void onSuccess(Message msg) {
-                String string = (String) msg.obj;
-                try {
-                    final JSONObject response = new JSONObject(string);
+        disposables.add(sampleObservable(welcomeTextUrl)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<String>() {
 
-                    Constants.SHOW_PLAYER_IMAGE = response.getJSONArray("content").getJSONObject(0).getString("playerimage");
-                    welcomeText.setText(Html.fromHtml(response.getJSONArray("content").getJSONObject(0).getString("description")));
-                    if (response.getJSONArray("content").getJSONObject(0).getString("clickable").equals("true")) {
-                        welcomeText.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                try {
-                                    Uri uriUrl = Uri.parse(String.valueOf(response.getJSONArray("content").getJSONObject(0).getString("link")));
-                                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-                                    startActivity(launchBrowser);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    }
+                    @Override
+                    public void onNext(@NonNull String s) {
+                        Log.d(Constants.TAG, "onNext(" + s + ")");
 
-                    if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("appimage").equals("true")) {
-                        imageView.setVisibility(View.VISIBLE);
-                        Picasso.with(FrontPage.this)
-                                .load(response.getJSONArray("content").getJSONObject(0).getString("appimageurl"))
-                                .placeholder(R.drawable.default_image)
-                                .into(imageView);
-                        imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                try {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("applink"))));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    } else {
-                        imageView.setVisibility(View.GONE);
-                    }
+                        try {
+                            final JSONObject response = new JSONObject(s);
 
-                    if (!response.getJSONArray("content").getJSONObject(0).getString("checkversion").contains(pInfo.versionName)) {
-                        new AlertDialog.Builder(FrontPage.this)
-                                .setMessage(response.getJSONArray("content").getJSONObject(0).getString("popupmessage"))
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            Constants.SHOW_PLAYER_IMAGE = response.getJSONArray("content").getJSONObject(0).getString("playerimage");
+                            welcomeText.setText(Html.fromHtml(response.getJSONArray("content").getJSONObject(0).getString("description")));
+                            if (response.getJSONArray("content").getJSONObject(0).getString("clickable").equals("true")) {
+                                welcomeText.setOnClickListener(new View.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface arg0, int arg1) {
+                                    public void onClick(View v) {
                                         try {
-                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("popuplink"))));
+                                            Uri uriUrl = Uri.parse(String.valueOf(response.getJSONArray("content").getJSONObject(0).getString("link")));
+                                            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                                            startActivity(launchBrowser);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
                                     }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                });
+                            }
+
+                            if (isNetworkAvailable() && response.getJSONArray("content").getJSONObject(0).getString("appimage").equals("true")) {
+                                imageView.setVisibility(View.VISIBLE);
+                                Picasso.with(FrontPage.this)
+                                        .load(response.getJSONArray("content").getJSONObject(0).getString("appimageurl"))
+                                        .placeholder(R.drawable.default_image)
+                                        .into(imageView);
+                                imageView.setOnClickListener(new View.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
+                                    public void onClick(View v) {
+                                        try {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("applink"))));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
-                                })
-                                .create()
-                                .show();
+                                });
+                            } else {
+                                imageView.setVisibility(View.GONE);
+                            }
+
+                            if (!response.getJSONArray("content").getJSONObject(0).getString("checkversion").contains(pInfo.versionName)) {
+                                new AlertDialog.Builder(FrontPage.this)
+                                        .setMessage(response.getJSONArray("content").getJSONObject(0).getString("popupmessage"))
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface arg0, int arg1) {
+                                                try {
+                                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getJSONArray("content").getJSONObject(0).getString("popuplink"))));
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .create()
+                                        .show();
+                            }
+
+                            JSONArray menus = response.getJSONArray("content").getJSONObject(0).getJSONArray("menus");
+                            for (int i = 0; i < menus.length(); i++) {
+                                selectedMenu.add(menus.getJSONObject(i).getString("name"));
+                            }
+                            menuList.getAdapter().notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
-                    JSONArray menus = response.getJSONArray("content").getJSONObject(0).getJSONArray("menus");
-                    for (int i = 0; i < menus.length(); i++) {
-                        selectedMenu.add(menus.getJSONObject(i).getString("name"));
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        progressDialog.dismiss();
+                        Log.e(Constants.TAG, "onError()", e);
                     }
-                    menuList.getAdapter().notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+                    @Override
+                    public void onComplete() {
+                        progressDialog.dismiss();
+                        Log.d(Constants.TAG, "onComplete()");
+                    }
+                }));
     }
 
     private boolean isNetworkAvailable() {
@@ -332,7 +354,6 @@ public class FrontPage extends RoboAppCompatActivity {
                 }
             }
         });
-
     }
 
     private void initialize() {
@@ -346,5 +367,11 @@ public class FrontPage extends RoboAppCompatActivity {
 
         setSupportActionBar(toolbar);
         typeface = Typeface.createFromAsset(this.getAssets(), Constants.SOLAIMAN_LIPI_FONT);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposables.clear();
     }
 }

@@ -44,14 +44,10 @@ public class FixtureActivity extends CommonActivity {
     @Inject
     private NetworkService networkService;
 
-    private String series;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initialize();
-
-        series = getIntent().getStringExtra("series");
 
         recyclerView.setAdapter(new BasicListAdapter<Match, FixtureViewHolder>(data) {
             @Override
@@ -85,8 +81,8 @@ public class FixtureActivity extends CommonActivity {
                 holder.textteam2.setText(data.get(position).getTeam2());
                 holder.venue.setText(data.get(position).getVenue());
 
-                String timeparts[] = data.get(position).getTime().split("T");
-                holder.time.setText(timeparts[0] + "  " + timeparts[1]);
+                //String timeparts[] = data.get(position).getTime().split("T");
+                //holder.time.setText(timeparts[0] + "  " + timeparts[1]);
                 holder.seriesName.setText(data.get(position).getSeriesName());
                 holder.matchNo.setText(data.get(position).getMatchNo());
 
@@ -94,112 +90,40 @@ public class FixtureActivity extends CommonActivity {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if (series.equals("fixture")) {
-            String url = Constants.FIXTURE_URL;
-            Log.d(Constants.TAG, url);
 
-            networkService.fetchFixture(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
+        String url = Constants.FIXTURE_URL;
+        Log.d(Constants.TAG, url);
 
-                        String team1, team2, venue, time, seriesName, matcNo;
-                        response = response.getJSONObject("query").getJSONObject("results");
-                        JSONArray jsonArray = response.getJSONArray("Match");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject obj = jsonArray.getJSONObject(i);
-                            JSONArray array = obj.getJSONArray("Team");
-                            seriesName = obj.getString("series_name");
-                            matcNo = obj.getString("MatchNo");
+        networkService.fetchFixture(new DefaultMessageHandler(this, true) {
+            @Override
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
+                try {
+                    JSONObject response = new JSONObject(string);
 
-                            team1 = array.getJSONObject(0).getString("Team");
-                            team2 = array.getJSONObject(1).getString("Team");
+                    String team1, team2, venue, time, seriesName, matcNo;
+                    response = response.getJSONObject("schedule");
+                    JSONArray jsonArray = response.getJSONArray("matches");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        seriesName = obj.getString("name");
+                        matcNo = obj.getString("id");
 
-                            venue = obj.getJSONObject("Venue").getString("content");
-                            time = obj.getString("StartDate");
-                            Match match = new Match(team1, team2, venue, time, seriesName, matcNo, "");
-                            data.add(match);
-                        }
+                        team1 = obj.getString("team1");
+                        team2 = obj.getString("team2");
 
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        venue = obj.getString("location");
+                        time = obj.getString("result");
+                        Match match = new Match(team1, team2, venue, time, seriesName, matcNo, "");
+                        data.add(match);
                     }
+
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
-        } else if (series.equals("trination")) {
-            String url = "http://get.yesdhaka.com/cricket/crickettv/tri_schedule.json";
-            Log.d(Constants.TAG, url);
-
-            networkService.fetchTriNationSchedule(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-
-                        String team1, team2, venue, time, seriesName, matcNo;
-
-                        JSONArray jsonArray = response.getJSONArray("matches");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject obj = jsonArray.getJSONObject(i);
-
-                            seriesName = "Tri Nation Series";
-                            matcNo = "";
-
-                            team1 = obj.getString("team1_name");
-                            team2 = obj.getString("team2_name");
-
-                            venue = obj.getString("venue");
-                            time = obj.getString("match_date") + "T" + obj.getString("match_time");
-                            Match match = new Match(team1, team2, venue, time, seriesName, matcNo, "");
-                            data.add(match);
-                        }
-
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } else if (series.equals("championstrophy")) {
-            String url = "http://get.yesdhaka.com/cricket/champ_schedule.json";
-            Log.d(Constants.TAG, url);
-
-            networkService.fetchCTSchedule(new DefaultMessageHandler(this, true) {
-                @Override
-                public void onSuccess(Message msg) {
-                    String string = (String) msg.obj;
-                    try {
-                        JSONObject response = new JSONObject(string);
-
-                        String team1, team2, venue, time, seriesName, matcNo;
-
-                        JSONArray jsonArray = response.getJSONArray("matches");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject obj = jsonArray.getJSONObject(i);
-
-                            seriesName = "CT";
-                            matcNo = "";
-
-                            team1 = obj.getString("team1_name");
-                            team2 = obj.getString("team2_name");
-
-                            venue = obj.getString("venue");
-                            time = obj.getString("match_date") + "T" + obj.getString("match_time");
-                            Match match = new Match(team1, team2, venue, time, seriesName, matcNo, "");
-                            data.add(match);
-                        }
-
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
+            }
+        });
 
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
@@ -238,6 +162,5 @@ public class FixtureActivity extends CommonActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         adView = (AdView) findViewById(R.id.adViewFixture);
-
     }
 }
