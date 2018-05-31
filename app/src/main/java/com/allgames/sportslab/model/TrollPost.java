@@ -3,7 +3,7 @@ package com.allgames.sportslab.model;
 /**
  * Created by Ripon on 8/12/16.
  */
-public class TrollPost {
+class TrollPost {
 
     private int id;
     private String imageurl;

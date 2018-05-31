@@ -25,7 +25,6 @@ import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.LiveScoreFragment;
-import com.allgames.sportslab.fragment.OpinionFragment;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
@@ -50,11 +49,12 @@ public class FrontPage extends RoboAppCompatActivity
     private Toolbar toolbar;
 
     @Inject
+    private
     NetworkService networkService;
 
-    InterstitialAd mInterstitialAd;
+    private InterstitialAd mInterstitialAd;
 
-    NavigationView navigationView;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +66,14 @@ public class FrontPage extends RoboAppCompatActivity
         setupViewPage(this.viewPager);
         ((TabLayout) findViewById(R.id.tabLayout)).setupWithViewPager(this.viewPager);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         drawer.openDrawer(Gravity.LEFT);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         hideAllMenu(navigationView);
@@ -143,7 +143,7 @@ public class FrontPage extends RoboAppCompatActivity
         }
     }
 
-    public final void setupViewPage(ViewPager viewPager) {
+    private void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(new LiveScoreFragment(), "লাইভ স্কোর");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
@@ -151,7 +151,7 @@ public class FrontPage extends RoboAppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -219,7 +219,7 @@ public class FrontPage extends RoboAppCompatActivity
             }
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -258,7 +258,7 @@ public class FrontPage extends RoboAppCompatActivity
 
     }
 
-    public void hideAllMenu(NavigationView navigationView) {
+    private void hideAllMenu(NavigationView navigationView) {
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.nav_live_streaming).setVisible(false);
         menu.findItem(R.id.nav_live_streaming_football).setVisible(false);
@@ -272,7 +272,7 @@ public class FrontPage extends RoboAppCompatActivity
         menu.findItem(R.id.nav_fixture).setVisible(false);
     }
 
-    public void showAllMenu(NavigationView navigationView) {
+    private void showAllMenu(NavigationView navigationView) {
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.nav_live_streaming).setVisible(true);
         menu.findItem(R.id.nav_live_streaming_football).setVisible(true);

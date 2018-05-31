@@ -79,15 +79,15 @@ public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerView
     }
 
     static class BowlerViewHolder extends RecyclerView.ViewHolder {
-        protected TextView name;
-        protected TextView overs;
-        protected TextView maidens;
-        protected TextView runs;
-        protected TextView wickets;
-        protected LinearLayout linearLayout;
-        protected CircleImageView playerImage;
+        TextView name;
+        TextView overs;
+        TextView maidens;
+        TextView runs;
+        TextView wickets;
+        LinearLayout linearLayout;
+        CircleImageView playerImage;
 
-        public BowlerViewHolder(View itemView) {
+        BowlerViewHolder(View itemView) {
             super(itemView);
 
             name = ViewHolder.get(itemView, R.id.bowl_Name);

@@ -7,10 +7,10 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.util.Constants;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
  * @author Ripon
@@ -26,7 +26,7 @@ public class FrameStream extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.framestream);
 
-        adView = (AdView) findViewById(R.id.adViewFrameStream);
+        adView = findViewById(R.id.adViewFrameStream);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);
@@ -49,7 +49,7 @@ public class FrameStream extends AppCompatActivity {
                 "       " + str + "  \n" +
                 "    </body>\n" +
                 "</html>";
-        webView = (WebView) findViewById(R.id.wvframe);
+        webView = findViewById(R.id.wvframe);
         webView.getSettings().setJavaScriptEnabled(true);
 
         webView.getSettings().setBuiltInZoomControls(true);

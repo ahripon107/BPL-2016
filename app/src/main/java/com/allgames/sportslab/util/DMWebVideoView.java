@@ -153,7 +153,7 @@ public class DMWebVideoView extends WebView {
         loadUrl(String.format(mEmbedUrl, videoId, mAllowAutomaticNativeFullscreen, getContext().getPackageName()));
     }
 
-    public void hideVideoView() {
+    private void hideVideoView() {
         if (isFullscreen()) {
             if (mCustomVideoView != null) {
                 mCustomVideoView.stopPlayback();
@@ -195,7 +195,7 @@ public class DMWebVideoView extends WebView {
         mIsFullscreen = true;
     }
 
-    public boolean isFullscreen() {
+    private boolean isFullscreen() {
         return mIsFullscreen;
     }
 

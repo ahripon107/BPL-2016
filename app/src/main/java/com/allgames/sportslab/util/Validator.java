@@ -7,7 +7,7 @@ import android.widget.TextView;
  * @author Ripon
  */
 
-public class Validator {
+class Validator {
 
     public static boolean validateNotEmpty(EditText editText, String errorMsg) {
         if (editText.getText().toString().trim().isEmpty()) {

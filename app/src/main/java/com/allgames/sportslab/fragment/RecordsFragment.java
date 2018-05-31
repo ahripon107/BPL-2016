@@ -29,9 +29,9 @@ import java.util.ArrayList;
  */
 public class RecordsFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    ArrayList<RecordModel> recordModels = new ArrayList<>();
-    Gson gson = new Gson();
+    private RecyclerView recyclerView;
+    private ArrayList<RecordModel> recordModels = new ArrayList<>();
+    private Gson gson = new Gson();
 
     @Nullable
     @Override
@@ -42,7 +42,7 @@ public class RecordsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
     }
 
     public void populateFragment(JSONArray jsonArray) throws JSONException {
@@ -74,10 +74,10 @@ public class RecordsFragment extends Fragment {
     }
 
     private static class RecordsViewHolder extends RecyclerView.ViewHolder {
-        protected TextView textView;
-        protected LinearLayout recordTypeLayout;
+        TextView textView;
+        LinearLayout recordTypeLayout;
 
-        public RecordsViewHolder(View itemView) {
+        RecordsViewHolder(View itemView) {
             super(itemView);
             textView = ViewHolder.get(itemView, R.id.tv_record_type);
             recordTypeLayout = ViewHolder.get(itemView, R.id.record_type_layout);

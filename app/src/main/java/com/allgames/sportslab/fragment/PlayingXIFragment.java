@@ -18,7 +18,6 @@ import com.allgames.sportslab.activity.PlayerCareerActivity;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Player;
 import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.ViewHolder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +33,8 @@ public class PlayingXIFragment extends Fragment {
 
     private RecyclerView t1, t2;
     private TextView team1N, team2N;
-    ArrayList<Player> team1, team2;
+    private ArrayList<Player> team1;
+    private ArrayList<Player> team2;
 
     @Nullable
     @Override
@@ -44,12 +44,12 @@ public class PlayingXIFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        t1 = (RecyclerView) view.findViewById(R.id.list_team1);
-        t2 = (RecyclerView) view.findViewById(R.id.list_team2);
+        t1 = view.findViewById(R.id.list_team1);
+        t2 = view.findViewById(R.id.list_team2);
         t1.setNestedScrollingEnabled(false);
         t2.setNestedScrollingEnabled(false);
-        team1N = (TextView) view.findViewById(R.id.tv_team1Name);
-        team2N = (TextView) view.findViewById(R.id.tv_team2Name);
+        team1N = view.findViewById(R.id.tv_team1Name);
+        team2N = view.findViewById(R.id.tv_team2Name);
         team1 = new ArrayList<>();
         team2 = new ArrayList<>();
     }
@@ -154,14 +154,13 @@ public class PlayingXIFragment extends Fragment {
     }
 
     private static class PlayingXIViewHolder extends RecyclerView.ViewHolder {
+        TextView textView;
+        ImageView imageView;
 
-        protected TextView textView;
-        protected ImageView imageView;
-
-        public PlayingXIViewHolder(View itemView) {
+        PlayingXIViewHolder(View itemView) {
             super(itemView);
-            textView = ViewHolder.get(itemView, R.id.tv_player_name);
-            imageView = ViewHolder.get(itemView, R.id.civ_player_image);
+            this.textView = itemView.findViewById(R.id.tv_player_name);
+            this.imageView = itemView.findViewById(R.id.civ_player_image);
         }
     }
 }

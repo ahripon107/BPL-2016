@@ -95,11 +95,11 @@ public class TeamProfileAdapter extends RecyclerView.Adapter<TeamProfileAdapter.
     }
 
     static class TeamProfileViewHolder extends RecyclerView.ViewHolder {
-        protected CircleImageView circleImageView;
-        protected TextView tname;
-        protected LinearLayout linearLayout;
+        CircleImageView circleImageView;
+        TextView tname;
+        LinearLayout linearLayout;
 
-        public TeamProfileViewHolder(View itemView) {
+        TeamProfileViewHolder(View itemView) {
             super(itemView);
             circleImageView = ViewHolder.get(itemView, R.id.civTeams);
             tname = ViewHolder.get(itemView, R.id.tvTeamName);

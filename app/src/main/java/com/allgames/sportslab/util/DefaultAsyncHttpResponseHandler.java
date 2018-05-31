@@ -13,7 +13,7 @@ import cz.msebera.android.httpclient.Header;
  * @author Ripon
  */
 
-public class DefaultAsyncHttpResponseHandler extends AsyncHttpResponseHandler {
+class DefaultAsyncHttpResponseHandler extends AsyncHttpResponseHandler {
     private Handler handler;
 
     public DefaultAsyncHttpResponseHandler(Handler handler) {

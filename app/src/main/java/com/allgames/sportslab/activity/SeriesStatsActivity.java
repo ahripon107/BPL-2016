@@ -38,22 +38,24 @@ import roboguice.inject.ContentView;
 @ContentView(R.layout.activity_series_stats)
 public class SeriesStatsActivity extends CommonActivity {
 
-    Spinner spinner;
-    RecyclerView recyclerView;
-    List<String> currentSeries, seriesIds;
-    ArrayList<RecordModel> seriesStatsModels;
-    Gson gson;
+    private Spinner spinner;
+    private RecyclerView recyclerView;
+    private List<String> currentSeries;
+    private List<String> seriesIds;
+    private ArrayList<RecordModel> seriesStatsModels;
+    private Gson gson;
 
 
     @Inject
+    private
     NetworkService networkService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        spinner = (Spinner) findViewById(R.id.spinner);
-        recyclerView = (RecyclerView) findViewById(R.id.series_stats);
+        spinner = findViewById(R.id.spinner);
+        recyclerView = findViewById(R.id.series_stats);
 
         currentSeries = new ArrayList<>();
         seriesIds = new ArrayList<>();
@@ -64,7 +66,7 @@ public class SeriesStatsActivity extends CommonActivity {
         fetchData();
     }
 
-    public void fetchData() {
+    private void fetchData() {
 
         networkService.fetchSeriesStats(new DefaultMessageHandler(this, true) {
             @Override
@@ -120,13 +122,13 @@ public class SeriesStatsActivity extends CommonActivity {
     }
 
     private static class SeriesStatsViewHolder extends RecyclerView.ViewHolder {
-        protected TextView textView;
-        protected LinearLayout recordTypeLayout;
+        TextView textView;
+        LinearLayout recordTypeLayout;
 
-        public SeriesStatsViewHolder(View itemView) {
+        SeriesStatsViewHolder(View itemView) {
             super(itemView);
-            textView = ViewHolder.get(itemView, R.id.tv_record_type);
-            recordTypeLayout = ViewHolder.get(itemView, R.id.record_type_layout);
+            this.textView = ViewHolder.get(itemView, R.id.tv_record_type);
+            this.recordTypeLayout = ViewHolder.get(itemView, R.id.record_type_layout);
         }
     }
 }

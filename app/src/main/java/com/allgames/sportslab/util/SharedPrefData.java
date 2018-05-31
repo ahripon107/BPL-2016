@@ -8,13 +8,13 @@ import android.os.Build;
  * @author Ripon
  */
 
-public class SharedPrefData {
+class SharedPrefData {
 
-    public static String SHARED_PREF_NAME = "SHARED_PREF_NAME_SPORTS";
+    private static String SHARED_PREF_NAME = "SHARED_PREF_NAME_SPORTS";
 
-    public static String SHARED_KEY_TAG_NICKNAME = "nickname";
+    private static String SHARED_KEY_TAG_NICKNAME = "nickname";
 
-    public static String SHARED_KEY_TAG_MOBILE_NO = "mobileno";
+    private static String SHARED_KEY_TAG_MOBILE_NO = "mobileno";
 
     public static String getNickName(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -36,7 +36,7 @@ public class SharedPrefData {
         return mobileNo;
     }
 
-    public static void setNickName(Context context, String nickname) {
+    private static void setNickName(Context context, String nickname) {
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(SHARED_KEY_TAG_NICKNAME, nickname);

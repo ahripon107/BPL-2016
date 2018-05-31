@@ -158,7 +158,7 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
         });
     }
 
-    public void publishComment(final String comment) {
+    private void publishComment(final String comment) {
 
         networkService.insertComment(comment, profile, cricketNews.getSource() + cricketNews.getId(), new DefaultMessageHandler(getContext(), false) {
             @Override
@@ -192,12 +192,12 @@ public class NewsCommentsFragment extends RoboFragment implements SwipeRefreshLa
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
-        protected TextView commenter;
-        protected TextView comment;
-        protected TextView timestamp;
-        protected ImageView imageView;
+        TextView commenter;
+        TextView comment;
+        TextView timestamp;
+        ImageView imageView;
 
-        public CommentViewHolder(View v) {
+        CommentViewHolder(View v) {
             super(v);
             commenter = ViewHolder.get(v, R.id.tvName);
             comment = ViewHolder.get(v, R.id.tvComment);

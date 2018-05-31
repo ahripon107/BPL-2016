@@ -56,18 +56,18 @@ public class TeamRecordAdapter extends RecyclerView.Adapter<TeamRecordAdapter.Te
 
     static class TeamRecordViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView vsWhom;
-        protected TextView played;
-        protected TextView wins;
-        protected TextView loss;
-        protected TextView draw;
-        protected TextView highestInnings;
-        protected TextView BBI;
-        protected TextView bestIndividual;
-        protected TextView mostWkts;
-        protected TextView mostRuns;
+        TextView vsWhom;
+        TextView played;
+        TextView wins;
+        TextView loss;
+        TextView draw;
+        TextView highestInnings;
+        TextView BBI;
+        TextView bestIndividual;
+        TextView mostWkts;
+        TextView mostRuns;
 
-        public TeamRecordViewHolder(View itemView) {
+        TeamRecordViewHolder(View itemView) {
             super(itemView);
 
             vsWhom = ViewHolder.get(itemView, R.id.tvAgainst);

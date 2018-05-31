@@ -39,15 +39,18 @@ import roboguice.inject.ContentView;
 @ContentView(R.layout.activity_ranking)
 public class RecordDetailsActivity extends CommonActivity {
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    Spinner spinner;
-    AdView adView;
-    MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
-    String recordType, url;
-    Dialogs dialogs;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private Spinner spinner;
+    private AdView adView;
+    private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
+    private String recordType;
+    private String url;
+    private Dialogs dialogs;
 
-    RecordsDetailsFragment testFragment, odiFragment, t20Fragment;
+    private RecordsDetailsFragment testFragment;
+    private RecordsDetailsFragment odiFragment;
+    private RecordsDetailsFragment t20Fragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,10 +61,10 @@ public class RecordDetailsActivity extends CommonActivity {
         url = getIntent().getStringExtra("url");
         dialogs = new Dialogs(this);
 
-        tabLayout = (TabLayout) findViewById(R.id.tab_ranking);
-        viewPager = (ViewPager) findViewById(R.id.view_pager_ranking);
-        spinner = (Spinner) findViewById(R.id.spinner);
-        adView = (AdView) findViewById(R.id.adViewMatchDetails);
+        tabLayout = findViewById(R.id.tab_ranking);
+        viewPager = findViewById(R.id.view_pager_ranking);
+        spinner = findViewById(R.id.spinner);
+        adView = findViewById(R.id.adViewMatchDetails);
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
@@ -136,7 +139,7 @@ public class RecordDetailsActivity extends CommonActivity {
 
     }
 
-    public final void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(testFragment, "Test");
         this.matchDetailsViewPagerAdapter.addFragment(odiFragment, "ODI");
@@ -144,7 +147,7 @@ public class RecordDetailsActivity extends CommonActivity {
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
-    public void fetchData(String url) {
+    private void fetchData(String url) {
         dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override

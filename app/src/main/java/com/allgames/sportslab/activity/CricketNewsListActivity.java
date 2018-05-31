@@ -203,12 +203,12 @@ public class CricketNewsListActivity extends CommonActivity {
     }
 
     private static class NewsViewHolder extends RecyclerView.ViewHolder {
-        protected TextView headline;
-        protected TextView author;
-        protected TextView time;
-        protected ImageView circleImageView;
+        TextView headline;
+        TextView author;
+        TextView time;
+        ImageView circleImageView;
 
-        public NewsViewHolder(View itemView) {
+        NewsViewHolder(View itemView) {
             super(itemView);
 
             headline = ViewHolder.get(itemView, R.id.tv_headline);

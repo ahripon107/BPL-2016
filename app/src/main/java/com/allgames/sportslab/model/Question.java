@@ -4,7 +4,7 @@ package com.allgames.sportslab.model;
  * @author Ripon
  */
 
-public class Question {
+class Question {
 
     private int id;
     private int quizid;

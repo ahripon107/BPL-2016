@@ -34,10 +34,10 @@ import cz.msebera.android.httpclient.Header;
  */
 public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.PlayerListViewHolder> {
 
-    Context context;
-    ArrayList<Player> players;
-    Gson gson;
-    Dialogs dialogs;
+    private Context context;
+    private ArrayList<Player> players;
+    private Gson gson;
+    private Dialogs dialogs;
 
     public PlayerListAdapter(Context context, ArrayList<Player> players) {
         this.context = context;
@@ -103,7 +103,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
         LinearLayout linearLayout;
         Button viewProfile;
 
-        public PlayerListViewHolder(View itemView) {
+        PlayerListViewHolder(View itemView) {
             super(itemView);
             viewProfile = ViewHolder.get(itemView, R.id.btn_view_profile);
             pname = ViewHolder.get(itemView, R.id.tvPlayerName);

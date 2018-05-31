@@ -44,7 +44,7 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.fixture)
 public class PastMatchesActivity extends CommonActivity {
 
-    Dialogs dialogs;
+    private Dialogs dialogs;
     @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
     @Inject
@@ -198,17 +198,17 @@ public class PastMatchesActivity extends CommonActivity {
     }
 
     private static class PastMatchesViewHolder extends RecyclerView.ViewHolder {
-        protected CircleImageView imgteam1;
-        protected CircleImageView imgteam2;
-        protected TextView textteam1;
-        protected TextView textteam2;
-        protected TextView venue;
-        protected TextView time;
-        protected TextView seriesName;
-        protected TextView matchNo;
-        protected LinearLayout linearLayout;
+        CircleImageView imgteam1;
+        CircleImageView imgteam2;
+        TextView textteam1;
+        TextView textteam2;
+        TextView venue;
+        TextView time;
+        TextView seriesName;
+        TextView matchNo;
+        LinearLayout linearLayout;
 
-        public PastMatchesViewHolder(View itemView) {
+        PastMatchesViewHolder(View itemView) {
             super(itemView);
 
             imgteam1 = ViewHolder.get(itemView, R.id.civTeam1);

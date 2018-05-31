@@ -24,9 +24,9 @@ import java.util.ArrayList;
  */
 public class RecordFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    ArrayList<RecordVsOthers> pl;
-    TeamRecordAdapter teamRecordAdapter;
+    private RecyclerView recyclerView;
+    private ArrayList<RecordVsOthers> pl;
+    private TeamRecordAdapter teamRecordAdapter;
 
 
     public static RecordFragment newInstanceOfRecordFragment(String text, String what) {
@@ -50,7 +50,7 @@ public class RecordFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         pl = new ArrayList<>();
         teamRecordAdapter = new TeamRecordAdapter(this.getActivity(), pl);
         recyclerView.setAdapter(teamRecordAdapter);

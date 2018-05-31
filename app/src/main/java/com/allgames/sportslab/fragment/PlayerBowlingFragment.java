@@ -336,16 +336,16 @@ public class PlayerBowlingFragment extends RoboFragment {
     }
 
     private static class ProfileBowlingViewHolder extends RecyclerView.ViewHolder {
-        protected TextView property;
-        protected TextView test;
-        protected TextView odi;
-        protected TextView t20i;
-        protected TextView fc;
-        protected TextView lista;
-        protected TextView t20;
-        protected LinearLayout linearlayout;
+        TextView property;
+        TextView test;
+        TextView odi;
+        TextView t20i;
+        TextView fc;
+        TextView lista;
+        TextView t20;
+        LinearLayout linearlayout;
 
-        public ProfileBowlingViewHolder(View itemView) {
+        ProfileBowlingViewHolder(View itemView) {
             super(itemView);
             property = ViewHolder.get(itemView, R.id.game_type);
             test = ViewHolder.get(itemView, R.id.tv_test);
@@ -358,7 +358,7 @@ public class PlayerBowlingFragment extends RoboFragment {
         }
     }
 
-    public ProfileBowling processProfileBowling(JSONObject jsonObject) {
+    private ProfileBowling processProfileBowling(JSONObject jsonObject) {
         ProfileBowling profileBowling = null;
         try {
             String Mat = jsonObject.getString("Mat");

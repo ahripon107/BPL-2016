@@ -285,7 +285,7 @@ public class FragmentScoreBoard extends RoboFragment {
         });
     }
 
-    public void setMatchSummary(Summary matchSummary) {
+    private void setMatchSummary(Summary matchSummary) {
         if (isAdded()) {
             this.labelTournament.setText(matchSummary.getTournament());
             this.labelGround.setText(matchSummary.getGround());
@@ -304,9 +304,9 @@ public class FragmentScoreBoard extends RoboFragment {
         setFirstInningsDNB(didNotBat);
     }
 
-    public void setResponse(JSONObject response, int numberOfInnings) {
+    private void setResponse(JSONObject response, int numberOfInnings) {
         this.response = response;
-        this.numberOfInnings = numberOfInnings;
+        FragmentScoreBoard.numberOfInnings = numberOfInnings;
 
         if (numberOfInnings == 0) {
             firstInnings.setVisibility(View.GONE);
@@ -401,20 +401,20 @@ public class FragmentScoreBoard extends RoboFragment {
     }
 
 
-    public void setFirstInningsBattingList(JSONArray jsonArray) {
+    private void setFirstInningsBattingList(JSONArray jsonArray) {
         BatsmanAdapter batsmanAdapter = new BatsmanAdapter(getContext(), preocessBattingList(jsonArray));
         battingInnings1.setAdapter(batsmanAdapter);
         battingInnings1.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    public void setFirstInningsBowlingList(JSONArray jsonArray) {
+    private void setFirstInningsBowlingList(JSONArray jsonArray) {
         BowlerAdapter bowlerAdapter = new BowlerAdapter(getContext(), processBowlingList(jsonArray));
         bowlingInnings1.setAdapter(bowlerAdapter);
         bowlingInnings1.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
 
-    public void setFirstInningsSummary(JSONObject jsonObject) {
+    private void setFirstInningsSummary(JSONObject jsonObject) {
         try {
             if (jsonObject.getJSONObject("extra").has("details")) {
                 innings1extra.setText(jsonObject.getJSONObject("extra").getString("details") + " --- " + jsonObject.getJSONObject("extra").getString("total"));
@@ -431,7 +431,7 @@ public class FragmentScoreBoard extends RoboFragment {
         }
     }
 
-    public void setFirstInningsFOW(JSONArray jsonArray) {
+    private void setFirstInningsFOW(JSONArray jsonArray) {
         String string = "<b>Fall of wickets:</b> ";
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
@@ -444,7 +444,7 @@ public class FragmentScoreBoard extends RoboFragment {
         innings1fallofwickets.setText(Html.fromHtml(string));
     }
 
-    public void setFirstInningsDNB(JSONArray jsonArray) {
+    private void setFirstInningsDNB(JSONArray jsonArray) {
         String string = "<b>Did not bat:</b> ";
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
@@ -458,11 +458,11 @@ public class FragmentScoreBoard extends RoboFragment {
     }
 
 
-    public void hideFirstInnings() {
+    private void hideFirstInnings() {
         firstInningsContainer.setVisibility(View.GONE);
     }
 
-    public ArrayList<Batsman> preocessBattingList(JSONArray jsonArray) {
+    private ArrayList<Batsman> preocessBattingList(JSONArray jsonArray) {
         ArrayList<Batsman> batsmen = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
@@ -486,7 +486,7 @@ public class FragmentScoreBoard extends RoboFragment {
         return batsmen;
     }
 
-    public ArrayList<Bowler> processBowlingList(JSONArray jsonArray) {
+    private ArrayList<Bowler> processBowlingList(JSONArray jsonArray) {
         ArrayList<Bowler> bowlers = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             try {

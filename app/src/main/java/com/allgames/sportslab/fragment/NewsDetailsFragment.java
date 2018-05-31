@@ -36,16 +36,16 @@ import static com.allgames.sportslab.activity.NewsDetailsActivity.EXTRA_NEWS_OBJ
 
 public class NewsDetailsFragment extends Fragment {
 
-    Button detailsNews;
-    ImageView imageView;
-    TextView headline;
-    TextView date;
-    TextView author;
-    TextView details;
-    CricketNews cricketNews;
+    private Button detailsNews;
+    private ImageView imageView;
+    private TextView headline;
+    private TextView date;
+    private TextView author;
+    private TextView details;
+    private CricketNews cricketNews;
 
-    Typeface typeface;
-    Dialogs dialogs;
+    private Typeface typeface;
+    private Dialogs dialogs;
 
     @Nullable
     @Override
@@ -57,12 +57,12 @@ public class NewsDetailsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        detailsNews = (Button) view.findViewById(R.id.btn_details_news);
-        imageView = (ImageView) view.findViewById(R.id.image);
-        headline = (TextView) view.findViewById(R.id.text_view_headline);
-        date = (TextView) view.findViewById(R.id.text_view_date);
-        author = (TextView) view.findViewById(R.id.text_view_author);
-        details = (TextView) view.findViewById(R.id.text_view_details);
+        detailsNews = view.findViewById(R.id.btn_details_news);
+        imageView = view.findViewById(R.id.image);
+        headline = view.findViewById(R.id.text_view_headline);
+        date = view.findViewById(R.id.text_view_date);
+        author = view.findViewById(R.id.text_view_author);
+        details = view.findViewById(R.id.text_view_details);
 
         dialogs = new Dialogs(getContext());
 

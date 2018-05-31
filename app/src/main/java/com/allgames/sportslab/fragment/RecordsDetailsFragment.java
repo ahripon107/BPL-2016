@@ -15,7 +15,6 @@ import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.RecordDetailsModel1;
 import com.allgames.sportslab.model.RecordDetailsModel2;
 import com.allgames.sportslab.model.RecordDetailsModel3;
-import com.allgames.sportslab.util.ViewHolder;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ import java.util.ArrayList;
  */
 public class RecordsDetailsFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -35,7 +34,7 @@ public class RecordsDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
     }
 
     public void setUpSixElements(final ArrayList<RecordDetailsModel1> recordDetailsModel1s) {
@@ -97,39 +96,49 @@ public class RecordsDetailsFragment extends Fragment {
     }
 
     private static class SixElementViewHolder extends RecyclerView.ViewHolder {
-        protected TextView tv1, tv2, tv3, tv4, tv5, tv6;
+        TextView tv1;
+        TextView tv2;
+        TextView tv3;
+        TextView tv4;
+        TextView tv5;
+        TextView tv6;
 
-        public SixElementViewHolder(View itemView) {
+        SixElementViewHolder(View itemView) {
             super(itemView);
-            tv1 = ViewHolder.get(itemView, R.id.tv_str1);
-            tv2 = ViewHolder.get(itemView, R.id.tv_str2);
-            tv3 = ViewHolder.get(itemView, R.id.tv_str3);
-            tv4 = ViewHolder.get(itemView, R.id.tv_str4);
-            tv5 = ViewHolder.get(itemView, R.id.tv_str5);
-            tv6 = ViewHolder.get(itemView, R.id.tv_str6);
+            tv1 = itemView.findViewById(R.id.tv_str1);
+            tv2 = itemView.findViewById(R.id.tv_str2);
+            tv3 = itemView.findViewById(R.id.tv_str3);
+            tv4 = itemView.findViewById(R.id.tv_str4);
+            tv5 = itemView.findViewById(R.id.tv_str5);
+            tv6 = itemView.findViewById(R.id.tv_str6);
         }
     }
 
     private static class FourElementViewHolder extends RecyclerView.ViewHolder {
-        protected TextView tv1, tv2, tv3, tv4;
+        TextView tv1;
+        TextView tv2;
+        TextView tv3;
+        TextView tv4;
 
-        public FourElementViewHolder(View itemView) {
+        FourElementViewHolder(View itemView) {
             super(itemView);
-            tv1 = ViewHolder.get(itemView, R.id.tv_str1);
-            tv2 = ViewHolder.get(itemView, R.id.tv_str2);
-            tv3 = ViewHolder.get(itemView, R.id.tv_str3);
-            tv4 = ViewHolder.get(itemView, R.id.tv_str4);
+            tv1 = itemView.findViewById(R.id.tv_str1);
+            tv2 = itemView.findViewById(R.id.tv_str2);
+            tv3 = itemView.findViewById(R.id.tv_str3);
+            tv4 = itemView.findViewById(R.id.tv_str4);
         }
     }
 
     private static class ThreeElementViewHolder extends RecyclerView.ViewHolder {
-        protected TextView tv1, tv2, tv3;
+        TextView tv1;
+        TextView tv2;
+        TextView tv3;
 
-        public ThreeElementViewHolder(View itemView) {
+        ThreeElementViewHolder(View itemView) {
             super(itemView);
-            tv1 = ViewHolder.get(itemView, R.id.tv_str1);
-            tv2 = ViewHolder.get(itemView, R.id.tv_str2);
-            tv3 = ViewHolder.get(itemView, R.id.tv_str3);
+            tv1 = itemView.findViewById(R.id.tv_str1);
+            tv2 = itemView.findViewById(R.id.tv_str2);
+            tv3 = itemView.findViewById(R.id.tv_str3);
 
         }
     }

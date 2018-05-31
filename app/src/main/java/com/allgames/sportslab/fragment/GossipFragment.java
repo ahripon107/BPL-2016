@@ -152,7 +152,7 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
         });
     }
 
-    public void publishComment(final String comment) {
+    private void publishComment(final String comment) {
 
         networkService.insertComment(comment, profile, "gossip" + getArguments().getString("liveMatchID"), new DefaultMessageHandler(getContext(), true) {
             @Override
@@ -178,7 +178,7 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
         });
     }
 
-    public void populateList(JSONObject response) {
+    private void populateList(JSONObject response) {
         try {
             if (response.getString("msg").equals("Successful")) {
                 comments.clear();
@@ -209,12 +209,12 @@ public class GossipFragment extends RoboFragment implements SwipeRefreshLayout.O
     }
 
     public static class GossipViewHolder extends RecyclerView.ViewHolder {
-        protected TextView commenter;
-        protected TextView comment;
-        protected TextView timestamp;
-        protected ImageView imageView;
+        TextView commenter;
+        TextView comment;
+        TextView timestamp;
+        ImageView imageView;
 
-        public GossipViewHolder(View v) {
+        GossipViewHolder(View v) {
             super(v);
             commenter = ViewHolder.get(v, R.id.tvName);
             comment = ViewHolder.get(v, R.id.tvComment);

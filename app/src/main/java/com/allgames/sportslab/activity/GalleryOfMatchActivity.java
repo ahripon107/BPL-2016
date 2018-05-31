@@ -40,13 +40,13 @@ import roboguice.inject.InjectView;
 public class GalleryOfMatchActivity extends CommonActivity {
 
     @InjectView(R.id.adViewFixture)
-    AdView adView;
+    private AdView adView;
 
     @InjectView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Inject
-    ArrayList<Gallery> galleries;
+    private ArrayList<Gallery> galleries;
 
     @Inject
     private NetworkService networkService;
@@ -105,12 +105,12 @@ public class GalleryOfMatchActivity extends CommonActivity {
     }
 
     private static class GalleryMatchViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView imageView;
-        protected TextView title;
-        protected TextView courtesy;
-        protected LinearLayout linearLayout;
+        ImageView imageView;
+        TextView title;
+        TextView courtesy;
+        LinearLayout linearLayout;
 
-        public GalleryMatchViewHolder(View itemView) {
+        GalleryMatchViewHolder(View itemView) {
             super(itemView);
             imageView = ViewHolder.get(itemView, R.id.img_troll_post);
             title = ViewHolder.get(itemView, R.id.tv_troll_post_title);

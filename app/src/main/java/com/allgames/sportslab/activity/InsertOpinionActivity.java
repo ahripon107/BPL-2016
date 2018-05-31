@@ -45,9 +45,9 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_opinions)
 public class InsertOpinionActivity extends CommonActivity {
 
-    Typeface tf;
-    String id;
-    Profile profile;
+    private Typeface tf;
+    private String id;
+    private Profile profile;
     @Inject
     private ArrayList<Comment> comments;
     @InjectView(R.id.rvComments)
@@ -125,7 +125,7 @@ public class InsertOpinionActivity extends CommonActivity {
             }
         });
 
-        question = (TextView) findViewById(R.id.opinion_question);
+        question = findViewById(R.id.opinion_question);
         question.setTypeface(tf);
         question.setText(getIntent().getStringExtra("question"));
 
@@ -149,7 +149,7 @@ public class InsertOpinionActivity extends CommonActivity {
         });
     }
 
-    public void publishComment(final String comment) {
+    private void publishComment(final String comment) {
 
         networkService.publishOpinionComment(id, profile.getName(), comment, profile.getProfilePictureUri(50, 50).toString(), new DefaultMessageHandler(this, true) {
             @Override
@@ -174,12 +174,12 @@ public class InsertOpinionActivity extends CommonActivity {
     }
 
     public static class OpinionViewHolder extends RecyclerView.ViewHolder {
-        protected TextView commenter;
-        protected TextView comment;
-        protected TextView timestamp;
-        protected ImageView imageView;
+        TextView commenter;
+        TextView comment;
+        TextView timestamp;
+        ImageView imageView;
 
-        public OpinionViewHolder(View v) {
+        OpinionViewHolder(View v) {
             super(v);
             commenter = ViewHolder.get(v, R.id.tvName);
             comment = ViewHolder.get(v, R.id.tvComment);

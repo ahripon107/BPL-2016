@@ -7,9 +7,9 @@ import java.util.ArrayList;
  * @author Ripon
  */
 public class PlayerProfile implements Serializable{
-    String Profile;
-    Style style;
-    ArrayList<MatchStats> matchStatses;
+    private String Profile;
+    private Style style;
+    private ArrayList<MatchStats> matchStatses;
 
     public PlayerProfile(String profile, Style style, ArrayList<MatchStats> matchStatses) {
         this.Profile = profile;

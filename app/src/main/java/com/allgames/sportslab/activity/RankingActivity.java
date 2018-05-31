@@ -35,25 +35,25 @@ import roboguice.inject.ContentView;
 @ContentView(R.layout.activity_ranking)
 public class RankingActivity extends CommonActivity {
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    Spinner spinner;
-    AdView adView;
-    MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
-    RankingFragment testFragment;
-    RankingFragment odiFragment;
-    RankingFragment T20Fragment;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private Spinner spinner;
+    private AdView adView;
+    private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
+    private RankingFragment testFragment;
+    private RankingFragment odiFragment;
+    private RankingFragment T20Fragment;
     JSONObject response;
-    Dialogs dialogs;
+    private Dialogs dialogs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tabLayout = (TabLayout) findViewById(R.id.tab_ranking);
-        viewPager = (ViewPager) findViewById(R.id.view_pager_ranking);
-        spinner = (Spinner) findViewById(R.id.spinner);
-        adView = (AdView) findViewById(R.id.adViewMatchDetails);
+        tabLayout = findViewById(R.id.tab_ranking);
+        viewPager = findViewById(R.id.view_pager_ranking);
+        spinner = findViewById(R.id.spinner);
+        adView = findViewById(R.id.adViewMatchDetails);
         testFragment = new RankingFragment();
         odiFragment = new RankingFragment();
         T20Fragment = new RankingFragment();
@@ -156,7 +156,7 @@ public class RankingActivity extends CommonActivity {
         adView.loadAd(adRequest);
     }
 
-    public final void setupViewPage(ViewPager viewPager) {
+    private void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         this.matchDetailsViewPagerAdapter.addFragment(testFragment, "Test");
         this.matchDetailsViewPagerAdapter.addFragment(odiFragment, "ODI");

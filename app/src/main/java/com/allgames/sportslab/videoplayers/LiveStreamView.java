@@ -25,14 +25,13 @@ public class LiveStreamView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.livestreamview);
 
-        videoView1 = (VideoView) findViewById(R.id.videoView);
+        videoView1 = findViewById(R.id.videoView);
         // Set the media controller buttons
         if (mediaController == null) {
             mediaController = new MediaController(LiveStreamView.this);
 
             // Set the videoView that acts as the anchor for the MediaController.
             mediaController.setAnchorView(videoView1);
-
 
             // Set MediaController for VideoView
             videoView1.setMediaController(mediaController);
@@ -44,7 +43,7 @@ public class LiveStreamView extends AppCompatActivity {
         videoView1.requestFocus();
         videoView1.start();
 
-        AdView adView = (AdView) findViewById(R.id.adViewStreamM3U8);
+        AdView adView = findViewById(R.id.adViewStreamM3U8);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
         adView.loadAd(adRequest);

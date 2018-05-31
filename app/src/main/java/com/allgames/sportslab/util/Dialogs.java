@@ -10,8 +10,8 @@ import com.allgames.sportslab.R;
  */
 
 public class Dialogs {
-    Context context;
-    ProgressDialog progressDialog;
+    private Context context;
+    private ProgressDialog progressDialog;
 
     public Dialogs(Context context) {
         this.context = context;

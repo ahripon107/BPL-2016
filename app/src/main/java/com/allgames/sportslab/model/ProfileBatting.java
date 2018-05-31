@@ -5,7 +5,19 @@ package com.allgames.sportslab.model;
  */
 public class ProfileBatting {
 
-    String gametype,fifty,hundred,Mat,Inns,NO,Runs,HS,Ave,BF,SR,fours,sixes;
+    private String gametype;
+    private String fifty;
+    private String hundred;
+    private String Mat;
+    private String Inns;
+    private String NO;
+    private String Runs;
+    private String HS;
+    private String Ave;
+    private String BF;
+    private String SR;
+    private String fours;
+    private String sixes;
 
     public ProfileBatting(String gametype, String fifty, String hundred, String mat, String inns, String NO, String runs, String HS, String ave, String BF, String SR, String fours, String sixes) {
         this.gametype = gametype;

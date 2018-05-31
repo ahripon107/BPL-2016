@@ -42,7 +42,7 @@ public class NewsDetailsActivity extends CommonActivity {
         adView.loadAd(adRequest);
     }
 
-    public final void setupViewPage(ViewPager viewPager) {
+    private void setupViewPage(ViewPager viewPager) {
         MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         matchDetailsViewPagerAdapter.addFragment(new NewsDetailsFragment(), "বিস্তারিত");
         matchDetailsViewPagerAdapter.addFragment(new NewsCommentsFragment(), "কমেন্ট");

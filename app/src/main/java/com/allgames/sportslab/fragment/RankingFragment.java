@@ -33,12 +33,13 @@ import java.util.ArrayList;
  */
 public class RankingFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    ArrayList<RankingPlayer> rankingPlayers = new ArrayList<>();
-    ArrayList<RankingTeam> rankingTeams = new ArrayList<>();
-    LinearLayout teamLayout, playerLayout;
-    Gson gson = new Gson();
-    Typeface tf;
+    private RecyclerView recyclerView;
+    private ArrayList<RankingPlayer> rankingPlayers = new ArrayList<>();
+    private ArrayList<RankingTeam> rankingTeams = new ArrayList<>();
+    private LinearLayout teamLayout;
+    private LinearLayout playerLayout;
+    private Gson gson = new Gson();
+    private Typeface tf;
 
     @Nullable
     @Override
@@ -57,14 +58,14 @@ public class RankingFragment extends Fragment {
     }
 
     private static class PlayerViewHolder extends RecyclerView.ViewHolder {
-        protected TextView rank;
-        protected TextView playerName;
-        protected TextView playerAverage;
-        protected TextView playerRating;
-        protected ImageView playerImage;
-        protected ImageView countryImage;
+        TextView rank;
+        TextView playerName;
+        TextView playerAverage;
+        TextView playerRating;
+        ImageView playerImage;
+        ImageView countryImage;
 
-        public PlayerViewHolder(View itemView) {
+        PlayerViewHolder(View itemView) {
             super(itemView);
             rank = ViewHolder.get(itemView, R.id.tv_player_rank);
             playerName = ViewHolder.get(itemView, R.id.tv_player_name);
@@ -76,14 +77,14 @@ public class RankingFragment extends Fragment {
     }
 
     private static class TeamViewHolder extends RecyclerView.ViewHolder {
-        protected TextView teamRank;
-        protected TextView teamName;
-        protected TextView teamMatches;
-        protected TextView teamPoint;
-        protected TextView teamRating;
-        protected ImageView teamImage;
+        TextView teamRank;
+        TextView teamName;
+        TextView teamMatches;
+        TextView teamPoint;
+        TextView teamRating;
+        ImageView teamImage;
 
-        public TeamViewHolder(View itemView) {
+        TeamViewHolder(View itemView) {
             super(itemView);
             teamRank = ViewHolder.get(itemView, R.id.iv_team_rank);
             teamName = ViewHolder.get(itemView, R.id.tv_team_name);

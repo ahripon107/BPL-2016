@@ -33,12 +33,12 @@ public class TeamDetailsActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adView = (AdView) findViewById(R.id.adViewTeamProfieDetails);
+        adView = findViewById(R.id.adViewTeamProfieDetails);
 
         String data = getIntent().getStringExtra("data");
-        mTabLayout = (TabLayout) findViewById(R.id.hoteltab_layout);
+        mTabLayout = findViewById(R.id.hoteltab_layout);
         mAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), Titles, data);
-        mPager = (ViewPager) findViewById(R.id.view_pager);
+        mPager = findViewById(R.id.view_pager);
         mPager.setAdapter(mAdapter);
 
         mTabLayout.setupWithViewPager(mPager);
@@ -52,7 +52,7 @@ public class TeamDetailsActivity extends CommonActivity {
         private CharSequence[] titles;
         private String data;
 
-        public SectionsPagerAdapter(FragmentManager fm, CharSequence[] titles, String data) {
+        SectionsPagerAdapter(FragmentManager fm, CharSequence[] titles, String data) {
             super(fm);
             this.titles = titles;
             this.data = data;

@@ -128,17 +128,17 @@ public class FixtureActivity extends CommonActivity {
     }
 
     private static class FixtureViewHolder extends RecyclerView.ViewHolder {
-        protected CircleImageView imgteam1;
-        protected CircleImageView imgteam2;
-        protected TextView textteam1;
-        protected TextView textteam2;
-        protected TextView venue;
-        protected TextView time;
-        protected TextView seriesName;
-        protected TextView matchNo;
-        protected LinearLayout linearLayout;
+        CircleImageView imgteam1;
+        CircleImageView imgteam2;
+        TextView textteam1;
+        TextView textteam2;
+        TextView venue;
+        TextView time;
+        TextView seriesName;
+        TextView matchNo;
+        LinearLayout linearLayout;
 
-        public FixtureViewHolder(View itemView) {
+        FixtureViewHolder(View itemView) {
             super(itemView);
 
             imgteam1 = ViewHolder.get(itemView, R.id.civTeam1);

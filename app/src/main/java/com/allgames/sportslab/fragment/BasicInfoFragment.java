@@ -35,14 +35,14 @@ public class BasicInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.basicinfofragment, container, false);
-        TextView testRank = (TextView) v.findViewById(R.id.tvTestRank);
-        TextView odiRank = (TextView) v.findViewById(R.id.tvODIRank);
-        TextView t20Rank = (TextView) v.findViewById(R.id.tvT20Rank);
-        TextView testCaptain = (TextView) v.findViewById(R.id.tvTestCaptain);
-        TextView odiCaptain = (TextView) v.findViewById(R.id.tvODICaptain);
-        TextView t20Captain = (TextView) v.findViewById(R.id.tvT20Captain);
-        TextView coach = (TextView) v.findViewById(R.id.tvCoach);
-        TextView description = (TextView) v.findViewById(R.id.tvDescription);
+        TextView testRank = v.findViewById(R.id.tvTestRank);
+        TextView odiRank = v.findViewById(R.id.tvODIRank);
+        TextView t20Rank = v.findViewById(R.id.tvT20Rank);
+        TextView testCaptain = v.findViewById(R.id.tvTestCaptain);
+        TextView odiCaptain = v.findViewById(R.id.tvODICaptain);
+        TextView t20Captain = v.findViewById(R.id.tvT20Captain);
+        TextView coach = v.findViewById(R.id.tvCoach);
+        TextView description = v.findViewById(R.id.tvDescription);
         String string = getArguments().getString("details");
 
 

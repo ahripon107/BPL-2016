@@ -28,12 +28,14 @@ import roboguice.inject.ContentView;
 @ContentView(R.layout.activity_match_details)
 public class RecordsActivity extends CommonActivity {
 
-    MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
-    ViewPager viewPager;
-    Gson gson;
-    TabLayout tabLayout;
-    AdView adView;
-    RecordsFragment battingRecordsFragment, bowlingRecordsFragment, fastestRecordsFragment;
+    private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
+    private ViewPager viewPager;
+    private Gson gson;
+    private TabLayout tabLayout;
+    private AdView adView;
+    private RecordsFragment battingRecordsFragment;
+    private RecordsFragment bowlingRecordsFragment;
+    private RecordsFragment fastestRecordsFragment;
 
     @Inject
     private NetworkService networkService;
@@ -46,9 +48,9 @@ public class RecordsActivity extends CommonActivity {
         bowlingRecordsFragment = new RecordsFragment();
         fastestRecordsFragment = new RecordsFragment();
 
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        adView = (AdView) findViewById(R.id.adViewMatchDetails);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+        adView = findViewById(R.id.adViewMatchDetails);
+        tabLayout = findViewById(R.id.tabLayout);
 
         gson = new Gson();
         viewPager.setOffscreenPageLimit(2);
@@ -82,7 +84,7 @@ public class RecordsActivity extends CommonActivity {
         });
     }
 
-    public void setUpViewPager(ViewPager viewPager) {
+    private void setUpViewPager(ViewPager viewPager) {
         matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
 
         Bundle bundle = new Bundle();

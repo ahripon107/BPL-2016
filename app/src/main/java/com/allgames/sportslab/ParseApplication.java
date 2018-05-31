@@ -43,7 +43,7 @@ public class ParseApplication extends MultiDexApplication {
         return mInstance;
     }
 
-    public synchronized Tracker getGoogleAnalyticsTracker() {
+    private synchronized Tracker getGoogleAnalyticsTracker() {
         AnalyticsTrackers analyticsTrackers = AnalyticsTrackers.getInstance();
         return analyticsTrackers.get(AnalyticsTrackers.Target.APP);
     }

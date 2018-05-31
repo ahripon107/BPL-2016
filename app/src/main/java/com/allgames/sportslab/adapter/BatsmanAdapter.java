@@ -90,17 +90,17 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
     }
 
     static class BatsmanViewHolder extends RecyclerView.ViewHolder {
-        protected TextView name;
-        protected TextView runs;
-        protected TextView ball;
-        protected TextView fours;
-        protected TextView six;
-        protected TextView out;
-        protected TextView sr;
-        protected LinearLayout linearLayout;
-        protected CircleImageView playerImage;
+        TextView name;
+        TextView runs;
+        TextView ball;
+        TextView fours;
+        TextView six;
+        TextView out;
+        TextView sr;
+        LinearLayout linearLayout;
+        CircleImageView playerImage;
 
-        public BatsmanViewHolder(View itemView) {
+        BatsmanViewHolder(View itemView) {
             super(itemView);
 
             name = ViewHolder.get(itemView, R.id.batsmenName);

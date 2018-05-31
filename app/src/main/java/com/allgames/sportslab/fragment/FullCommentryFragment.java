@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Commentry;
@@ -23,7 +21,8 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.Dialogs;
 import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.FetchFromWeb;
-import com.allgames.sportslab.util.ViewHolder;
+import com.google.inject.Inject;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,13 +39,11 @@ import roboguice.inject.InjectView;
  */
 public class FullCommentryFragment extends RoboFragment {
 
+    private Dialogs dialogs;
     @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
-
     @Inject
     private ArrayList<Commentry> commentries;
-
-    Dialogs dialogs;
 
     @Nullable
     @Override
@@ -102,7 +99,7 @@ public class FullCommentryFragment extends RoboFragment {
     }
 
 
-    public void fetchCommentries() {
+    private void fetchCommentries() {
 
         String url = getArguments().getString("url");
         dialogs.showDialog();
@@ -198,17 +195,17 @@ public class FullCommentryFragment extends RoboFragment {
     }
 
     private static class CommentryViewHolder extends RecyclerView.ViewHolder {
+        TextView item;
+        LinearLayout linearLayout;
+        TextView overno;
+        TextView event;
 
-        protected TextView item;
-        protected LinearLayout linearLayout;
-        protected TextView overno, event;
-
-        public CommentryViewHolder(View itemView) {
+        CommentryViewHolder(View itemView) {
             super(itemView);
-            item = ViewHolder.get(itemView, R.id.live_commentary);
-            this.linearLayout = (LinearLayout) itemView.findViewById(R.id.ball_layout);
-            this.overno = (TextView) itemView.findViewById(R.id.tv_overno);
-            this.event = (TextView) itemView.findViewById(R.id.tv_event);
+            this.item = itemView.findViewById(R.id.live_commentary);
+            this.linearLayout = itemView.findViewById(R.id.ball_layout);
+            this.overno = itemView.findViewById(R.id.tv_overno);
+            this.event = itemView.findViewById(R.id.tv_event);
         }
     }
 }

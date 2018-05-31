@@ -39,17 +39,21 @@ import roboguice.inject.ContentView;
 @ContentView(R.layout.activity_ranking)
 public class SeriesStatsDetailsActivity extends CommonActivity {
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    Spinner spinner;
-    AdView adView;
-    MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
-    String seriesId, url;
-    List<String> currentSeries, seriesIds;
-    Dialogs dialogs;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private Spinner spinner;
+    private AdView adView;
+    private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
+    private String seriesId;
+    private String url;
+    private List<String> currentSeries;
+    private List<String> seriesIds;
+    private Dialogs dialogs;
 
-    RecordsDetailsFragment testFragment, odiFragment, t20Fragment;
-    ArrayAdapter<String> dataAdapter;
+    private RecordsDetailsFragment testFragment;
+    private RecordsDetailsFragment odiFragment;
+    private RecordsDetailsFragment t20Fragment;
+    private ArrayAdapter<String> dataAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,10 +66,10 @@ public class SeriesStatsDetailsActivity extends CommonActivity {
         seriesIds = new ArrayList<>();
         dialogs = new Dialogs(this);
 
-        tabLayout = (TabLayout) findViewById(R.id.tab_ranking);
-        viewPager = (ViewPager) findViewById(R.id.view_pager_ranking);
-        spinner = (Spinner) findViewById(R.id.spinner);
-        adView = (AdView) findViewById(R.id.adViewMatchDetails);
+        tabLayout = findViewById(R.id.tab_ranking);
+        viewPager = findViewById(R.id.view_pager_ranking);
+        spinner = findViewById(R.id.spinner);
+        adView = findViewById(R.id.adViewMatchDetails);
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
@@ -109,7 +113,7 @@ public class SeriesStatsDetailsActivity extends CommonActivity {
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
-    public void fetchData(String url) {
+    private void fetchData(String url) {
         dialogs.showDialog();
         FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
             @Override

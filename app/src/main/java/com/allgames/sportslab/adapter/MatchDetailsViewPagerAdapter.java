@@ -25,11 +25,11 @@ public class MatchDetailsViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public Fragment getItem(int position) {
-        return (Fragment) this.fragmentList.get(position);
+        return this.fragmentList.get(position);
     }
 
     public CharSequence getPageTitle(int position) {
-        return (CharSequence) this.titleList.get(position);
+        return this.titleList.get(position);
     }
 
     public final void addFragment(Fragment fragment, String title) {

@@ -5,16 +5,16 @@ package com.allgames.sportslab.model;
  */
 public class RecordVsOthers {
 
-    String against;
-    String played;
-    String wins;
-    String loss;
-    String draw;
-    String highestInnings;
-    String bestBBI;
-    String bestInning;
-    String maxWkts;
-    String maxRuns;
+    private String against;
+    private String played;
+    private String wins;
+    private String loss;
+    private String draw;
+    private String highestInnings;
+    private String bestBBI;
+    private String bestInning;
+    private String maxWkts;
+    private String maxRuns;
 
     public RecordVsOthers(String against, String played, String wins, String loss, String draw, String highestInnings, String bestBBI, String bestInning, String maxWkts, String maxRuns) {
         this.against = against;

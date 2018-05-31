@@ -40,15 +40,16 @@ import roboguice.inject.InjectView;
 public class QuotesListActivity extends CommonActivity {
 
     @InjectView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
+
     @InjectView(R.id.adViewNews)
-    AdView adView;
+    private AdView adView;
 
     @Inject
-    ArrayList<CricketNews> quotes;
+    private ArrayList<CricketNews> quotes;
 
     @Inject
-    NetworkService networkService;
+    private NetworkService networkService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,12 +104,12 @@ public class QuotesListActivity extends CommonActivity {
     }
 
     private static class QuotesViewHolder extends RecyclerView.ViewHolder {
-        protected TextView headline;
-        protected TextView author;
-        protected TextView time;
-        protected ImageView circleImageView;
+        TextView headline;
+        TextView author;
+        TextView time;
+        ImageView circleImageView;
 
-        public QuotesViewHolder(View itemView) {
+        QuotesViewHolder(View itemView) {
             super(itemView);
 
             headline = ViewHolder.get(itemView, R.id.tv_headline);

@@ -20,7 +20,7 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.livescore)
 public class LiveScore extends CommonActivity {
 
-    public static final String EXTRA_URL = "url";
+    private static final String EXTRA_URL = "url";
 
     @InjectView(R.id.webView)
     private WebView mWebview;

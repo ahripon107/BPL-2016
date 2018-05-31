@@ -26,13 +26,13 @@ import roboguice.inject.InjectView;
 public class LoginActivity extends CommonActivity {
 
     @InjectView(R.id.login_button)
-    LoginButton loginButton;
+    private LoginButton loginButton;
     @InjectView(R.id.login_text)
-    TextView textView;
+    private TextView textView;
 
-    CallbackManager callbackManager;
-    Profile profile;
-    ProfileTracker profileTracker;
+    private CallbackManager callbackManager;
+    private Profile profile;
+    private ProfileTracker profileTracker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -18,9 +18,10 @@ import roboguice.inject.ContentView;
 @ContentView(R.layout.playersfragment)
 public class TeamProfile extends CommonActivity {
 
-    ArrayList<String> teams, teamImages;
-    TeamProfileAdapter teamProfileAdapter;
-    RecyclerView recyclerView;
+    private ArrayList<String> teams;
+    private ArrayList<String> teamImages;
+    private TeamProfileAdapter teamProfileAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class TeamProfile extends CommonActivity {
         teamImages.add(Constants.NED_TEAM_LOGO_URL);
         teamImages.add(Constants.SCO_TEAM_LOGO_URL);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         teamProfileAdapter = new TeamProfileAdapter(this, teams, teamImages);
         recyclerView.setAdapter(teamProfileAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

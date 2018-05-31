@@ -133,7 +133,7 @@ public class PointsTableActivity extends CommonActivity {
         });
     }
 
-    public void processData(JSONObject jsonObject) {
+    private void processData(JSONObject jsonObject) {
 
         pointTableElements.clear();
         pointTableElements.add(new PointsTableElement("Team", "Played", "Wins", "Loss", "NR", "Pts", "NRR"));
@@ -175,15 +175,15 @@ public class PointsTableActivity extends CommonActivity {
     }
 
     private static class PointsTableViewHolder extends RecyclerView.ViewHolder {
-        protected TextView teamName;
-        protected TextView played;
-        protected TextView wins;
-        protected TextView losses;
-        protected TextView NR;
-        protected TextView points;
-        protected TextView nrr;
+        TextView teamName;
+        TextView played;
+        TextView wins;
+        TextView losses;
+        TextView NR;
+        TextView points;
+        TextView nrr;
 
-        public PointsTableViewHolder(View itemView) {
+        PointsTableViewHolder(View itemView) {
             super(itemView);
             teamName = ViewHolder.get(itemView, R.id.tv_team_name);
             played = ViewHolder.get(itemView, R.id.tv_played);

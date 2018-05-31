@@ -38,13 +38,13 @@ import roboguice.inject.InjectView;
 public class GalleryActivity extends CommonActivity {
 
     @InjectView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Inject
-    ArrayList<Gallery> galleries;
+    private ArrayList<Gallery> galleries;
 
     @Inject
-    NetworkService networkService;
+    private NetworkService networkService;
 
 
     @Override
@@ -109,13 +109,13 @@ public class GalleryActivity extends CommonActivity {
 
     private static class GalleryViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView matchTitle;
-        protected ImageView imageView;
-        protected TextView matchDate;
-        protected TextView author;
-        protected LinearLayout linearLayout;
+        TextView matchTitle;
+        ImageView imageView;
+        TextView matchDate;
+        TextView author;
+        LinearLayout linearLayout;
 
-        public GalleryViewHolder(View itemView) {
+        GalleryViewHolder(View itemView) {
             super(itemView);
 
             matchTitle = ViewHolder.get(itemView, R.id.tv_headline);

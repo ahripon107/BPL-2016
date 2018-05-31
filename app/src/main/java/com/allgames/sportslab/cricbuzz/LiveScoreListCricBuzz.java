@@ -50,12 +50,15 @@ import roboguice.inject.InjectView;
 public class LiveScoreListCricBuzz extends RoboAppCompatActivity {
 
     @InjectView(R.id.rv_live_score)
+    private
     RecyclerView recyclerView;
 
     @Inject
+    private
     ArrayList<Match> datas;
 
     @InjectView(R.id.adViewLiveScoreList)
+    private
     AdView adView;
 
     @Override
@@ -164,14 +167,14 @@ public class LiveScoreListCricBuzz extends RoboAppCompatActivity {
     }
 
     private static class LiveScoreViewHolder extends RecyclerView.ViewHolder {
-        protected CircleImageView imgteam1;
-        protected CircleImageView imgteam2;
-        protected TextView textteam1;
-        protected TextView textteam2;
-        protected TextView venue;
-        protected TextView time;
+        CircleImageView imgteam1;
+        CircleImageView imgteam2;
+        TextView textteam1;
+        TextView textteam2;
+        TextView venue;
+        TextView time;
 
-        public LiveScoreViewHolder(final View itemView) {
+        LiveScoreViewHolder(final View itemView) {
             super(itemView);
 
             imgteam1 = ViewHolder.get(itemView, R.id.civTeam1);

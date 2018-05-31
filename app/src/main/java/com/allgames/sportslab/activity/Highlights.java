@@ -15,12 +15,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.LivestreamAndHighlights;
@@ -33,6 +27,12 @@ import com.allgames.sportslab.util.ViewHolder;
 import com.allgames.sportslab.videoplayers.FrameStream;
 import com.allgames.sportslab.videoplayers.HighlightsVids;
 import com.allgames.sportslab.videoplayers.LiveStreamView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,23 +50,24 @@ import roboguice.inject.InjectView;
 public class Highlights extends RoboAppCompatActivity {
 
     @InjectView(R.id.lvHighlights)
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @InjectView(R.id.adViewHighlights)
-    AdView adView;
+    private AdView adView;
 
     @InjectView(R.id.empty_view)
-    TextView emptyView;
-
-    ArrayList<LivestreamAndHighlights> objects;
-    InterstitialAd mInterstitialAd;
+    private TextView emptyView;
 
     @Inject
-    Gson gson;
+    private Gson gson;
 
     @Inject
-    NetworkService networkService;
-    String cause, url;
+    private NetworkService networkService;
+
+    private String cause;
+    private String url;
+    private ArrayList<LivestreamAndHighlights> objects;
+    private InterstitialAd mInterstitialAd;
 
 
     @Override
@@ -158,19 +159,6 @@ public class Highlights extends RoboAppCompatActivity {
         adView.loadAd(adRequest);
     }
 
-    private static class HighlightsViewHolder extends RecyclerView.ViewHolder {
-        protected TextView teamName;
-        protected LinearLayout linearLayout;
-        protected Button watchLive;
-
-        public HighlightsViewHolder(View itemView) {
-            super(itemView);
-            teamName = ViewHolder.get(itemView, R.id.tv_link_title);
-            linearLayout = ViewHolder.get(itemView, R.id.linear_layout);
-            watchLive = ViewHolder.get(itemView, R.id.btn_watch);
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -192,7 +180,7 @@ public class Highlights extends RoboAppCompatActivity {
         }
     }
 
-    public void fetchFromWeb(String url) {
+    private void fetchFromWeb(String url) {
 
         networkService.fetchHighlights(url, new DefaultMessageHandler(this, true) {
             @Override
@@ -224,5 +212,18 @@ public class Highlights extends RoboAppCompatActivity {
                 emptyView.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private static class HighlightsViewHolder extends RecyclerView.ViewHolder {
+        TextView teamName;
+        LinearLayout linearLayout;
+        Button watchLive;
+
+        HighlightsViewHolder(View itemView) {
+            super(itemView);
+            teamName = ViewHolder.get(itemView, R.id.tv_link_title);
+            linearLayout = ViewHolder.get(itemView, R.id.linear_layout);
+            watchLive = ViewHolder.get(itemView, R.id.btn_watch);
+        }
     }
 }

@@ -20,9 +20,10 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_match_details)
 public class FullCommentryActivity extends CommonActivity {
 
-    int numberOfInnings;
-    String id;
+    private int numberOfInnings;
+    private String id;
     @InjectView(R.id.adViewMatchDetails)
+    private
     AdView adView;
     @InjectView(R.id.viewPager)
     private ViewPager viewPager;
@@ -45,7 +46,7 @@ public class FullCommentryActivity extends CommonActivity {
         adView.loadAd(adRequest);
     }
 
-    public void setupViewPage(ViewPager viewPager) {
+    private void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         for (int i = 1; i <= numberOfInnings; i++) {
             FullCommentryFragment fullCommentryFragment = new FullCommentryFragment();

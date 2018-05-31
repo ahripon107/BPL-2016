@@ -24,7 +24,7 @@ public class DefaultMessageHandler extends Handler {
         this(context, showProgressDialog, null);
     }
 
-    public DefaultMessageHandler(Context context, boolean showProgressDialog, String message) {
+    private DefaultMessageHandler(Context context, boolean showProgressDialog, String message) {
         this.context = context;
 
         if (showProgressDialog) {
@@ -54,7 +54,7 @@ public class DefaultMessageHandler extends Handler {
     public void onSuccess(Message msg) {
     }
 
-    public void onFailure() {
+    protected void onFailure() {
         Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
     }
 }

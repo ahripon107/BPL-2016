@@ -52,7 +52,7 @@ public class ActivityMatchDetails extends CommonActivity {
     }
 
 
-    public final void setupViewPage(ViewPager viewPager) {
+    private void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         Bundle bundle = new Bundle();
         bundle.putString("liveMatchID", liveMatchID);

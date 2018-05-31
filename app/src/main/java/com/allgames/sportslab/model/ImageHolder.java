@@ -8,7 +8,7 @@ import com.google.inject.Singleton;
  * @author Ripon
  */
 @Singleton
-public class ImageHolder {
+class ImageHolder {
 
     private Bitmap image;
 

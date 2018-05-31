@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.inject.Inject;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.activity.FullCommentryActivity;
 import com.allgames.sportslab.adapter.BasicListAdapter;
@@ -26,7 +25,7 @@ import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.NetworkService;
-import com.allgames.sportslab.util.ViewHolder;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,9 +62,9 @@ public class FragmentMatchSummary extends RoboFragment {
 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.commentryList = (RecyclerView) view.findViewById(R.id.commentry_list);
-        this.noCommentry = (TextView) view.findViewById(R.id.no_commentry);
-        this.fullCommentry = (Button) view.findViewById(R.id.btn_full_commentry);
+        this.commentryList = view.findViewById(R.id.commentry_list);
+        this.noCommentry = view.findViewById(R.id.no_commentry);
+        this.fullCommentry = view.findViewById(R.id.btn_full_commentry);
         liveMatchID = getArguments().getString("liveMatchID");
 
         Log.d(Constants.TAG, liveMatchID);
@@ -120,7 +119,7 @@ public class FragmentMatchSummary extends RoboFragment {
         });
     }
 
-    public void loadCommentry(String yahooID) {
+    private void loadCommentry(String yahooID) {
 
         networkService.loadCommentryFromYahoo(yahooID, new DefaultMessageHandler(getContext(), false) {
             @Override
@@ -208,7 +207,7 @@ public class FragmentMatchSummary extends RoboFragment {
         });
     }
 
-    public void setCommentry(final ArrayList<Commentry> commentries) {
+    private void setCommentry(final ArrayList<Commentry> commentries) {
         if (isAdded()) {
             commentryList.setAdapter(new BasicListAdapter<Commentry, CommentryViewHolder>(commentries) {
                 @Override
@@ -254,27 +253,28 @@ public class FragmentMatchSummary extends RoboFragment {
         }
     }
 
-    public void setNoCommentry() {
+    private void setNoCommentry() {
         noCommentry.setVisibility(View.VISIBLE);
         fullCommentry.setVisibility(View.GONE);
     }
 
-    public void setMatchID(String id) {
+    private void setMatchID(String id) {
         this.yahooID = id;
     }
 
     private static class CommentryViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView item;
-        protected LinearLayout linearLayout;
-        protected TextView overno, event;
+        TextView item;
+        LinearLayout linearLayout;
+        TextView overno;
+        TextView event;
 
-        public CommentryViewHolder(View itemView) {
+        CommentryViewHolder(View itemView) {
             super(itemView);
-            item = ViewHolder.get(itemView, R.id.live_commentary);
-            this.linearLayout = (LinearLayout) itemView.findViewById(R.id.ball_layout);
-            this.overno = (TextView) itemView.findViewById(R.id.tv_overno);
-            this.event = (TextView) itemView.findViewById(R.id.tv_event);
+            this.item = itemView.findViewById(R.id.live_commentary);
+            this.linearLayout = itemView.findViewById(R.id.ball_layout);
+            this.overno = itemView.findViewById(R.id.tv_overno);
+            this.event = itemView.findViewById(R.id.tv_event);
         }
     }
 }

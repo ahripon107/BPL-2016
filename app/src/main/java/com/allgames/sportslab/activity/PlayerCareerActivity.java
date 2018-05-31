@@ -70,7 +70,7 @@ public class PlayerCareerActivity extends CommonActivity {
         private CharSequence[] Titles;
         private String data;
 
-        public PlayerCareerPagerAdapter(FragmentManager fm, CharSequence[] Titles, String data) {
+        PlayerCareerPagerAdapter(FragmentManager fm, CharSequence[] Titles, String data) {
             super(fm);
             this.Titles = Titles;
             this.data = data;

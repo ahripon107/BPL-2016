@@ -15,14 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.activity.InsertOpinionActivity;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.FetchFromWeb;
-import com.allgames.sportslab.util.ViewHolder;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,9 +37,10 @@ import cz.msebera.android.httpclient.Header;
 
 public class OpinionFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    ArrayList<String> data, ids;
-    Typeface typeface;
+    private RecyclerView recyclerView;
+    private ArrayList<String> data;
+    private ArrayList<String> ids;
+    private Typeface typeface;
 
     @Nullable
     @Override
@@ -52,7 +52,7 @@ public class OpinionFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         data = new ArrayList<>();
         ids = new ArrayList<>();
 
@@ -113,13 +113,13 @@ public class OpinionFragment extends Fragment {
     }
 
     private static class OpinionViewHolder extends RecyclerView.ViewHolder {
-        protected TextView ques;
-        protected LinearLayout linearLayout;
+        TextView ques;
+        LinearLayout linearLayout;
 
-        public OpinionViewHolder(View itemView) {
+        OpinionViewHolder(View itemView) {
             super(itemView);
-            ques = ViewHolder.get(itemView, R.id.tv_opinion_ques);
-            linearLayout = ViewHolder.get(itemView, R.id.opinion_layout);
+            this.ques = itemView.findViewById(R.id.tv_opinion_ques);
+            this.linearLayout = itemView.findViewById(R.id.opinion_layout);
         }
     }
 }

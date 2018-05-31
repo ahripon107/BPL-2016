@@ -24,9 +24,9 @@ import java.util.ArrayList;
  * @author Ripon
  */
 public class PlayersFragment extends Fragment {
-    RecyclerView recyclerView;
-    ArrayList<Player> pl;
-    PlayerListAdapter playerListAdapter;
+    private RecyclerView recyclerView;
+    private ArrayList<Player> pl;
+    private PlayerListAdapter playerListAdapter;
 
     public PlayersFragment() {
 
@@ -44,7 +44,7 @@ public class PlayersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.playersfragment, container, false);
-        recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        recyclerView = v.findViewById(R.id.recycler_view);
         pl = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(getContext(), pl);
         recyclerView.setAdapter(playerListAdapter);

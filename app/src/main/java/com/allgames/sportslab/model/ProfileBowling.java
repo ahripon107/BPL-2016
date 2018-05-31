@@ -4,7 +4,20 @@ package com.allgames.sportslab.model;
  * @author Ripon
  */
 public class ProfileBowling {
-    String gameType,Mat,Inns,Balls,Runs,Wkts,BBI,BBM,Ave,Econ,SR,fourWkts,fiveWkts, tenWkts;
+    private String gameType;
+    private String Mat;
+    private String Inns;
+    private String Balls;
+    private String Runs;
+    private String Wkts;
+    private String BBI;
+    private String BBM;
+    private String Ave;
+    private String Econ;
+    private String SR;
+    private String fourWkts;
+    private String fiveWkts;
+    private String tenWkts;
 
     public ProfileBowling(String gameType, String mat, String inns, String balls, String runs, String wkts, String BBI, String BBM, String ave, String econ, String SR, String fourWkts, String fiveWkts, String tenWkts) {
         this.gameType = gameType;

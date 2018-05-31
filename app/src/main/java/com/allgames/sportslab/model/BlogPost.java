@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author Ripon
  */
 
-public class BlogPost implements Serializable {
+class BlogPost implements Serializable {
 
     private int id;
     private String name;
