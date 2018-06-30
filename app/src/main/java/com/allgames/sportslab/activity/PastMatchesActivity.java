@@ -83,7 +83,7 @@ public class PastMatchesActivity extends CommonActivity {
                 holder.venue.setText(data.get(position).getVenue());
 
                 holder.time.setTextSize(20f);
-                holder.time.setText(data.get(position).getTime());
+                holder.time.setText(data.get(position).getMatchStatus());
                 holder.seriesName.setText(data.get(position).getSeriesName());
                 holder.matchNo.setText(data.get(position).getMatchNo());
 

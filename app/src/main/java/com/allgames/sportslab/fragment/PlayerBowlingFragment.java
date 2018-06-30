@@ -75,10 +75,13 @@ public class PlayerBowlingFragment extends RoboFragment {
 
         try {
             response = new JSONObject(data);
-            JSONObject battingObject = response.getJSONObject("data").getJSONObject("bowling");
+            JSONObject battingObject = response.getJSONObject("bowling");
+            if (battingObject.has("stats")) {
+                battingObject = battingObject.getJSONObject("stats");
+            }
 
-            if (battingObject.has("tests")) {
-                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("tests"));
+            if (battingObject.has("test")) {
+                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("test"));
 
 
                 matches.setTest(profileBat.getMat());
@@ -110,8 +113,8 @@ public class PlayerBowlingFragment extends RoboFragment {
                 tenWkts.setTest("-");
             }
 
-            if (battingObject.has("ODIs")) {
-                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("ODIs"));
+            if (battingObject.has("odi")) {
+                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("odi"));
 
                 matches.setOdi(profileBat.getMat());
                 innings.setOdi(profileBat.getInns());
@@ -141,8 +144,8 @@ public class PlayerBowlingFragment extends RoboFragment {
                 fiveWkts.setOdi("-");
                 tenWkts.setOdi("-");
             }
-            if (battingObject.has("T20Is")) {
-                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("T20Is"));
+            if (battingObject.has("t20")) {
+                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("t20"));
 
                 matches.setT20i(profileBat.getMat());
                 innings.setT20i(profileBat.getInns());
@@ -172,8 +175,8 @@ public class PlayerBowlingFragment extends RoboFragment {
                 fiveWkts.setT20i("-");
                 tenWkts.setT20i("-");
             }
-            if (battingObject.has("firstClass")) {
-                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("firstClass"));
+            if (battingObject.has("ipl")) {
+                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("ipl"));
 
                 matches.setFirstClass(profileBat.getMat());
                 innings.setFirstClass(profileBat.getInns());
@@ -203,8 +206,8 @@ public class PlayerBowlingFragment extends RoboFragment {
                 fiveWkts.setFirstClass("-");
                 tenWkts.setFirstClass("-");
             }
-            if (battingObject.has("listA")) {
-                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("listA"));
+            if (battingObject.has("cl")) {
+                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("cl"));
 
                 matches.setListA(profileBat.getMat());
                 innings.setListA(profileBat.getInns());
@@ -234,37 +237,6 @@ public class PlayerBowlingFragment extends RoboFragment {
                 fiveWkts.setListA("-");
                 tenWkts.setListA("-");
             }
-            if (battingObject.has("twenty20")) {
-                ProfileBowling profileBat = processProfileBowling(battingObject.getJSONObject("twenty20"));
-
-                matches.setTwenty20(profileBat.getMat());
-                innings.setTwenty20(profileBat.getInns());
-                wickets.setTwenty20(profileBat.getWkts());
-                runs.setTwenty20(profileBat.getRuns());
-                balls.setTwenty20(profileBat.getBalls());
-                economy.setTwenty20(profileBat.getEcon());
-                average.setTwenty20(profileBat.getAve());
-                strikeRate.setTwenty20(profileBat.getSR());
-                bbi.setTwenty20(profileBat.getBBI());
-                bbm.setTwenty20(profileBat.getBBM());
-                fourWkts.setTwenty20(profileBat.getFourWkts());
-                fiveWkts.setTwenty20(profileBat.getFiveWkts());
-                tenWkts.setTwenty20(profileBat.getTenWkts());
-            } else {
-                matches.setTwenty20("-");
-                innings.setTwenty20("-");
-                wickets.setTwenty20("-");
-                runs.setTwenty20("-");
-                balls.setTwenty20("-");
-                economy.setTwenty20("-");
-                average.setTwenty20("-");
-                strikeRate.setTwenty20("-");
-                bbi.setTwenty20("-");
-                bbm.setTwenty20("-");
-                fourWkts.setTwenty20("-");
-                fiveWkts.setTwenty20("-");
-                tenWkts.setTwenty20("-");
-            }
 
             matches.setProperty("Matches");
             innings.setProperty("Innings");
@@ -284,9 +256,8 @@ public class PlayerBowlingFragment extends RoboFragment {
             headline.setTest("Test");
             headline.setOdi("ODI");
             headline.setT20i("T20I");
-            headline.setFirstClass("FC");
-            headline.setListA("ListA");
-            headline.setTwenty20("T20");
+            headline.setFirstClass("IPL");
+            headline.setListA("CL");
 
             profileBattingRows.add(headline);
             profileBattingRows.add(matches);
@@ -318,9 +289,8 @@ public class PlayerBowlingFragment extends RoboFragment {
                     holder.test.setText(profileBtng.getTest());
                     holder.odi.setText(profileBtng.getOdi());
                     holder.t20i.setText(profileBtng.getT20i());
-                    holder.fc.setText(profileBtng.getFirstClass());
-                    holder.lista.setText(profileBtng.getListA());
-                    holder.t20.setText(profileBtng.getTwenty20());
+                    holder.ipl.setText(profileBtng.getFirstClass());
+                    holder.cl.setText(profileBtng.getListA());
 
                     if (position == 0) {
                         holder.linearlayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.batsmanbowlerbackground));
@@ -340,9 +310,8 @@ public class PlayerBowlingFragment extends RoboFragment {
         TextView test;
         TextView odi;
         TextView t20i;
-        TextView fc;
-        TextView lista;
-        TextView t20;
+        TextView ipl;
+        TextView cl;
         LinearLayout linearlayout;
 
         ProfileBowlingViewHolder(View itemView) {
@@ -351,9 +320,8 @@ public class PlayerBowlingFragment extends RoboFragment {
             test = ViewHolder.get(itemView, R.id.tv_test);
             odi = ViewHolder.get(itemView, R.id.tv_odi);
             t20i = ViewHolder.get(itemView, R.id.tv_t20i);
-            fc = ViewHolder.get(itemView, R.id.tv_fc);
-            lista = ViewHolder.get(itemView, R.id.tv_lista);
-            t20 = ViewHolder.get(itemView, R.id.tv_t20);
+            ipl = ViewHolder.get(itemView, R.id.tv_ipl);
+            cl = ViewHolder.get(itemView, R.id.tv_cl);
             linearlayout = ViewHolder.get(itemView, R.id.layout);
         }
     }
@@ -361,19 +329,19 @@ public class PlayerBowlingFragment extends RoboFragment {
     private ProfileBowling processProfileBowling(JSONObject jsonObject) {
         ProfileBowling profileBowling = null;
         try {
-            String Mat = jsonObject.getString("Mat");
-            String Inns = jsonObject.getString("Inns");
-            String balls = jsonObject.getString("Balls");
-            String Runs = jsonObject.getString("Runs");
-            String wkts = jsonObject.getString("Wkts");
-            String BBI = jsonObject.getString("BBI");
-            String BBM = jsonObject.getString("BBM");
-            String Ave = jsonObject.getString("Ave");
-            String Econ = jsonObject.getString("Econ");
-            String SR = jsonObject.getString("SR");
+            String Mat = jsonObject.getString("matches");
+            String Inns = jsonObject.getString("innings");
+            String balls = jsonObject.getString("balls");
+            String Runs = jsonObject.getString("runs");
+            String wkts = jsonObject.getString("wickets");
+            String BBI = jsonObject.getString("bbi");
+            String BBM = jsonObject.getString("bbm");
+            String Ave = jsonObject.getString("avg");
+            String Econ = jsonObject.getString("eco");
+            String SR = jsonObject.getString("sr");
             String fourWkts = jsonObject.getString("4w");
             String fiveWkts = jsonObject.getString("5w");
-            String tenWkts = jsonObject.getString("10");
+            String tenWkts = jsonObject.getString("10w");
             profileBowling = new ProfileBowling(Mat, Inns, balls, Runs, wkts, BBI, BBM, Ave, Econ, SR, fourWkts, fiveWkts, tenWkts);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/refresh"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -19,31 +18,6 @@
             android:textColor="@color/Black"
             android:textSize="17sp"
             android:visibility="gone" />
-
-        <com.dd.ShadowLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginBottom="5dp"
-            app:sl_cornerRadius="2dp"
-            app:sl_dx="5dp"
-            app:sl_dy="5dp"
-            app:sl_shadowColor="#AA000000">
-
-            <Button
-                android:id="@+id/btn_full_commentry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:background="@drawable/raised_selector"
-                android:minHeight="36dp"
-                android:minWidth="88dp"
-                android:paddingRight="4dp"
-                android:text="Full Commentry"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="@android:color/white" />
-
-        </com.dd.ShadowLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/commentry_list"

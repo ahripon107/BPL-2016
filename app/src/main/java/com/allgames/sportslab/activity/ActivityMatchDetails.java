@@ -4,17 +4,19 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
+import com.allgames.sportslab.model.Match;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
-import com.allgames.sportslab.fragment.FragmentMatchSummary;
+import com.allgames.sportslab.fragment.FragmentCommentry;
 import com.allgames.sportslab.fragment.FragmentScoreBoard;
 import com.allgames.sportslab.fragment.GossipFragment;
 import com.allgames.sportslab.fragment.PlayingXIFragment;
 import com.allgames.sportslab.util.Constants;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -34,13 +36,13 @@ public class ActivityMatchDetails extends CommonActivity {
     @InjectView(R.id.tabLayout)
     private TabLayout tabLayout;
 
-    private String liveMatchID;
+    private Match match;
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.liveMatchID = getIntent().getStringExtra("matchID");
+        this.match = (Match) getIntent().getSerializableExtra("summary");
 
         viewPager.setOffscreenPageLimit(4);
         setupViewPage(this.viewPager);
@@ -55,23 +57,23 @@ public class ActivityMatchDetails extends CommonActivity {
     private void setupViewPage(ViewPager viewPager) {
         this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
         Bundle bundle = new Bundle();
-        bundle.putString("liveMatchID", liveMatchID);
+        bundle.putSerializable("summary", match);
 
         FragmentScoreBoard fragmentScoreBoard = new FragmentScoreBoard();
         fragmentScoreBoard.setArguments(bundle);
         this.matchDetailsViewPagerAdapter.addFragment(fragmentScoreBoard, "স্কোর বোর্ড");
-        FragmentMatchSummary fragmentMatchSummary = new FragmentMatchSummary();
 
-        fragmentMatchSummary.setArguments(bundle);
-        this.matchDetailsViewPagerAdapter.addFragment(fragmentMatchSummary, "কমেন্ট্রি");
-        this.matchDetailsViewPagerAdapter.addFragment(new PlayingXIFragment(), "একাদশ");
+        FragmentCommentry fragmentCommentry = new FragmentCommentry();
+        fragmentCommentry.setArguments(bundle);
+        this.matchDetailsViewPagerAdapter.addFragment(fragmentCommentry, "কমেন্ট্রি");
+
+        PlayingXIFragment playingXIFragment = new PlayingXIFragment();
+        playingXIFragment.setArguments(bundle);
+        this.matchDetailsViewPagerAdapter.addFragment(playingXIFragment, "একাদশ");
+
         GossipFragment fragment = new GossipFragment();
         fragment.setArguments(bundle);
         this.matchDetailsViewPagerAdapter.addFragment(fragment, "আড্ডা");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
-    }
-
-    public void setPlayingXI(JSONArray batTeam1, JSONArray dnbTeam1, JSONArray batTeam2, JSONArray dnbTeam2, String team1Name, String team2Name) {
-        ((PlayingXIFragment) ActivityMatchDetails.this.matchDetailsViewPagerAdapter.getItem(2)).setPlayingXI(batTeam1, dnbTeam1, batTeam2, dnbTeam2, team1Name, team2Name);
     }
 }

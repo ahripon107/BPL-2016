@@ -54,11 +54,11 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
         holder.sr.setText(batsmans.get(position).getSr());
         if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
             Picasso.with(context)
-                    .load("http://cdn.cricapi.com/players/" + batsmans.get(position).getPlayerId() + ".jpg")
+                    .load("http://i.cricketcb.com/stats/img/faceImages/" + batsmans.get(position).getPlayerId() + ".jpg")
                     .placeholder(R.drawable.player_thumb)
                     .into(holder.playerImage);
         }
-        if (batsmans.get(position).getOut().equals("not out")) {
+        if (batsmans.get(position).getOut().equals("not out") || batsmans.get(position).getOut().equals("batting")) {
             holder.name.setTextColor(context.getResources().getColor(R.color.Blue));
             holder.out.setTextColor(context.getResources().getColor(R.color.ForestGreen));
             holder.name.setTypeface(null, Typeface.BOLD);

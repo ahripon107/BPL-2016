@@ -49,7 +49,7 @@ public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerView
         holder.wickets.setText(bowlers.get(position).getWicket());
         if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
             Picasso.with(context)
-                    .load("http://cdn.cricapi.com/players/" + bowlers.get(position).getPlayerId() + ".jpg")
+                    .load("http://i.cricketcb.com/stats/img/faceImages/" + bowlers.get(position).getPlayerId() + ".jpg")
                     .placeholder(R.drawable.player_thumb)
                     .into(holder.playerImage);
         }

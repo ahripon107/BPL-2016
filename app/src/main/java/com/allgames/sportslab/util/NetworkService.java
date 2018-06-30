@@ -1,6 +1,7 @@
 package com.allgames.sportslab.util;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.facebook.Profile;
 import com.google.inject.Inject;
@@ -17,8 +18,9 @@ public class NetworkService {
     @Inject
     private AsyncHttpClient httpClient;
 
-    public void fetchMatchDetails(String matchId, Handler handler) {
-        httpClient.get("http://37.187.95.220:8080/cricket-api/api/match/" + matchId, null, new DefaultAsyncHttpResponseHandler(handler));
+    public void fetchMatchDetails(String dataPath, Handler handler) {
+        httpClient.get("http://sng.mapps.cricbuzz.com/cbzandroid/3.0/match/" + dataPath + "scorecard.json", null,
+                new DefaultAsyncHttpResponseHandler(handler));
     }
 
     public void fetchMatchIdMatcher(String matchId, Handler handler) {
@@ -29,9 +31,9 @@ public class NetworkService {
         httpClient.get("http://apisea.xyz/Cricket/apis/v1/fetchIDMatcher.php", params, new DefaultAsyncHttpResponseHandler(handler));
     }
 
-    public void loadCommentryFromYahoo(String yahooId, Handler handler) {
-        String url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id=" + yahooId + "%20limit%205&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
-
+    public void loadCommentry(String matchId, int fileno, Handler handler) {
+        String url = "http://sng2.mapps.cricbuzz.com/cbzandroid/2.0/fullComm.php?matchPath=" + matchId + "&fileno="+ fileno;
+        Log.d("commentry", url);
         httpClient.get(url, null, new DefaultAsyncHttpResponseHandler(handler));
     }
 
@@ -59,13 +61,17 @@ public class NetworkService {
     }
 
     public void fetchPlayerProfile(String playerId, Handler handler) {
-
-        httpClient.get("http://cricapi.com/api/playerStats?pid=" + playerId + "&apikey=MScPVINvZoYtOmeNSY7aDVtaa4H2", null, new DefaultAsyncHttpResponseHandler(handler));
+        Log.d("profile", "http://mapps.cricbuzz.com/cricbuzz-android/stats/player/" + playerId);
+        httpClient.get("http://mapps.cricbuzz.com/cricbuzz-android/stats/player/" + playerId, null, new DefaultAsyncHttpResponseHandler(handler));
     }
 
     public void fetchPlayerProfileYahoo(String yahooId, Handler handler) {
         String url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.player.profile%20where%20player_id=" + yahooId + "&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
         httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchLiveScore(Handler handler) {
+        httpClient.get("http://mapps.cricbuzz.com/cbzandroid/2.0/currentmatches.json", new DefaultAsyncHttpResponseHandler(handler));
     }
 
     public void fetchLiveScoreSource(Handler handler) {

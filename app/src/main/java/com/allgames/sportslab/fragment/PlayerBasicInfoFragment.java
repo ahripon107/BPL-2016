@@ -2,6 +2,7 @@ package com.allgames.sportslab.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,8 @@ public class PlayerBasicInfoFragment extends RoboFragment {
     @InjectView(R.id.tv_born)
     private TextView born;
 
-    @InjectView(R.id.tv_current_age)
-    private TextView currentAge;
+    @InjectView(R.id.tv_birth_place)
+    private TextView birthPlace;
 
     @InjectView(R.id.tv_playing_role)
     private TextView playingRole;
@@ -75,45 +76,47 @@ public class PlayerBasicInfoFragment extends RoboFragment {
         try {
             response = new JSONObject(data);
 
+            response = response.getJSONObject("info");
             if (response.has("name")) playerName.setText(response.getString("name"));
             else playerName.setText("");
 
 
-            if (response.has("born")) born.setText(response.getString("born"));
+            if (response.has("DoB")) born.setText(response.getString("DoB"));
             else born.setText("");
 
-            if (response.has("currentAge")) currentAge.setText(response.getString("currentAge"));
-            else currentAge.setText("");
+            if (response.has("birth_place")) birthPlace.setText(response.getString("birth_place"));
+            else birthPlace.setText("");
 
-            if (response.has("majorTeams")) majorTeams.setText(response.getString("majorTeams"));
+            if (response.has("teams")) majorTeams.setText(response.getJSONArray("teams").toString());
             else majorTeams.setText("");
 
-            if (response.has("playingRole")) playingRole.setText(response.getString("playingRole"));
+            if (response.has("role")) playingRole.setText(response.getString("role"));
             else playingRole.setText("");
 
-            if (response.has("battingStyle"))
-                battingStyle.setText(response.getString("battingStyle"));
+            if (response.has("style"))
+                battingStyle.setText(response.getJSONObject("style").getString("bat"));
             else battingStyle.setText("");
 
-            if (response.has("bowlingStyle"))
-                bowlingStyle.setText(response.getString("bowlingStyle"));
+            if (response.has("style"))
+                bowlingStyle.setText(response.getJSONObject("style").getString("bowl"));
             else bowlingStyle.setText("");
 
-            if (response.has("profile")) profile.setText(response.getString("profile"));
-            else profile.setText("");
-
-            if (response.has("fullName")) fullName.setText(response.getString("fullName"));
+            if (response.has("name")) fullName.setText(response.getString("name"));
             else fullName.setText("");
 
-            if (response.has("country")) playerCountry.setText(response.getString("country"));
+            if (response.has("nationality")) playerCountry.setText(response.getString("nationality"));
             else playerCountry.setText("");
 
-            if (response.has("imageURL")) {
+            if (response.has("image")) {
                 Picasso.with(getActivity())
-                        .load(response.getString("imageURL"))
+                        .load("http://i.cricketcb.com/stats/img/"+response.getString("image"))
                         .placeholder(R.drawable.default_image)
                         .into(playerImage);
             }
+
+            response = new JSONObject(data);
+            if (response.has("bio")) profile.setText(Html.fromHtml(response.getString("bio")));
+            else profile.setText("");
 
         } catch (JSONException e) {
             e.printStackTrace();

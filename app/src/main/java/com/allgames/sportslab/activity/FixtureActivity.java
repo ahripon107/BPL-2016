@@ -78,7 +78,7 @@ public class FixtureActivity extends CommonActivity {
                 holder.textteam2.setText(data.get(position).getTeam2());
                 holder.venue.setText(data.get(position).getVenue());
 
-                String timeparts[] = data.get(position).getTime().split("T");
+                String timeparts[] = data.get(position).getMatchStatus().split("T");
                 holder.time.setText(timeparts[0] + "  " + timeparts[1]);
                 holder.seriesName.setText(data.get(position).getSeriesName());
                 holder.matchNo.setText(data.get(position).getMatchNo());

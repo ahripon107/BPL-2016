@@ -7,23 +7,34 @@ import java.io.Serializable;
  */
 public class Match implements Serializable {
 
-
     private String team1;
     private String team2;
     private String venue;
-    private String time;
+    private String matchStatus;
     private String seriesName;
     private String matchNo;
     private String matchId;
+    private String dataPath;
 
     public Match(String team1, String team2, String venue, String time, String seriesName, String matchNo, String matchId) {
         this.team1 = team1;
         this.team2 = team2;
         this.venue = venue;
-        this.time = time;
+        this.matchStatus = time;
         this.seriesName = seriesName;
         this.matchNo = matchNo;
         this.matchId = matchId;
+    }
+
+    public Match(String team1, String team2, String venue, String time, String seriesName, String matchNo, String matchId, String dataPath) {
+        this.team1 = team1;
+        this.team2 = team2;
+        this.venue = venue;
+        this.matchStatus = time;
+        this.seriesName = seriesName;
+        this.matchNo = matchNo;
+        this.matchId = matchId;
+        this.dataPath = dataPath;
     }
 
     public String getTeam1() {
@@ -50,12 +61,12 @@ public class Match implements Serializable {
         this.venue = venue;
     }
 
-    public String getTime() {
-        return time;
+    public String getMatchStatus() {
+        return matchStatus;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setMatchStatus(String matchStatus) {
+        this.matchStatus = matchStatus;
     }
 
     public String getSeriesName() {
@@ -82,13 +93,21 @@ public class Match implements Serializable {
         this.matchId = matchId;
     }
 
+    public String getDataPath() {
+        return dataPath;
+    }
+
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
+    }
+
     @Override
     public String toString() {
         return "Match{" +
                 "team1='" + team1 + '\'' +
                 ", team2='" + team2 + '\'' +
                 ", venue='" + venue + '\'' +
-                ", time='" + time + '\'' +
+                ", matchStatus='" + matchStatus + '\'' +
                 ", seriesName='" + seriesName + '\'' +
                 ", matchNo='" + matchNo + '\'' +
                 ", matchId=" + matchId +

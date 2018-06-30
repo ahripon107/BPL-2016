@@ -76,26 +76,26 @@ public class FrontPage extends RoboAppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        hideAllMenu(navigationView);
+//        hideAllMenu(navigationView);
 
-        networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
-            @Override
-            public void onSuccess(Message msg) {
-                super.onSuccess(msg);
-                String string = (String) msg.obj;
-                try {
-                    JSONObject response = new JSONObject(string);
-                    if (response.getString("msg").equals("Successful")) {
-                        String source = response.getJSONArray("content").getJSONObject(0).getString("showmenu");
-                        if (source.equals("true")) {
-                            showAllMenu(navigationView);
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        networkService.fetchIsAllowed(new DefaultMessageHandler(this, true) {
+//            @Override
+//            public void onSuccess(Message msg) {
+//                super.onSuccess(msg);
+//                String string = (String) msg.obj;
+//                try {
+//                    JSONObject response = new JSONObject(string);
+//                    if (response.getString("msg").equals("Successful")) {
+//                        String source = response.getJSONArray("content").getJSONObject(0).getString("showmenu");
+//                        if (source.equals("true")) {
+//                            showAllMenu(navigationView);
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         AdRequest adRequest1 = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
