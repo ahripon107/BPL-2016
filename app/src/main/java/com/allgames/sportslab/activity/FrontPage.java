@@ -204,9 +204,6 @@ public class FrontPage extends RoboAppCompatActivity
         } else if (id == R.id.nav_quotes) {
             checkIsAllowed("quotes", "com.allgames.sportslab.activity.QuotesListActivity", null);
 
-        } else if (id == R.id.nav_team_profile) {
-            Intent intent = new Intent(FrontPage.this, TeamProfile.class);
-            startActivity(intent);
         } else if (id == R.id.nav_login_logout) {
             Intent intent = new Intent(FrontPage.this, LoginActivity.class);
             startActivity(intent);
@@ -286,7 +283,6 @@ public class FrontPage extends RoboAppCompatActivity
         menu.findItem(R.id.nav_records).setVisible(true);
         menu.findItem(R.id.nav_points_table).setVisible(true);
         menu.findItem(R.id.nav_quotes).setVisible(true);
-        menu.findItem(R.id.nav_team_profile).setVisible(true);
         menu.findItem(R.id.nav_login_logout).setVisible(true);
         menu.findItem(R.id.nav_update_app).setVisible(true);
         menu.findItem(R.id.nav_past_matches).setVisible(true);

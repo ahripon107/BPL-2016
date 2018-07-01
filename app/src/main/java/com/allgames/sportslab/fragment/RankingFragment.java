@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +21,6 @@ import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.RankingPlayer;
 import com.allgames.sportslab.model.RankingTeam;
 import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.ViewHolder;
 
 import org.json.JSONArray;
@@ -55,6 +55,8 @@ public class RankingFragment extends Fragment {
         teamLayout = (LinearLayout) view.findViewById(R.id.team_layout);
         playerLayout = (LinearLayout) view.findViewById(R.id.player_layout);
         tf = Typeface.createFromAsset(getContext().getAssets(), Constants.SOLAIMAN_LIPI_FONT);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
     private static class PlayerViewHolder extends RecyclerView.ViewHolder {
@@ -131,7 +133,6 @@ public class RankingFragment extends Fragment {
                             .into(holder.countryImage);
                 }
             });
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -169,8 +170,6 @@ public class RankingFragment extends Fragment {
                             .into(holder.teamImage);
                 }
             });
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

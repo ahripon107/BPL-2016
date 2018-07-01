@@ -1,18 +1,15 @@
 package com.allgames.sportslab.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.RecordsDetailsFragment;
@@ -20,8 +17,11 @@ import com.allgames.sportslab.model.RecordDetailsModel1;
 import com.allgames.sportslab.model.RecordDetailsModel2;
 import com.allgames.sportslab.model.RecordDetailsModel3;
 import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.Dialogs;
-import com.allgames.sportslab.util.FetchFromWeb;
+import com.allgames.sportslab.util.DefaultMessageHandler;
+import com.allgames.sportslab.util.NetworkService;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +30,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
 import roboguice.inject.ContentView;
 
 /**
@@ -46,11 +45,13 @@ public class RecordDetailsActivity extends CommonActivity {
     private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
     private String recordType;
     private String url;
-    private Dialogs dialogs;
 
     private RecordsDetailsFragment testFragment;
     private RecordsDetailsFragment odiFragment;
     private RecordsDetailsFragment t20Fragment;
+
+    @Inject
+    private NetworkService networkService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +60,6 @@ public class RecordDetailsActivity extends CommonActivity {
         setTitle(getIntent().getStringExtra("title"));
         recordType = getIntent().getStringExtra("recordtype");
         url = getIntent().getStringExtra("url");
-        dialogs = new Dialogs(this);
 
         tabLayout = findViewById(R.id.tab_ranking);
         viewPager = findViewById(R.id.view_pager_ranking);
@@ -135,8 +135,6 @@ public class RecordDetailsActivity extends CommonActivity {
 
             }
         });
-
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -148,12 +146,12 @@ public class RecordDetailsActivity extends CommonActivity {
     }
 
     private void fetchData(String url) {
-        dialogs.showDialog();
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+
+        networkService.fetch(url, new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
                 try {
+                    JSONObject response = new JSONObject((String) msg.obj);
                     if (testFragment.isAdded()) {
                         ArrayList<RecordDetailsModel1> sixElementModels = new ArrayList<RecordDetailsModel1>();
                         ArrayList<RecordDetailsModel2> fourElementModel = new ArrayList<RecordDetailsModel2>();
@@ -261,17 +259,6 @@ public class RecordDetailsActivity extends CommonActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                dialogs.dismissDialog();
             }
         });
     }

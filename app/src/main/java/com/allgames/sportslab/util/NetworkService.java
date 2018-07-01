@@ -23,18 +23,23 @@ public class NetworkService {
                 new DefaultAsyncHttpResponseHandler(handler));
     }
 
-    public void fetchMatchIdMatcher(String matchId, Handler handler) {
-        RequestParams params = new RequestParams();
-        params.add("key", "bl905577");
-        params.add("cricinfo", matchId);
-
-        httpClient.get("http://apisea.xyz/Cricket/apis/v1/fetchIDMatcher.php", params, new DefaultAsyncHttpResponseHandler(handler));
-    }
 
     public void loadCommentry(String matchId, int fileno, Handler handler) {
         String url = "http://sng2.mapps.cricbuzz.com/cbzandroid/2.0/fullComm.php?matchPath=" + matchId + "&fileno="+ fileno;
         Log.d("commentry", url);
         httpClient.get(url, null, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchRanking(Handler handler) {
+        httpClient.get(Constants.RANKING_URL, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetchPastMatches(Handler handler) {
+        httpClient.get(Constants.PAST_MATCHES_URL, new DefaultAsyncHttpResponseHandler(handler));
+    }
+
+    public void fetch(String url, Handler handler) {
+        httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
     }
 
     public void fetchComments(String id, Handler handler) {
@@ -65,20 +70,8 @@ public class NetworkService {
         httpClient.get("http://mapps.cricbuzz.com/cricbuzz-android/stats/player/" + playerId, null, new DefaultAsyncHttpResponseHandler(handler));
     }
 
-    public void fetchPlayerProfileYahoo(String yahooId, Handler handler) {
-        String url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.player.profile%20where%20player_id=" + yahooId + "&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
-        httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
-    }
-
     public void fetchLiveScore(Handler handler) {
         httpClient.get("http://mapps.cricbuzz.com/cbzandroid/2.0/currentmatches.json", new DefaultAsyncHttpResponseHandler(handler));
-    }
-
-    public void fetchLiveScoreSource(Handler handler) {
-        RequestParams params = new RequestParams();
-        params.add("key", "bl905577");
-
-        httpClient.get(Constants.LIVE_SCORE_SOURCE_URL, params, new DefaultAsyncHttpResponseHandler(handler));
     }
 
     public void fetchWelcomeText(Handler handler) {

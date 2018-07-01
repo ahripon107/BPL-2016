@@ -1,6 +1,7 @@
 package com.allgames.sportslab.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -8,17 +9,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.RankingFragment;
 import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.Dialogs;
-import com.allgames.sportslab.util.FetchFromWeb;
+import com.allgames.sportslab.util.DefaultMessageHandler;
+import com.allgames.sportslab.util.NetworkService;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
 import roboguice.inject.ContentView;
 
 /**
@@ -35,6 +34,7 @@ import roboguice.inject.ContentView;
 @ContentView(R.layout.activity_ranking)
 public class RankingActivity extends CommonActivity {
 
+    JSONObject response;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Spinner spinner;
@@ -43,8 +43,8 @@ public class RankingActivity extends CommonActivity {
     private RankingFragment testFragment;
     private RankingFragment odiFragment;
     private RankingFragment T20Fragment;
-    JSONObject response;
-    private Dialogs dialogs;
+    @Inject
+    private NetworkService networkService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,6 @@ public class RankingActivity extends CommonActivity {
         testFragment = new RankingFragment();
         odiFragment = new RankingFragment();
         T20Fragment = new RankingFragment();
-        dialogs = new Dialogs(this);
 
         List<String> categories = new ArrayList<String>();
         categories.add("Top Teams");
@@ -75,13 +74,11 @@ public class RankingActivity extends CommonActivity {
         String url = Constants.RANKING_URL;
         Log.d(Constants.TAG, url);
 
-        dialogs.showDialog();
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchRanking(new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, final JSONObject response) {
-                dialogs.dismissDialog();
-
+            public void onSuccess(Message msg) {
                 try {
+                    response = new JSONObject((String) msg.obj);
                     if (testFragment.isAdded())
                         testFragment.populateTeamList(response.getJSONObject("Team").getJSONArray("TEST"));
                     if (odiFragment.isAdded())
@@ -136,18 +133,6 @@ public class RankingActivity extends CommonActivity {
                     }
                 });
                 Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(RankingActivity.this, "Failed", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-                Toast.makeText(RankingActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
 

@@ -2,31 +2,28 @@ package com.allgames.sportslab.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.inject.Inject;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Match;
 import com.allgames.sportslab.util.CircleImageView;
 import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.Dialogs;
-import com.allgames.sportslab.util.FetchFromWeb;
+import com.allgames.sportslab.util.DefaultMessageHandler;
+import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.RecyclerItemClickListener;
 import com.allgames.sportslab.util.ViewHolder;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +31,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
@@ -44,7 +40,6 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.fixture)
 public class PastMatchesActivity extends CommonActivity {
 
-    private Dialogs dialogs;
     @InjectView(R.id.recycler_view)
     private RecyclerView recyclerView;
     @Inject
@@ -52,12 +47,12 @@ public class PastMatchesActivity extends CommonActivity {
     @InjectView(R.id.adViewFixture)
     private AdView adView;
 
+    @Inject
+    private NetworkService networkService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        dialogs = new Dialogs(this);
 
         recyclerView.setAdapter(new BasicListAdapter<Match, PastMatchesViewHolder>(data) {
             @Override
@@ -95,102 +90,42 @@ public class PastMatchesActivity extends CommonActivity {
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, final int position) {
-                        String idMatcherURL = "http://apisea.xyz/Cricket/apis/v1/fetxchCrictinfoMatchID.php";
-                        Log.d(Constants.TAG, idMatcherURL);
-
-                        dialogs.showDialog();
-                        RequestParams params = new RequestParams();
-                        params.add("key", "bl905577");
-                        params.add("yahoo", data.get(position).getMatchId());
-
-                        FetchFromWeb.get(idMatcherURL, params, new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                dialogs.dismissDialog();
-                                try {
-                                    if (response.getString("msg").equals("Successful")) {
-                                        String cricinfoID = response.getJSONArray("content").getJSONObject(0).getString("cricinfoID");
-                                        Intent intent = new Intent(PastMatchesActivity.this, ActivityMatchDetails.class);
-                                        intent.putExtra("matchID", cricinfoID);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(PastMatchesActivity.this, "Scorecard not available", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    Log.d(Constants.TAG, response.toString());
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                dialogs.dismissDialog();
-                                Toast.makeText(PastMatchesActivity.this, "Failed", Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        Intent intent = new Intent(PastMatchesActivity.this, ActivityMatchDetails.class);
+                        intent.putExtra("summary", data.get(position));
+                        startActivity(intent);
                     }
                 })
         );
 
-        String url = Constants.PAST_MATCHES_URL;
-        Log.d(Constants.TAG, url);
-
-
-        dialogs.showDialog();
-
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetchPastMatches(new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
+                String result = (String) msg.obj;
                 try {
-                    String team1, team2, venue, time = "", seriesName, matcNo, matchID;
-                    response = response.getJSONObject("query").getJSONObject("results");
-                    JSONArray jsonArray = response.getJSONArray("Match");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        JSONArray array = obj.getJSONArray("Team");
-                        seriesName = obj.getString("series_name");
-                        matcNo = obj.getString("MatchNo");
+                    JSONArray matchJsonArray = new JSONArray(result);
+                    for (int i = 0; i < matchJsonArray.length(); i++) {
+                        JSONObject matchJsonObject = matchJsonArray.getJSONObject(i);
+                        String team1 = matchJsonObject.getJSONObject("team1").getString("sName");
+                        String team2 = matchJsonObject.getJSONObject("team2").getString("sName");
+                        String venue = matchJsonObject.getJSONObject("header").getString("grnd") + ", " +
+                                matchJsonObject.getJSONObject("header").getString("vcity") + ", " +
+                                matchJsonObject.getJSONObject("header").getString("vcountry");
+                        String time = matchJsonObject.getJSONObject("header").getString("status");
+                        String seriesName = matchJsonObject.getString("srs");
+                        String matchNo = matchJsonObject.getJSONObject("header").getString("mnum");
+                        String matchId = matchJsonObject.getString("matchId");
+                        String dataPath = matchJsonObject.getString("datapath");
 
-                        team1 = array.getJSONObject(0).getString("Team");
-                        team2 = array.getJSONObject(1).getString("Team");
-
-                        venue = obj.getJSONObject("Venue").getString("content");
-
-                        String by = obj.getJSONObject("Result").getString("by");
-                        String how = obj.getJSONObject("Result").getString("how");
-                        JSONArray temp = obj.getJSONObject("Result").getJSONArray("Team");
-                        if (temp.getJSONObject(0).getString("matchwon").equals("yes") && temp.getJSONObject(1).getString("matchwon").equals("no")) {
-                            time = team1 + " won by " + by + " " + how;
-                        } else if (temp.getJSONObject(0).getString("matchwon").equals("no") && temp.getJSONObject(1).getString("matchwon").equals("yes")) {
-                            time = team2 + " won by " + by + " " + how;
-                        } else if (temp.getJSONObject(0).getString("matchwon").equals("no") && temp.getJSONObject(1).getString("matchwon").equals("no")) {
-                            time = how;
-                        }
-                        matchID = obj.getString("matchid");
-                        Match match = new Match(team1, team2, venue, time, seriesName, matcNo, matchID);
-                        data.add(match);
+                        data.add(new Match(team1, team2, venue, time, seriesName, matchNo, matchId, dataPath));
                     }
+
+                    recyclerView.getAdapter().notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                dialogs.dismissDialog();
-                Toast.makeText(PastMatchesActivity.this, "Failed", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-                Toast.makeText(PastMatchesActivity.this, "Failed", Toast.LENGTH_LONG).show();
             }
         });
+
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
                 .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();

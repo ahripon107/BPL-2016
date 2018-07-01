@@ -78,23 +78,18 @@ public class PlayerCareerActivity extends CommonActivity {
 
         @Override
         public Fragment getItem(int position) {
-
+            Bundle bundle = new Bundle();
+            bundle.putString("data", data);
             if (position == 0) {
                 PlayerBasicInfoFragment playerBasicInfoFragment = new PlayerBasicInfoFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("data", data);
                 playerBasicInfoFragment.setArguments(bundle);
                 return playerBasicInfoFragment;
             } else if (position == 1) {
                 PlayerBattingFragment playerBattingFragment = new PlayerBattingFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("data", data);
                 playerBattingFragment.setArguments(bundle);
                 return playerBattingFragment;
             } else {
                 PlayerBowlingFragment playerBattingFragment = new PlayerBowlingFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("data", data);
                 playerBattingFragment.setArguments(bundle);
                 return playerBattingFragment;
             }

@@ -1,6 +1,7 @@
 package com.allgames.sportslab.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -10,9 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.RecordsDetailsFragment;
@@ -20,8 +18,11 @@ import com.allgames.sportslab.model.RecordDetailsModel1;
 import com.allgames.sportslab.model.RecordDetailsModel2;
 import com.allgames.sportslab.model.RecordDetailsModel3;
 import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.Dialogs;
-import com.allgames.sportslab.util.FetchFromWeb;
+import com.allgames.sportslab.util.DefaultMessageHandler;
+import com.allgames.sportslab.util.NetworkService;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +31,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
 import roboguice.inject.ContentView;
 
 /**
@@ -48,12 +48,14 @@ public class SeriesStatsDetailsActivity extends CommonActivity {
     private String url;
     private List<String> currentSeries;
     private List<String> seriesIds;
-    private Dialogs dialogs;
 
     private RecordsDetailsFragment testFragment;
     private RecordsDetailsFragment odiFragment;
     private RecordsDetailsFragment t20Fragment;
     private ArrayAdapter<String> dataAdapter;
+
+    @Inject
+    private NetworkService networkService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +66,6 @@ public class SeriesStatsDetailsActivity extends CommonActivity {
         url = getIntent().getStringExtra("url");
         currentSeries = new ArrayList<>();
         seriesIds = new ArrayList<>();
-        dialogs = new Dialogs(this);
 
         tabLayout = findViewById(R.id.tab_ranking);
         viewPager = findViewById(R.id.view_pager_ranking);
@@ -79,11 +80,8 @@ public class SeriesStatsDetailsActivity extends CommonActivity {
         odiFragment = new RecordsDetailsFragment();
         t20Fragment = new RecordsDetailsFragment();
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //setupViewPager(viewPager);
         viewPager.setOffscreenPageLimit(2);
-
 
         dataAdapter = new ArrayAdapter<String>(SeriesStatsDetailsActivity.this, android.R.layout.simple_spinner_item, currentSeries);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -105,21 +103,12 @@ public class SeriesStatsDetailsActivity extends CommonActivity {
         });
     }
 
-    public final void setupViewPager(ViewPager viewPager) {
-        this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
-        this.matchDetailsViewPagerAdapter.addFragment(testFragment, "Test");
-        this.matchDetailsViewPagerAdapter.addFragment(odiFragment, "ODI");
-        this.matchDetailsViewPagerAdapter.addFragment(t20Fragment, "T20I");
-        viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
-    }
-
     private void fetchData(String url) {
-        dialogs.showDialog();
-        FetchFromWeb.get(url, null, new JsonHttpResponseHandler() {
+        networkService.fetch(url, new DefaultMessageHandler(this, true) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                dialogs.dismissDialog();
+            public void onSuccess(Message msg) {
                 try {
+                    JSONObject response = new JSONObject((String) msg.obj);
                     currentSeries.clear();
                     seriesIds.clear();
                     JSONArray jsonArray1 = response.getJSONObject("series-stats").getJSONArray("relatedSeries");
@@ -247,17 +236,6 @@ public class SeriesStatsDetailsActivity extends CommonActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialogs.dismissDialog();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                dialogs.dismissDialog();
             }
         });
     }

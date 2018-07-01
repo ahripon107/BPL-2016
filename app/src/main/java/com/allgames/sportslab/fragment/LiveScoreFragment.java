@@ -30,7 +30,6 @@ import com.allgames.sportslab.model.Match;
 import com.allgames.sportslab.util.CircleImageView;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
-import com.allgames.sportslab.util.Dialogs;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.RecyclerItemClickListener;
 import com.allgames.sportslab.util.ViewHolder;
@@ -66,7 +65,6 @@ public class LiveScoreFragment extends RoboFragment {
     @Inject
     private NetworkService networkService;
 
-    private Dialogs dialogs;
     private PackageInfo pInfo;
 
     @Nullable
@@ -79,7 +77,6 @@ public class LiveScoreFragment extends RoboFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        dialogs = new Dialogs(getContext());
         try {
             pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
@@ -180,15 +177,15 @@ public class LiveScoreFragment extends RoboFragment {
             @Override
             public void onBindViewHolder(LiveScoreViewHolder holder, final int position) {
                 //if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
-                    Picasso.with(getContext())
-                            .load(Constants.resolveLogo(datas.get(position).getTeam1()))
-                            .placeholder(R.drawable.default_image)
-                            .into(holder.imgteam1);
+                Picasso.with(getContext())
+                        .load(Constants.resolveLogo(datas.get(position).getTeam1()))
+                        .placeholder(R.drawable.default_image)
+                        .into(holder.imgteam1);
 
-                    Picasso.with(getContext())
-                            .load(Constants.resolveLogo(datas.get(position).getTeam2()))
-                            .placeholder(R.drawable.default_image)
-                            .into(holder.imgteam2);
+                Picasso.with(getContext())
+                        .load(Constants.resolveLogo(datas.get(position).getTeam2()))
+                        .placeholder(R.drawable.default_image)
+                        .into(holder.imgteam2);
                 //}
 
                 holder.textteam1.setText(datas.get(position).getTeam1());
@@ -223,8 +220,8 @@ public class LiveScoreFragment extends RoboFragment {
                         JSONObject matchJsonObject = matchJsonArray.getJSONObject(i);
                         String team1 = matchJsonObject.getJSONObject("team1").getString("sName");
                         String team2 = matchJsonObject.getJSONObject("team2").getString("sName");
-                        String venue = matchJsonObject.getJSONObject("header").getString("grnd") + ", "+
-                                matchJsonObject.getJSONObject("header").getString("vcity") + ", "+
+                        String venue = matchJsonObject.getJSONObject("header").getString("grnd") + ", " +
+                                matchJsonObject.getJSONObject("header").getString("vcity") + ", " +
                                 matchJsonObject.getJSONObject("header").getString("vcountry");
                         String time = matchJsonObject.getJSONObject("header").getString("status");
                         String seriesName = matchJsonObject.getString("srs");

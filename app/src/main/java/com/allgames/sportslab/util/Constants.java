@@ -23,10 +23,8 @@ public class Constants {
     public static final String ONE_PLUS_TEST_DEVICE = "7D3F3DF2A7214E839DBE70BE2132D5B9";
     //public static final String XIAOMI_TEST_DEVICE = "EE613118FFB77F457D6DBDAC46C3658C";
     public static final String XIAOMI_TEST_DEVICE = "F5C90B562D482744906FD29363CF595C";
-    public static final String NEWS_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.news(0,50)%20where%20region=%22IN%22&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
     public static final String FIXTURE_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.upcoming_matches(0,50)&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
-    public static final String COMMENTARY_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.commentary%20where%20match_id=193958%20limit%205&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
-    public static final String PAST_MATCHES_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20cricket.past_matches%20(0,30)&format=json&diagnostics=false&env=store%3A%2F%2F0TxIGQMQbObzvU4Apia0V0&callback=";
+    public static final String PAST_MATCHES_URL = "http://mapps.cricbuzz.com/cbzandroid/2.0/archivematches.json";
     public static final String RANKING_URL = "http://mapps.cricbuzz.com/cbzvernacular/bengali/stats/rankings";
     public static final String POINT_TABLE_URL = "http://mapps.cricbuzz.com/cricbuzz-android/series/points_table";
     public static final String RECORDS_URL = "http://opera.m.cricbuzz.com/cbzandroid/top-stats";
@@ -40,7 +38,7 @@ public class Constants {
     public static String QUIZ_ID = "1";
 
     public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/CricketLiveLatest/apis/v1/accessChecker.php";
-    public static final String OPINION_QUES_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchOpinionQuestions.php";
+    public static final String OPINION_QUES_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchOpinionQuestions.php?key=bl905577";
 
     public static final String WELCOME_TEXT_URL = "http://apisea.xyz/CricketLiveLatest/apis/v1/welcometext.php?key=bl905577";
     public static final String LIVE_SCORE_SOURCE_URL = "http://apisea.xyz/BPL2016/apis/v4/livescoresource.php";

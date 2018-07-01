@@ -5,6 +5,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -20,7 +21,6 @@ import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Commentry;
 import com.allgames.sportslab.model.Match;
 import com.allgames.sportslab.util.DefaultMessageHandler;
-import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.NetworkService;
 import com.google.inject.Inject;
 
@@ -61,6 +61,10 @@ public class FragmentCommentry extends RoboFragment {
         this.commentryList = view.findViewById(R.id.commentry_list);
         this.noCommentry = view.findViewById(R.id.no_commentry);
         match = (Match) getArguments().getSerializable("summary");
+
+        commentryList.setLayoutManager(new LinearLayoutManager(getContext()));
+        commentryList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        noCommentry.setVisibility(View.GONE);
 
         //Log.d(Constants.TAG, liveMatchID);
         setCommentry(commentry);
@@ -176,9 +180,6 @@ public class FragmentCommentry extends RoboFragment {
                     return position;
                 }
             });
-            commentryList.setLayoutManager(new LinearLayoutManager(getContext()));
-            commentryList.addItemDecoration(new DividerItemDecoration(getContext()));
-            noCommentry.setVisibility(View.GONE);
 
         }
     }

@@ -3,6 +3,7 @@ package com.allgames.sportslab.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +21,6 @@ import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.LivestreamAndHighlights;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
-import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.NetworkService;
 import com.allgames.sportslab.util.RoboAppCompatActivity;
 import com.allgames.sportslab.util.ViewHolder;
@@ -135,7 +135,7 @@ public class Highlights extends RoboAppCompatActivity {
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         if (cause.equals("livestream")) {
             url = "http://apisea.xyz/Cricket/apis/v1/fetchLiveStrams.php?key=bl905577";

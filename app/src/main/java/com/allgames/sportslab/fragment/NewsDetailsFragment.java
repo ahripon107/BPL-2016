@@ -2,31 +2,29 @@ package com.allgames.sportslab.fragment;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.model.CricketNews;
 import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.Dialogs;
-import com.allgames.sportslab.util.FetchFromWeb;
+import com.allgames.sportslab.util.DefaultMessageHandler;
+import com.allgames.sportslab.util.NetworkService;
+import com.google.inject.Inject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cz.msebera.android.httpclient.Header;
+import roboguice.fragment.RoboFragment;
 
 import static com.allgames.sportslab.activity.NewsDetailsActivity.EXTRA_NEWS_OBJECT;
 
@@ -34,7 +32,7 @@ import static com.allgames.sportslab.activity.NewsDetailsActivity.EXTRA_NEWS_OBJ
  * @author Ripon
  */
 
-public class NewsDetailsFragment extends Fragment {
+public class NewsDetailsFragment extends RoboFragment {
 
     private Button detailsNews;
     private ImageView imageView;
@@ -45,7 +43,9 @@ public class NewsDetailsFragment extends Fragment {
     private CricketNews cricketNews;
 
     private Typeface typeface;
-    private Dialogs dialogs;
+
+    @Inject
+    private NetworkService networkService;
 
     @Nullable
     @Override
@@ -63,8 +63,6 @@ public class NewsDetailsFragment extends Fragment {
         date = view.findViewById(R.id.text_view_date);
         author = view.findViewById(R.id.text_view_author);
         details = view.findViewById(R.id.text_view_details);
-
-        dialogs = new Dialogs(getContext());
 
         cricketNews = (CricketNews) getActivity().getIntent().getSerializableExtra(EXTRA_NEWS_OBJECT);
 
@@ -93,13 +91,11 @@ public class NewsDetailsFragment extends Fragment {
             details.setText(Html.fromHtml(cricketNews.getSourceBangla()));
             imageView.setVisibility(View.GONE);
         } else {
-            dialogs.showDialog();
-            FetchFromWeb.get(cricketNews.getDetailNewsUrl(), null, new JsonHttpResponseHandler() {
+            networkService.fetch(cricketNews.getDetailNewsUrl(), new DefaultMessageHandler(getContext(), true) {
                 @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    dialogs.dismissDialog();
+                public void onSuccess(Message msg) {
                     try {
-
+                        JSONArray response = new JSONArray((String) msg.obj);
                         JSONObject jsonObject = response.getJSONObject(0);
                         if (jsonObject.has("ContentDetails")) {
                             details.setText(Html.fromHtml(jsonObject.getString("ContentDetails")));
@@ -107,46 +103,25 @@ public class NewsDetailsFragment extends Fragment {
                             details.setText(Html.fromHtml(jsonObject.getString("NewsDetails")));
                         }
 
-
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                        try {
+                            JSONObject response = new JSONObject((String) msg.obj);
+                            if (response.has("getnewsby_id")) {
+                                JSONObject jsonObject = response.getJSONObject("getnewsby_id");
+                                details.setText(Html.fromHtml(jsonObject.getString("summery")));
+                            } else if (response.has("contents")) {
+                                response = response.getJSONArray("contents").getJSONObject(0);
+                                details.setText(Html.fromHtml(response.getString("news_details")));
+                            } else {
+                                details.setText(Html.fromHtml(response.getString("ContentDetails")));
+                            }
 
-                    Log.d(Constants.TAG, response.toString());
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    dialogs.dismissDialog();
-                    try {
-                        if (response.has("getnewsby_id")) {
-                            JSONObject jsonObject = response.getJSONObject("getnewsby_id");
-                            details.setText(Html.fromHtml(jsonObject.getString("summery")));
-                        } else if (response.has("contents")) {
-                            response = response.getJSONArray("contents").getJSONObject(0);
-                            details.setText(Html.fromHtml(response.getString("news_details")));
-                        } else {
-                            details.setText(Html.fromHtml(response.getString("ContentDetails")));
+                        } catch (JSONException ea) {
+                            ea.printStackTrace();
                         }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
 
-                    Log.d(Constants.TAG, response.toString());
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    dialogs.dismissDialog();
-                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    dialogs.dismissDialog();
-                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
                 }
             });
         }

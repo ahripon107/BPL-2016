@@ -3,6 +3,7 @@ package com.allgames.sportslab.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.ProfileBatting;
 import com.allgames.sportslab.model.ProfileBattingBowlingRow;
-import com.allgames.sportslab.util.DividerItemDecoration;
 import com.allgames.sportslab.util.ViewHolder;
 
 import org.json.JSONException;
@@ -289,7 +289,7 @@ public class PlayerBattingFragment extends RoboFragment {
             });
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         } catch (JSONException e) {
             e.printStackTrace();
         }

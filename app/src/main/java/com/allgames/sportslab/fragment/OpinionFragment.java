@@ -3,25 +3,23 @@ package com.allgames.sportslab.fragment;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.activity.InsertOpinionActivity;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.FetchFromWeb;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.allgames.sportslab.util.DefaultMessageHandler;
+import com.allgames.sportslab.util.NetworkService;
+import com.google.inject.Inject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,18 +27,21 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
+import roboguice.fragment.RoboFragment;
 
 /**
  * @author Ripon
  */
 
-public class OpinionFragment extends Fragment {
+public class OpinionFragment extends RoboFragment {
 
     private RecyclerView recyclerView;
     private ArrayList<String> data;
     private ArrayList<String> ids;
     private Typeface typeface;
+
+    @Inject
+    private NetworkService networkService;
 
     @Nullable
     @Override
@@ -81,16 +82,11 @@ public class OpinionFragment extends Fragment {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        String url = Constants.OPINION_QUES_URL;
-        Log.d(Constants.TAG, url);
-        RequestParams params = new RequestParams();
-        params.add("key", "bl905577");
-
-        FetchFromWeb.get(url, params, new JsonHttpResponseHandler() {
+        networkService.fetch(Constants.OPINION_QUES_URL, new DefaultMessageHandler(getContext(), false) {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
+            public void onSuccess(Message msg) {
                 try {
+                    JSONObject response = new JSONObject((String) msg.obj);
                     JSONArray jsonArray = response.getJSONArray("content");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
@@ -101,13 +97,6 @@ public class OpinionFragment extends Fragment {
                     e.printStackTrace();
                 }
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Log.d(Constants.TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-
-                Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
             }
         });
     }

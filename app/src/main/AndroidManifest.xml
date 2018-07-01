@@ -50,18 +50,6 @@
             android:label="@string/app_name"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.allgames.sportslab.activity.LiveScore"
-            android:label="Details"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.allgames.sportslab.activity.TeamDetailsActivity"
-            android:label="Team Profile"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.allgames.sportslab.activity.TeamProfile"
-            android:label="টিম প্রোফাইল"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.allgames.sportslab.activity.PastMatchesActivity"
             android:label="Past Matches"
             android:screenOrientation="portrait" />
@@ -82,10 +70,6 @@
         <activity
             android:name="com.allgames.sportslab.activity.ActivityMatchDetails"
             android:label="Score Details"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.allgames.sportslab.activity.FullCommentryActivity"
-            android:label="Full Commentry"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.allgames.sportslab.activity.RankingActivity"
