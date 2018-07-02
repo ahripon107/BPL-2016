@@ -88,11 +88,6 @@
             android:label="Points Table"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.allgames.sportslab.activity.QuotesListActivity"
-            android:label="Quotes"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name="com.allgames.sportslab.activity.GalleryActivity"
             android:label="Gallery"
             android:screenOrientation="portrait" />

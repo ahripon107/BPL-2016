@@ -9,7 +9,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,7 +141,7 @@ public class FragmentCommentry extends RoboFragment {
             commentryList.setAdapter(new BasicListAdapter<Commentry, CommentryViewHolder>(commentries) {
                 @Override
                 public CommentryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singlecommentary, parent, false);
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_commentary, parent, false);
                     return new CommentryViewHolder(view);
                 }
 

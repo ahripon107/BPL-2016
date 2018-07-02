@@ -37,7 +37,7 @@ public class BowlerAdapter extends RecyclerView.Adapter<BowlerAdapter.BowlerView
 
     @Override
     public BowlerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BowlerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.singlebowler, parent, false));
+        return new BowlerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_bowler, parent, false));
     }
 
     @Override

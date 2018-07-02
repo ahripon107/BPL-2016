@@ -40,8 +40,7 @@ public class Constants {
     public static final String ACCESS_CHECKER_URL = "http://apisea.xyz/CricketLiveLatest/apis/v1/accessChecker.php";
     public static final String OPINION_QUES_URL = "http://apisea.xyz/BPL2016/apis/v4/fetchOpinionQuestions.php?key=bl905577";
 
-    public static final String WELCOME_TEXT_URL = "http://apisea.xyz/CricketLiveLatest/apis/v1/welcometext.php?key=bl905577";
-    public static final String LIVE_SCORE_SOURCE_URL = "http://apisea.xyz/BPL2016/apis/v4/livescoresource.php";
+    public static final String WELCOME_TEXT_URL = "http://apisea.xyz/live2018/api/v1/welcometext.php?key=bl905577";
 
     public static final String AUS_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/1_l-11-2-2012-975ee512e59ffc420e26dee2813daa27.png";
     public static final String BD_TEAM_LOGO_URL = "https://s.yimg.com/qx/cricket/fufp/images/2_l-11-2-2012-a853bb5b43497e2b3a38791dc389adc0.png";
@@ -64,8 +63,6 @@ public class Constants {
 
     public static final String INSERT_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v6/insertnewscomment.php";
     public static final String FETCH_NEWS_COMMENT_URL = "http://apisea.xyz/BPL2016/apis/v6/fetchnewscomments.php";
-    public static final String FETCH_QUIZ_QUESTIONS = "http://apisea.xyz/BPL2016/apis/v4/fetchQuizQuestions.php";
-    public static final String INSERT_QUIZ_MARKS = "http://apisea.xyz/BPL2016/apis/v4/insertQuizNumber.php";
 
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
@@ -128,7 +125,5 @@ public class Constants {
         } else {
             return "xyz";
         }
-
     }
-
 }

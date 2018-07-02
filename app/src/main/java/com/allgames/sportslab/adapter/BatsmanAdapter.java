@@ -39,7 +39,7 @@ public class BatsmanAdapter extends RecyclerView.Adapter<BatsmanAdapter.BatsmanV
 
     @Override
     public BatsmanViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singlebatsman, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_batsman, parent, false);
         return new BatsmanViewHolder(view);
     }
 

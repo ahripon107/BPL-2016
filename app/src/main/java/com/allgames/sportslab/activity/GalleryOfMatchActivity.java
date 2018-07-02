@@ -59,7 +59,7 @@ public class GalleryOfMatchActivity extends CommonActivity {
         recyclerView.setAdapter(new BasicListAdapter<Gallery, GalleryMatchViewHolder>(galleries) {
             @Override
             public GalleryMatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_troll_posts, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_gallery_of_match, parent, false);
                 return new GalleryMatchViewHolder(view);
             }
 

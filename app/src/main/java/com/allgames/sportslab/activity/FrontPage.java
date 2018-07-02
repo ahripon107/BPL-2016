@@ -1,37 +1,59 @@
 package com.allgames.sportslab.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allgames.sportslab.R;
+import com.allgames.sportslab.adapter.BasicListAdapter;
+import com.allgames.sportslab.model.Match;
+import com.allgames.sportslab.util.CircleImageView;
+import com.allgames.sportslab.util.Constants;
+import com.allgames.sportslab.util.DefaultMessageHandler;
+import com.allgames.sportslab.util.NetworkService;
+import com.allgames.sportslab.util.RecyclerItemClickListener;
+import com.allgames.sportslab.util.RoboAppCompatActivity;
+import com.allgames.sportslab.util.ViewHolder;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.inject.Inject;
-import com.allgames.sportslab.R;
-import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
-import com.allgames.sportslab.fragment.LiveScoreFragment;
-import com.allgames.sportslab.util.Constants;
-import com.allgames.sportslab.util.DefaultMessageHandler;
-import com.allgames.sportslab.util.NetworkService;
-import com.allgames.sportslab.util.RoboAppCompatActivity;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -40,17 +62,26 @@ import roboguice.inject.InjectView;
 public class FrontPage extends RoboAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private MatchDetailsViewPagerAdapter matchDetailsViewPagerAdapter;
-    @InjectView(R.id.viewPager)
-    private ViewPager viewPager;
     @InjectView(R.id.adViewFontPage)
     private AdView adView;
     @InjectView(R.id.toolbar)
     private Toolbar toolbar;
 
+    @InjectView(R.id.tv_welcome_text)
+    private TextView welcomeText;
+    @InjectView(R.id.live_matches)
+    private RecyclerView recyclerView;
+    @InjectView(R.id.tour_image)
+    private ImageView imageView;
+    @InjectView(R.id.tv_empty_view)
+    private TextView emptyView;
+
     @Inject
-    private
-    NetworkService networkService;
+    private ArrayList<Match> datas;
+    @Inject
+    private NetworkService networkService;
+
+    private PackageInfo pInfo;
 
     private InterstitialAd mInterstitialAd;
 
@@ -61,10 +92,6 @@ public class FrontPage extends RoboAppCompatActivity
         super.onCreate(savedInstanceState);
 
         setSupportActionBar(toolbar);
-
-        this.viewPager.setOffscreenPageLimit(2);
-        setupViewPage(this.viewPager);
-        ((TabLayout) findViewById(R.id.tabLayout)).setupWithViewPager(this.viewPager);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -119,6 +146,169 @@ public class FrontPage extends RoboAppCompatActivity
             }
         });
 
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String welcomeTextUrl = Constants.WELCOME_TEXT_URL;
+        Log.d(Constants.TAG, welcomeTextUrl);
+
+        networkService.fetchWelcomeText(new DefaultMessageHandler(this, true) {
+            @Override
+            public void onSuccess(Message msg) {
+                String string = (String) msg.obj;
+                try {
+                    final JSONObject response = new JSONObject(string);
+
+                    Constants.SHOW_PLAYER_IMAGE = response.getString("playerimage");
+                    welcomeText.setText(Html.fromHtml(response.getString("description")));
+                    if (response.getString("clickable").equals("true")) {
+                        welcomeText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    Uri uriUrl = Uri.parse(String.valueOf(response.getString("link")));
+                                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                                    startActivity(launchBrowser);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+
+                    if (isNetworkAvailable() && response.getString("appimage").equals("true")) {
+                        imageView.setVisibility(View.VISIBLE);
+                        Picasso.with(FrontPage.this)
+                                .load(response.getString("appimageurl"))
+                                .placeholder(R.drawable.default_image)
+                                .into(imageView);
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getString("applink"))));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } else {
+                        imageView.setVisibility(View.GONE);
+                    }
+
+                    if (!response.getString("checkversion").contains(pInfo.versionName)) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(FrontPage.this);
+                        alertDialogBuilder.setMessage(response.getString("popupmessage"));
+                        alertDialogBuilder.setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        try {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getString("popuplink"))));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+
+                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
+                    if (response.getString("showlivescore").equals("false")) {
+                        recyclerView.setVisibility(View.GONE);
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        recyclerView.setAdapter(new BasicListAdapter<Match, LiveScoreViewHolder>(datas) {
+            @Override
+            public LiveScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.match, parent, false);
+                return new LiveScoreViewHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(LiveScoreViewHolder holder, final int position) {
+                if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
+                    Picasso.with(FrontPage.this)
+                            .load(Constants.resolveLogo(datas.get(position).getTeam1()))
+                            .placeholder(R.drawable.default_image)
+                            .into(holder.imgteam1);
+
+                    Picasso.with(FrontPage.this)
+                            .load(Constants.resolveLogo(datas.get(position).getTeam2()))
+                            .placeholder(R.drawable.default_image)
+                            .into(holder.imgteam2);
+                }
+
+                holder.textteam1.setText(datas.get(position).getTeam1());
+                holder.textteam2.setText(datas.get(position).getTeam2());
+                holder.venue.setText(Html.fromHtml(datas.get(position).getVenue()));
+                holder.status.setText(datas.get(position).getMatchStatus());
+
+                holder.seriesName.setText(datas.get(position).getSeriesName());
+                holder.matchNo.setText(datas.get(position).getMatchNo());
+            }
+        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(FrontPage.this, ActivityMatchDetails.class);
+                        intent.putExtra("summary", datas.get(position));
+                        startActivity(intent);
+                    }
+                })
+        );
+
+        networkService.fetchLiveScore(new DefaultMessageHandler(this, true) {
+            @Override
+            public void onSuccess(Message msg) {
+                String result = (String) msg.obj;
+                try {
+                    JSONArray matchJsonArray = new JSONArray(result);
+                    for (int i = 0; i < matchJsonArray.length(); i++) {
+                        JSONObject matchJsonObject = matchJsonArray.getJSONObject(i);
+                        String team1 = matchJsonObject.getJSONObject("team1").getString("sName");
+                        String team2 = matchJsonObject.getJSONObject("team2").getString("sName");
+                        String venue = matchJsonObject.getJSONObject("header").getString("grnd") + ", " +
+                                matchJsonObject.getJSONObject("header").getString("vcity") + ", " +
+                                matchJsonObject.getJSONObject("header").getString("vcountry");
+                        String time = matchJsonObject.getJSONObject("header").getString("status");
+                        String seriesName = matchJsonObject.getString("srs");
+                        String matchNo = matchJsonObject.getJSONObject("header").getString("mnum");
+                        String matchId = matchJsonObject.getString("matchId");
+                        String dataPath = matchJsonObject.getString("datapath");
+
+                        datas.add(new Match(team1, team2, venue, time, seriesName, matchNo, matchId, dataPath));
+                    }
+
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -132,21 +322,15 @@ public class FrontPage extends RoboAppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-                Intent i=new Intent(android.content.Intent.ACTION_SEND);
+                Intent i = new Intent(android.content.Intent.ACTION_SEND);
                 i.setType("text/plain");
-                i.putExtra(android.content.Intent.EXTRA_SUBJECT,"Share App");
-                i.putExtra(android.content.Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id="+getPackageName());
-                startActivity(Intent.createChooser(i,"Share via"));
+                i.putExtra(android.content.Intent.EXTRA_SUBJECT, "Share App");
+                i.putExtra(android.content.Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=" + getPackageName());
+                startActivity(Intent.createChooser(i, "Share via"));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void setupViewPage(ViewPager viewPager) {
-        this.matchDetailsViewPagerAdapter = new MatchDetailsViewPagerAdapter(getSupportFragmentManager());
-        this.matchDetailsViewPagerAdapter.addFragment(new LiveScoreFragment(), "লাইভ স্কোর");
-        viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 
     @Override
@@ -201,9 +385,6 @@ public class FrontPage extends RoboAppCompatActivity
         } else if (id == R.id.nav_points_table) {
             Intent intent = new Intent(FrontPage.this, PointsTableActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_quotes) {
-            checkIsAllowed("quotes", "com.allgames.sportslab.activity.QuotesListActivity", null);
-
         } else if (id == R.id.nav_login_logout) {
             Intent intent = new Intent(FrontPage.this, LoginActivity.class);
             startActivity(intent);
@@ -264,7 +445,6 @@ public class FrontPage extends RoboAppCompatActivity
         menu.findItem(R.id.nav_highlights_football).setVisible(false);
         menu.findItem(R.id.nav_gallery).setVisible(false);
         menu.findItem(R.id.nav_ranking).setVisible(false);
-        menu.findItem(R.id.nav_quotes).setVisible(false);
         menu.findItem(R.id.nav_past_matches).setVisible(false);
         menu.findItem(R.id.nav_fixture).setVisible(false);
     }
@@ -282,9 +462,42 @@ public class FrontPage extends RoboAppCompatActivity
         menu.findItem(R.id.nav_ranking).setVisible(true);
         menu.findItem(R.id.nav_records).setVisible(true);
         menu.findItem(R.id.nav_points_table).setVisible(true);
-        menu.findItem(R.id.nav_quotes).setVisible(true);
         menu.findItem(R.id.nav_login_logout).setVisible(true);
         menu.findItem(R.id.nav_update_app).setVisible(true);
         menu.findItem(R.id.nav_past_matches).setVisible(true);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+
+    private static class LiveScoreViewHolder extends RecyclerView.ViewHolder {
+        CircleImageView imgteam1;
+        CircleImageView imgteam2;
+        TextView textteam1;
+        TextView textteam2;
+        TextView venue;
+        TextView status;
+        TextView seriesName;
+        TextView matchNo;
+        LinearLayout linearLayout;
+
+        LiveScoreViewHolder(final View itemView) {
+            super(itemView);
+
+            imgteam1 = ViewHolder.get(itemView, R.id.civTeam1);
+            imgteam2 = ViewHolder.get(itemView, R.id.civTeam2);
+            textteam1 = ViewHolder.get(itemView, R.id.tvTeam1);
+            textteam2 = ViewHolder.get(itemView, R.id.tvTeam2);
+            venue = ViewHolder.get(itemView, R.id.tvVenue);
+            status = ViewHolder.get(itemView, R.id.tvTime);
+            seriesName = ViewHolder.get(itemView, R.id.tvSeriesname);
+            matchNo = ViewHolder.get(itemView, R.id.tvMatchNo);
+            linearLayout = ViewHolder.get(itemView, R.id.match_layout);
+        }
     }
 }

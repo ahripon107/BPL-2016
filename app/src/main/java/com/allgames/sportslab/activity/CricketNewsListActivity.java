@@ -66,7 +66,7 @@ public class CricketNewsListActivity extends CommonActivity {
         recyclerView.setAdapter(new BasicListAdapter<CricketNews, NewsViewHolder>(cricketNewses) {
             @Override
             public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_quotes, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_news, parent, false);
                 return new NewsViewHolder(view);
             }
 
