@@ -3,7 +3,6 @@ package com.allgames.sportslab.util;
 import android.os.Handler;
 import android.util.Log;
 
-import com.facebook.Profile;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.loopj.android.http.AsyncHttpClient;
@@ -25,7 +24,7 @@ public class NetworkService {
 
 
     public void loadCommentry(String matchId, int fileno, Handler handler) {
-        String url = "http://sng2.mapps.cricbuzz.com/cbzandroid/2.0/fullComm.php?matchPath=" + matchId + "&fileno="+ fileno;
+        String url = "http://sng2.mapps.cricbuzz.com/cbzandroid/2.0/fullComm.php?matchPath=" + matchId + "&fileno=" + fileno;
         Log.d("commentry", url);
         httpClient.get(url, null, new DefaultAsyncHttpResponseHandler(handler));
     }
@@ -40,29 +39,6 @@ public class NetworkService {
 
     public void fetch(String url, Handler handler) {
         httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
-    }
-
-    public void fetchComments(String id, Handler handler) {
-
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("key", "bl905577");
-        requestParams.add("newsid", id);
-
-        httpClient.get(Constants.FETCH_NEWS_COMMENT_URL, requestParams, new DefaultAsyncHttpResponseHandler(handler));
-
-    }
-
-    public void insertComment(String comment, Profile profile, String id, Handler handler) {
-        RequestParams params = new RequestParams();
-
-        params.put("key", "bl905577");
-        params.put("newsid", id);
-        params.put("name", profile.getName());
-        params.put("comment", comment);
-        params.put("profileimage", profile.getProfilePictureUri(50, 50).toString());
-        params.put("timestamp", System.currentTimeMillis() + "");
-
-        httpClient.post(Constants.INSERT_NEWS_COMMENT_URL, params, new DefaultAsyncHttpResponseHandler(handler));
     }
 
     public void fetchPlayerProfile(String playerId, Handler handler) {
@@ -118,30 +94,6 @@ public class NetworkService {
 
     public void fetchSeriesStats(Handler handler) {
         httpClient.get(Constants.SERIES_STATS_URL, null, new DefaultAsyncHttpResponseHandler(handler));
-    }
-
-    public void fetchQuotes(Handler handler) {
-        httpClient.get("http://m.cricbuzz.com/cricbuzz-android/quotes", null, new DefaultAsyncHttpResponseHandler(handler));
-    }
-
-    public void fetchOpinionComments(String id, Handler handler) {
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("key", "bl905577");
-        requestParams.add("newsid", "opinion" + id);
-
-        httpClient.get(Constants.FETCH_NEWS_COMMENT_URL, requestParams, new DefaultAsyncHttpResponseHandler(handler));
-    }
-
-    public void publishOpinionComment(String id, String name, String comment, String image, Handler handler) {
-        RequestParams params = new RequestParams();
-        params.put("key", "bl905577");
-        params.put("newsid", "opinion" + id);
-        params.put("name", name);
-        params.put("comment", comment);
-        params.put("profileimage", image);
-        params.put("timestamp", System.currentTimeMillis() + "");
-
-        httpClient.post(Constants.INSERT_NEWS_COMMENT_URL, params, new DefaultAsyncHttpResponseHandler(handler));
     }
 
     public void fetchGalleryOfMatch(String url, Handler handler) {

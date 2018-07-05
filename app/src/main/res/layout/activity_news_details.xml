@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/pagebackground"
     android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/adViewNewsDetails"
         android:background="@color/pagebackground"
         android:padding="3dp">
 
@@ -22,8 +24,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
                 android:minHeight="130dp"
+                android:scaleType="fitXY"
                 android:src="@drawable/default_image" />
 
             <TextView
@@ -65,32 +67,16 @@
                 android:textColor="@color/Black"
                 android:textSize="16sp" />
 
-            <com.dd.ShadowLayout
-                app:sl_cornerRadius="2dp"
-                app:sl_dx="5dp"
-                app:sl_dy="5dp"
-                app:sl_shadowColor="#AA000000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginBottom="5dp">
-
-                <Button
-                    android:id="@+id/btn_details_news"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/raised_selector"
-                    android:minHeight="36dp"
-                    android:minWidth="88dp"
-                    android:text="DETAILS"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:textColor="@android:color/white" />
-
-            </com.dd.ShadowLayout>
-
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewNewsDetails"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/newsdetails" />
+
+</RelativeLayout>

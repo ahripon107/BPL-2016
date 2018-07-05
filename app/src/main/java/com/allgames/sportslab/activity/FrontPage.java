@@ -35,7 +35,6 @@ import android.widget.Toast;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Match;
-import com.allgames.sportslab.util.CircleImageView;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
@@ -238,7 +237,7 @@ public class FrontPage extends RoboAppCompatActivity
         recyclerView.setAdapter(new BasicListAdapter<Match, LiveScoreViewHolder>(datas) {
             @Override
             public LiveScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.match, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_match, parent, false);
                 return new LiveScoreViewHolder(view);
             }
 
@@ -261,8 +260,7 @@ public class FrontPage extends RoboAppCompatActivity
                 holder.venue.setText(Html.fromHtml(datas.get(position).getVenue()));
                 holder.status.setText(datas.get(position).getMatchStatus());
 
-                holder.seriesName.setText(datas.get(position).getSeriesName());
-                holder.matchNo.setText(datas.get(position).getMatchNo());
+                holder.seriesName.setText(datas.get(position).getSeriesName() + ", " + datas.get(position).getMatchNo());
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -271,7 +269,7 @@ public class FrontPage extends RoboAppCompatActivity
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(FrontPage.this, ActivityMatchDetails.class);
+                        Intent intent = new Intent(FrontPage.this, MatchDetailsActivity.class);
                         intent.putExtra("summary", datas.get(position));
                         startActivity(intent);
                     }
@@ -356,7 +354,7 @@ public class FrontPage extends RoboAppCompatActivity
             checkIsAllowed("livestream", "com.allgames.sportslab.activity.Highlights", "livestreamfootball");
 
         } else if (id == R.id.nav_sports_news) {
-            checkIsAllowed("news", "com.allgames.sportslab.activity.CricketNewsListActivity", null);
+            checkIsAllowed("activity_news", "com.allgames.sportslab.activity.CricketNewsListActivity", null);
 
         } else if (id == R.id.nav_highlights) {
             checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlights");
@@ -476,14 +474,13 @@ public class FrontPage extends RoboAppCompatActivity
 
 
     private static class LiveScoreViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView imgteam1;
-        CircleImageView imgteam2;
+        ImageView imgteam1;
+        ImageView imgteam2;
         TextView textteam1;
         TextView textteam2;
         TextView venue;
         TextView status;
         TextView seriesName;
-        TextView matchNo;
         LinearLayout linearLayout;
 
         LiveScoreViewHolder(final View itemView) {
@@ -496,7 +493,6 @@ public class FrontPage extends RoboAppCompatActivity
             venue = ViewHolder.get(itemView, R.id.tvVenue);
             status = ViewHolder.get(itemView, R.id.tvTime);
             seriesName = ViewHolder.get(itemView, R.id.tvSeriesname);
-            matchNo = ViewHolder.get(itemView, R.id.tvMatchNo);
             linearLayout = ViewHolder.get(itemView, R.id.match_layout);
         }
     }

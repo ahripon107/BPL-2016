@@ -4,19 +4,15 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
-import com.allgames.sportslab.model.Match;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.FragmentCommentry;
 import com.allgames.sportslab.fragment.FragmentScoreBoard;
-import com.allgames.sportslab.fragment.GossipFragment;
 import com.allgames.sportslab.fragment.PlayingXIFragment;
+import com.allgames.sportslab.model.Match;
 import com.allgames.sportslab.util.Constants;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -25,7 +21,7 @@ import roboguice.inject.InjectView;
  * @author ripon
  */
 @ContentView(R.layout.activity_match_details)
-public class ActivityMatchDetails extends CommonActivity {
+public class MatchDetailsActivity extends CommonActivity {
 
     @InjectView(R.id.viewPager)
     private ViewPager viewPager;
@@ -61,19 +57,16 @@ public class ActivityMatchDetails extends CommonActivity {
 
         FragmentScoreBoard fragmentScoreBoard = new FragmentScoreBoard();
         fragmentScoreBoard.setArguments(bundle);
-        this.matchDetailsViewPagerAdapter.addFragment(fragmentScoreBoard, "স্কোর বোর্ড");
+        this.matchDetailsViewPagerAdapter.addFragment(fragmentScoreBoard, "Score");
 
         FragmentCommentry fragmentCommentry = new FragmentCommentry();
         fragmentCommentry.setArguments(bundle);
-        this.matchDetailsViewPagerAdapter.addFragment(fragmentCommentry, "কমেন্ট্রি");
+        this.matchDetailsViewPagerAdapter.addFragment(fragmentCommentry, "Commentary");
 
         PlayingXIFragment playingXIFragment = new PlayingXIFragment();
         playingXIFragment.setArguments(bundle);
-        this.matchDetailsViewPagerAdapter.addFragment(playingXIFragment, "একাদশ");
+        this.matchDetailsViewPagerAdapter.addFragment(playingXIFragment, "Playing XI");
 
-        GossipFragment fragment = new GossipFragment();
-        fragment.setArguments(bundle);
-        this.matchDetailsViewPagerAdapter.addFragment(fragment, "আড্ডা");
         viewPager.setAdapter(this.matchDetailsViewPagerAdapter);
     }
 }

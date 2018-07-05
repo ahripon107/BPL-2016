@@ -15,8 +15,6 @@ public class Player {
         this.personid = personid;
     }
 
-
-
     public String getName() {
         return name;
     }

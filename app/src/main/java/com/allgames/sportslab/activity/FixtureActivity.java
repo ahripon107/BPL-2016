@@ -58,7 +58,7 @@ public class FixtureActivity extends CommonActivity {
         recyclerView.setAdapter(new BasicListAdapter<Match, FixtureViewHolder>(data) {
             @Override
             public FixtureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.match, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_match, parent, false);
                 return new FixtureViewHolder(view);
             }
 
@@ -80,8 +80,7 @@ public class FixtureActivity extends CommonActivity {
 
                 String timeparts[] = data.get(position).getMatchStatus().split("T");
                 holder.time.setText(timeparts[0] + "  " + timeparts[1]);
-                holder.seriesName.setText(data.get(position).getSeriesName());
-                holder.matchNo.setText(data.get(position).getMatchNo());
+                holder.seriesName.setText(data.get(position).getSeriesName() + ", " + data.get(position).getMatchNo());
 
             }
         });
@@ -135,7 +134,6 @@ public class FixtureActivity extends CommonActivity {
         TextView venue;
         TextView time;
         TextView seriesName;
-        TextView matchNo;
         LinearLayout linearLayout;
 
         FixtureViewHolder(View itemView) {
@@ -148,7 +146,6 @@ public class FixtureActivity extends CommonActivity {
             venue = ViewHolder.get(itemView, R.id.tvVenue);
             time = ViewHolder.get(itemView, R.id.tvTime);
             seriesName = ViewHolder.get(itemView, R.id.tvSeriesname);
-            matchNo = ViewHolder.get(itemView, R.id.tvMatchNo);
             linearLayout = ViewHolder.get(itemView, R.id.match_layout);
         }
     }

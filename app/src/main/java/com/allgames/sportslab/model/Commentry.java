@@ -6,7 +6,6 @@ package com.allgames.sportslab.model;
 
 public class Commentry {
 
-
     private String type;
     private String event;
     private String over;

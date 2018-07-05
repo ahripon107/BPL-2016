@@ -8,13 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Match;
-import com.allgames.sportslab.util.CircleImageView;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
@@ -57,7 +57,7 @@ public class PastMatchesActivity extends CommonActivity {
         recyclerView.setAdapter(new BasicListAdapter<Match, PastMatchesViewHolder>(data) {
             @Override
             public PastMatchesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.match, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_match, parent, false);
                 return new PastMatchesViewHolder(view);
             }
 
@@ -77,11 +77,8 @@ public class PastMatchesActivity extends CommonActivity {
                 holder.textteam2.setText(data.get(position).getTeam2());
                 holder.venue.setText(data.get(position).getVenue());
 
-                holder.time.setTextSize(20f);
                 holder.time.setText(data.get(position).getMatchStatus());
-                holder.seriesName.setText(data.get(position).getSeriesName());
-                holder.matchNo.setText(data.get(position).getMatchNo());
-
+                holder.seriesName.setText(data.get(position).getSeriesName() + ", " + data.get(position).getMatchNo());
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -90,7 +87,7 @@ public class PastMatchesActivity extends CommonActivity {
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, final int position) {
-                        Intent intent = new Intent(PastMatchesActivity.this, ActivityMatchDetails.class);
+                        Intent intent = new Intent(PastMatchesActivity.this, MatchDetailsActivity.class);
                         intent.putExtra("summary", data.get(position));
                         startActivity(intent);
                     }
@@ -133,14 +130,13 @@ public class PastMatchesActivity extends CommonActivity {
     }
 
     private static class PastMatchesViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView imgteam1;
-        CircleImageView imgteam2;
+        ImageView imgteam1;
+        ImageView imgteam2;
         TextView textteam1;
         TextView textteam2;
         TextView venue;
         TextView time;
         TextView seriesName;
-        TextView matchNo;
         LinearLayout linearLayout;
 
         PastMatchesViewHolder(View itemView) {
@@ -153,7 +149,6 @@ public class PastMatchesActivity extends CommonActivity {
             venue = ViewHolder.get(itemView, R.id.tvVenue);
             time = ViewHolder.get(itemView, R.id.tvTime);
             seriesName = ViewHolder.get(itemView, R.id.tvSeriesname);
-            matchNo = ViewHolder.get(itemView, R.id.tvMatchNo);
             linearLayout = ViewHolder.get(itemView, R.id.match_layout);
         }
     }

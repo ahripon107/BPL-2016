@@ -39,7 +39,7 @@ import roboguice.inject.InjectView;
 /**
  * @author ripon
  */
-@ContentView(R.layout.news)
+@ContentView(R.layout.activity_news)
 public class CricketNewsListActivity extends CommonActivity {
 
     @InjectView(R.id.recycler_view)

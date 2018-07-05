@@ -15,10 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.allgames.sportslab.R;
-import com.allgames.sportslab.activity.ActivityMatchDetails;
 import com.allgames.sportslab.adapter.BatsmanAdapter;
 import com.allgames.sportslab.adapter.BowlerAdapter;
 import com.allgames.sportslab.model.Batsman;
@@ -105,8 +103,6 @@ public class FragmentScoreBoard extends RoboFragment {
 
         playerIdNameMap = new HashMap<>();
 
-        Toast.makeText(getContext(), "Pull down to refresh scorecard", Toast.LENGTH_LONG).show();
-
         firstInnings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,8 +123,6 @@ public class FragmentScoreBoard extends RoboFragment {
                 secondInnings.setTypeface(null, Typeface.NORMAL);
                 thirdInnings.setTypeface(null, Typeface.NORMAL);
                 fourthInnings.setTypeface(null, Typeface.NORMAL);
-
-
             }
         });
 
@@ -240,8 +234,6 @@ public class FragmentScoreBoard extends RoboFragment {
                     e.printStackTrace();
                 }
             }
-
-
         });
     }
 
@@ -489,8 +481,8 @@ public class FragmentScoreBoard extends RoboFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
+
         return bowlers;
     }
 }

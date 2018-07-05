@@ -68,7 +68,7 @@
             android:label="Gallery"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.allgames.sportslab.activity.ActivityMatchDetails"
+            android:name="com.allgames.sportslab.activity.MatchDetailsActivity"
             android:label="Score Details"
             android:screenOrientation="portrait" />
         <activity
@@ -100,11 +100,6 @@
         <activity
             android:name="com.allgames.sportslab.activity.SeriesStatsDetailsActivity"
             android:label="Series Stats Details"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.allgames.sportslab.activity.InsertOpinionActivity"
-            android:label="মতামত"
             android:screenOrientation="portrait" />
 
         <activity

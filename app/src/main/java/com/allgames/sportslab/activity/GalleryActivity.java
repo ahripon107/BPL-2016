@@ -34,7 +34,7 @@ import roboguice.inject.InjectView;
 /**
  * @author Ripon
  */
-@ContentView(R.layout.playersfragment)
+@ContentView(R.layout.activity_gallery)
 public class GalleryActivity extends CommonActivity {
 
     @InjectView(R.id.recycler_view)
@@ -73,7 +73,7 @@ public class GalleryActivity extends CommonActivity {
 
             @Override
             public GalleryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.singlenews, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_gallery, parent, false);
                 return new GalleryViewHolder(view);
             }
 
