@@ -136,9 +136,9 @@ public class RankingActivity extends CommonActivity {
             }
         });
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
     }
 
     private void setupViewPage(ViewPager viewPager) {

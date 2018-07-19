@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
 import com.allgames.sportslab.model.Commentry;
-import com.allgames.sportslab.model.Match;
+import com.allgames.sportslab.model.match.Match;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.google.inject.Inject;

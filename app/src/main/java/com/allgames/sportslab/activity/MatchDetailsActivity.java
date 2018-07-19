@@ -9,7 +9,7 @@ import com.allgames.sportslab.adapter.MatchDetailsViewPagerAdapter;
 import com.allgames.sportslab.fragment.FragmentCommentry;
 import com.allgames.sportslab.fragment.FragmentScoreBoard;
 import com.allgames.sportslab.fragment.PlayingXIFragment;
-import com.allgames.sportslab.model.Match;
+import com.allgames.sportslab.model.match.Match;
 import com.allgames.sportslab.util.Constants;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -44,9 +44,9 @@ public class MatchDetailsActivity extends CommonActivity {
         setupViewPage(this.viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
     }
 
 

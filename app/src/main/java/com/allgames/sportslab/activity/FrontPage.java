@@ -34,7 +34,9 @@ import android.widget.Toast;
 
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
-import com.allgames.sportslab.model.Match;
+import com.allgames.sportslab.model.match.Header;
+import com.allgames.sportslab.model.match.Match;
+import com.allgames.sportslab.model.match.MiniScore;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
@@ -48,11 +50,14 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.inject.Inject;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -123,27 +128,27 @@ public class FrontPage extends RoboAppCompatActivity
 //            }
 //        });
 
-        AdRequest adRequest1 = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest1);
-
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-9201945236996508/7683380073");
-
-        AdRequest adRequestInterstitial = new AdRequest.Builder()
-                .addTestDevice(Constants.ONE_PLUS_TEST_DEVICE).addTestDevice(Constants.XIAOMI_TEST_DEVICE)
-                .build();
-        mInterstitialAd.loadAd(adRequestInterstitial);
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                }
-            }
-        });
+//        AdRequest adRequest1 = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest1);
+//
+//        mInterstitialAd = new InterstitialAd(this);
+//        mInterstitialAd.setAdUnitId("ca-app-pub-9201945236996508/7683380073");
+//
+//        AdRequest adRequestInterstitial = new AdRequest.Builder()
+//                .addTestDevice(Constants.ONE_PLUS_TEST_DEVICE).addTestDevice(Constants.XIAOMI_TEST_DEVICE)
+//                .build();
+//        mInterstitialAd.loadAd(adRequestInterstitial);
+//
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                super.onAdLoaded();
+//                if (mInterstitialAd.isLoaded()) {
+//                    mInterstitialAd.show();
+//                }
+//            }
+//        });
 
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -243,24 +248,36 @@ public class FrontPage extends RoboAppCompatActivity
 
             @Override
             public void onBindViewHolder(LiveScoreViewHolder holder, final int position) {
-                if (Constants.SHOW_PLAYER_IMAGE.equals("true")) {
-                    Picasso.with(FrontPage.this)
-                            .load(Constants.resolveLogo(datas.get(position).getTeam1()))
-                            .placeholder(R.drawable.default_image)
-                            .into(holder.imgteam1);
+                Match match = datas.get(position);
+                Picasso.with(FrontPage.this)
+                        .load(Constants.resolveLogo(match.getTeam1().getId()))
+                        .placeholder(R.drawable.default_image)
+                        .into(holder.imgteam1);
 
-                    Picasso.with(FrontPage.this)
-                            .load(Constants.resolveLogo(datas.get(position).getTeam2()))
-                            .placeholder(R.drawable.default_image)
-                            .into(holder.imgteam2);
+                Picasso.with(FrontPage.this)
+                        .load(Constants.resolveLogo(match.getTeam2().getId()))
+                        .placeholder(R.drawable.default_image)
+                        .into(holder.imgteam2);
+
+                MiniScore miniScore = match.getMiniScore();
+                if (miniScore != null) {
+                    if (miniScore.getBattingTeamId() == match.getTeam1().getId()) {
+                        holder.textteam1.setText(match.getTeam1().getShortName()+"  "+miniScore.getBattingTeamScore());
+                        holder.textteam2.setText(match.getTeam2().getShortName() + "  "+ miniScore.getBowlingTeamScore());
+                    } else {
+                        holder.textteam1.setText(match.getTeam1().getShortName()+"  "+miniScore.getBowlingTeamScore());
+                        holder.textteam2.setText(match.getTeam2().getShortName() + "  "+ miniScore.getBattingTeamScore());
+                    }
+                } else {
+                    holder.textteam1.setText(match.getTeam1().getShortName());
+                    holder.textteam2.setText(match.getTeam2().getShortName());
                 }
 
-                holder.textteam1.setText(datas.get(position).getTeam1());
-                holder.textteam2.setText(datas.get(position).getTeam2());
-                holder.venue.setText(Html.fromHtml(datas.get(position).getVenue()));
-                holder.status.setText(datas.get(position).getMatchStatus());
 
-                holder.seriesName.setText(datas.get(position).getSeriesName() + ", " + datas.get(position).getMatchNo());
+                Header header = match.getHeader();
+                holder.venue.setText(header.getGround() + ", " + header.getCity() + ", " + header.getCountry());
+                holder.status.setText(header.getStatus());
+                holder.seriesName.setText(match.getSrs() + ", " + header.getMatchNumber());
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -279,30 +296,14 @@ public class FrontPage extends RoboAppCompatActivity
         networkService.fetchLiveScore(new DefaultMessageHandler(this, true) {
             @Override
             public void onSuccess(Message msg) {
-                String result = (String) msg.obj;
+                ObjectMapper objectMapper = new ObjectMapper();
+                JavaType valueType = objectMapper.getTypeFactory().constructCollectionType(List.class, Match.class);
                 try {
-                    JSONArray matchJsonArray = new JSONArray(result);
-                    for (int i = 0; i < matchJsonArray.length(); i++) {
-                        JSONObject matchJsonObject = matchJsonArray.getJSONObject(i);
-                        String team1 = matchJsonObject.getJSONObject("team1").getString("sName");
-                        String team2 = matchJsonObject.getJSONObject("team2").getString("sName");
-                        String venue = matchJsonObject.getJSONObject("header").getString("grnd") + ", " +
-                                matchJsonObject.getJSONObject("header").getString("vcity") + ", " +
-                                matchJsonObject.getJSONObject("header").getString("vcountry");
-                        String time = matchJsonObject.getJSONObject("header").getString("status");
-                        String seriesName = matchJsonObject.getString("srs");
-                        String matchNo = matchJsonObject.getJSONObject("header").getString("mnum");
-                        String matchId = matchJsonObject.getString("matchId");
-                        String dataPath = matchJsonObject.getString("datapath");
-
-                        datas.add(new Match(team1, team2, venue, time, seriesName, matchNo, matchId, dataPath));
-                    }
-
+                    datas.addAll((ArrayList<Match>) objectMapper.readValue((String) msg.obj, valueType));
                     recyclerView.getAdapter().notifyDataSetChanged();
-                } catch (JSONException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
@@ -354,7 +355,9 @@ public class FrontPage extends RoboAppCompatActivity
             checkIsAllowed("livestream", "com.allgames.sportslab.activity.Highlights", "livestreamfootball");
 
         } else if (id == R.id.nav_sports_news) {
-            checkIsAllowed("activity_news", "com.allgames.sportslab.activity.CricketNewsListActivity", null);
+            Intent intent = new Intent(FrontPage.this, CricketNewsListActivity.class);
+            startActivity(intent);
+            //checkIsAllowed("activity_news", "com.allgames.sportslab.activity.CricketNewsListActivity", null);
 
         } else if (id == R.id.nav_highlights) {
             checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlights");
@@ -362,9 +365,6 @@ public class FrontPage extends RoboAppCompatActivity
         } else if (id == R.id.nav_highlights_football) {
             checkIsAllowed("highlights", "com.allgames.sportslab.activity.Highlights", "highlightsfootball");
 
-        } else if (id == R.id.nav_fixture) {
-            Intent intent = new Intent(FrontPage.this, FixtureActivity.class);
-            startActivity(intent);
         } else if (id == R.id.nav_past_matches) {
             Intent intent = new Intent(FrontPage.this, PastMatchesActivity.class);
             startActivity(intent);
@@ -444,7 +444,6 @@ public class FrontPage extends RoboAppCompatActivity
         menu.findItem(R.id.nav_gallery).setVisible(false);
         menu.findItem(R.id.nav_ranking).setVisible(false);
         menu.findItem(R.id.nav_past_matches).setVisible(false);
-        menu.findItem(R.id.nav_fixture).setVisible(false);
     }
 
     private void showAllMenu(NavigationView navigationView) {
@@ -454,7 +453,6 @@ public class FrontPage extends RoboAppCompatActivity
         menu.findItem(R.id.nav_sports_news).setVisible(true);
         menu.findItem(R.id.nav_highlights).setVisible(true);
         menu.findItem(R.id.nav_highlights_football).setVisible(true);
-        menu.findItem(R.id.nav_fixture).setVisible(true);
         menu.findItem(R.id.nav_gallery).setVisible(true);
         menu.findItem(R.id.nav_series_stats).setVisible(true);
         menu.findItem(R.id.nav_ranking).setVisible(true);

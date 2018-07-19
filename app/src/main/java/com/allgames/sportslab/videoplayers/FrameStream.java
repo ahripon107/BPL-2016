@@ -27,9 +27,9 @@ public class FrameStream extends AppCompatActivity {
         setContentView(R.layout.framestream);
 
         adView = findViewById(R.id.adViewFrameStream);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
         Intent intent = getIntent();
         String str = intent.getStringExtra("url");
 

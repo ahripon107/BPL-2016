@@ -64,9 +64,9 @@ public class PointsTableActivity extends CommonActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
 
         final List<String> categories = new ArrayList<String>();
         final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);

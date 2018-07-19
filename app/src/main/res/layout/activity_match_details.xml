@@ -11,11 +11,11 @@
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/white"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:tabGravity="fill"
         app:tabSelectedTextColor="@color/colorAccent"
-        app:tabTextAppearance="@style/TextAppearance.Design.Tab" />
+        app:tabTextAppearance="@style/CustomTabTextAppearance" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adViewMatchDetails"

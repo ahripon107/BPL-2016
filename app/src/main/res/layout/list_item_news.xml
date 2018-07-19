@@ -35,31 +35,22 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_headline"
+                android:id="@+id/tv_about"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Large Text"
-                android:textColor="@color/Black"
-                android:textSize="19sp" />
-
-            <TextView
-                android:id="@+id/tv_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Medium Text"
-                android:textColor="@color/DarkBlue"
+                android:textColor="@color/Gray"
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/tv_times_ago"
+                android:id="@+id/tv_headline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="3dp"
-                android:text="ago"
-                android:textColor="@color/Green"
-                android:textSize="14sp" />
+                android:text="Medium Text"
+                android:textColor="@color/Black"
+                android:textSize="19sp" />
+
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

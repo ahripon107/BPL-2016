@@ -43,10 +43,10 @@ public class LiveStreamView extends AppCompatActivity {
         videoView1.requestFocus();
         videoView1.start();
 
-        AdView adView = findViewById(R.id.adViewStreamM3U8);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdView adView = findViewById(R.id.adViewStreamM3U8);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
 
         Toast.makeText(getApplicationContext(), "Please wait while video is loading", Toast.LENGTH_LONG).show();
     }

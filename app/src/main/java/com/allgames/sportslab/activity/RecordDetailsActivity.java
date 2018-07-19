@@ -66,9 +66,9 @@ public class RecordDetailsActivity extends CommonActivity {
         spinner = findViewById(R.id.spinner);
         adView = findViewById(R.id.adViewMatchDetails);
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
 
         testFragment = new RecordsDetailsFragment();
         odiFragment = new RecordsDetailsFragment();

@@ -78,23 +78,23 @@ public class Highlights extends RoboAppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         objects = new ArrayList<>();
         cause = getIntent().getStringExtra("cause");
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-9201945236996508/1636846478");
+//        mInterstitialAd = new InterstitialAd(this);
+//        mInterstitialAd.setAdUnitId("ca-app-pub-9201945236996508/1636846478");
 
-        AdRequest adRequestInterstitial = new AdRequest.Builder()
-                .addTestDevice(Constants.ONE_PLUS_TEST_DEVICE).addTestDevice(Constants.XIAOMI_TEST_DEVICE)
-                .build();
-        mInterstitialAd.loadAd(adRequestInterstitial);
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                }
-            }
-        });
+//        AdRequest adRequestInterstitial = new AdRequest.Builder()
+//                .addTestDevice(Constants.ONE_PLUS_TEST_DEVICE).addTestDevice(Constants.XIAOMI_TEST_DEVICE)
+//                .build();
+//        mInterstitialAd.loadAd(adRequestInterstitial);
+//
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                super.onAdLoaded();
+//                if (mInterstitialAd.isLoaded()) {
+//                    mInterstitialAd.show();
+//                }
+//            }
+//        });
 
         recyclerView.setAdapter(new BasicListAdapter<LivestreamAndHighlights, HighlightsViewHolder>(objects) {
             @Override
@@ -154,9 +154,9 @@ public class Highlights extends RoboAppCompatActivity {
             fetchFromWeb(url);
             setTitle("হাইলাইটস");
         }
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
     }
 
     @Override

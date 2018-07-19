@@ -37,9 +37,9 @@ public class HighlightsVids extends YouTubeBaseActivity implements
 
         adView = findViewById(R.id.adViewHighlightsVids);
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
 
         Intent intent = getIntent();
         url = intent.getStringExtra("url");

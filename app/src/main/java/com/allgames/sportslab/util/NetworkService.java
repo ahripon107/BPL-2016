@@ -18,6 +18,7 @@ public class NetworkService {
     private AsyncHttpClient httpClient;
 
     public void fetchMatchDetails(String dataPath, Handler handler) {
+        Log.d("matchdetails", "http://sng.mapps.cricbuzz.com/cbzandroid/3.0/match/" + dataPath + "scorecard.json");
         httpClient.get("http://sng.mapps.cricbuzz.com/cbzandroid/3.0/match/" + dataPath + "scorecard.json", null,
                 new DefaultAsyncHttpResponseHandler(handler));
     }
@@ -54,10 +55,6 @@ public class NetworkService {
         httpClient.get(Constants.WELCOME_TEXT_URL, new DefaultAsyncHttpResponseHandler(handler));
     }
 
-    public void fetchFixture(Handler handler) {
-        httpClient.get(Constants.FIXTURE_URL, new DefaultAsyncHttpResponseHandler(handler));
-    }
-
     public void fetchAllPointTables(String url, Handler handler) {
         httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
     }
@@ -66,26 +63,14 @@ public class NetworkService {
         httpClient.get(url, new DefaultAsyncHttpResponseHandler(handler));
     }
 
-    public void fetchBanglanews(Handler handler) {
-        httpClient.get("http://www.banglanews24.com/api/category/5", null, new DefaultAsyncHttpResponseHandler(handler));
+    public void fetchNews(int pageNo, Handler handler) {
+        String url = "http://api.espncricinfo.com/3/story/news?key=c3e20ac4-4ade-4624-8d96-e19beb44ec68&page="+pageNo;
+        httpClient.get(url, null, new DefaultAsyncHttpResponseHandler(handler));
     }
 
-    public void fetchBdProtidin(Handler handler) {
-        httpClient.get("http://www.bd-pratidin.com/api/categorynews/9", null, new DefaultAsyncHttpResponseHandler(handler));
-    }
-
-    public void fetchRisingBd(Handler handler) {
-        httpClient.get("http://api.risingbd.com/index.php/News?name=Latest&cat_id=3", null, new DefaultAsyncHttpResponseHandler(handler));
-    }
-
-    public void fetchProthomAlo(Handler handler) {
-        String url = "http://www.prothom-alo.com/api/mobile_api/get_contents?APP_ID=3&start=0&limit=20&content_types=article&pages=216&content_tags=";
-        httpClient.addHeader("User-Agent", "Prothom-Alo-MobApp");
-
-        RequestParams requestParams = new RequestParams();
-        requestParams.put("APP_KEY", "PAL033B345MOB1L3APP3356D2ALLS3CR3T");
-
-        httpClient.post(url, requestParams, new DefaultAsyncHttpResponseHandler(handler));
+    public void fetchNewsDetails(String newsId, Handler handler) {
+        String url = "http://api.espncricinfo.com/3/story/"+newsId+"?key=c3e20ac4-4ade-4624-8d96-e19beb44ec68";
+        httpClient.get(url, null, new DefaultAsyncHttpResponseHandler(handler));
     }
 
     public void fetchRecords(Handler handler) {

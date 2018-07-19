@@ -45,8 +45,8 @@
 
                 <ImageView
                     android:id="@+id/civTeam1"
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
                     android:layout_margin="5dp"
                     android:src="@drawable/default_image" />
 
@@ -70,8 +70,8 @@
 
                 <ImageView
                     android:id="@+id/civTeam2"
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
                     android:layout_margin="5dp"
                     android:src="@drawable/default_image" />
 

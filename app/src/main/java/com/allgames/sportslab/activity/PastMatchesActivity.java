@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.adapter.BasicListAdapter;
-import com.allgames.sportslab.model.Match;
+import com.allgames.sportslab.model.match.Header;
+import com.allgames.sportslab.model.match.Match;
+import com.allgames.sportslab.model.match.MiniScore;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
@@ -25,11 +27,15 @@ import com.google.android.gms.ads.AdView;
 import com.google.inject.Inject;
 import com.squareup.picasso.Picasso;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -63,22 +69,35 @@ public class PastMatchesActivity extends CommonActivity {
 
             @Override
             public void onBindViewHolder(PastMatchesViewHolder holder, int position) {
+                Match match = data.get(position);
                 Picasso.with(PastMatchesActivity.this)
-                        .load(Constants.resolveLogo(data.get(position).getTeam1()))
+                        .load(Constants.resolveLogo(match.getTeam1().getId()))
                         .placeholder(R.drawable.default_image)
                         .into(holder.imgteam1);
 
                 Picasso.with(PastMatchesActivity.this)
-                        .load(Constants.resolveLogo(data.get(position).getTeam2()))
+                        .load(Constants.resolveLogo(match.getTeam2().getId()))
                         .placeholder(R.drawable.default_image)
                         .into(holder.imgteam2);
 
-                holder.textteam1.setText(data.get(position).getTeam1());
-                holder.textteam2.setText(data.get(position).getTeam2());
-                holder.venue.setText(data.get(position).getVenue());
+                MiniScore miniScore = match.getMiniScore();
+                if (miniScore != null) {
+                    if (miniScore.getBattingTeamId() == match.getTeam1().getId()) {
+                        holder.textteam1.setText(match.getTeam1().getShortName()+"  "+miniScore.getBattingTeamScore());
+                        holder.textteam2.setText(match.getTeam2().getShortName() + "  "+ miniScore.getBowlingTeamScore());
+                    } else {
+                        holder.textteam1.setText(match.getTeam1().getShortName()+"  "+miniScore.getBowlingTeamScore());
+                        holder.textteam2.setText(match.getTeam2().getShortName() + "  "+ miniScore.getBattingTeamScore());
+                    }
+                } else {
+                    holder.textteam1.setText(match.getTeam1().getShortName());
+                    holder.textteam2.setText(match.getTeam2().getShortName());
+                }
+                Header header = match.getHeader();
+                holder.venue.setText(header.getGround()+", "+header.getCity()+", "+header.getCountry());
 
-                holder.time.setText(data.get(position).getMatchStatus());
-                holder.seriesName.setText(data.get(position).getSeriesName() + ", " + data.get(position).getMatchNo());
+                holder.time.setText(header.getStatus());
+                holder.seriesName.setText(match.getSrs()+", "+header.getMatchNumber());
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -97,36 +116,21 @@ public class PastMatchesActivity extends CommonActivity {
         networkService.fetchPastMatches(new DefaultMessageHandler(this, true) {
             @Override
             public void onSuccess(Message msg) {
-                String result = (String) msg.obj;
+                ObjectMapper objectMapper = new ObjectMapper();
+                JavaType valueType = objectMapper.getTypeFactory().constructCollectionType(List.class, Match.class);
                 try {
-                    JSONArray matchJsonArray = new JSONArray(result);
-                    for (int i = 0; i < matchJsonArray.length(); i++) {
-                        JSONObject matchJsonObject = matchJsonArray.getJSONObject(i);
-                        String team1 = matchJsonObject.getJSONObject("team1").getString("sName");
-                        String team2 = matchJsonObject.getJSONObject("team2").getString("sName");
-                        String venue = matchJsonObject.getJSONObject("header").getString("grnd") + ", " +
-                                matchJsonObject.getJSONObject("header").getString("vcity") + ", " +
-                                matchJsonObject.getJSONObject("header").getString("vcountry");
-                        String time = matchJsonObject.getJSONObject("header").getString("status");
-                        String seriesName = matchJsonObject.getString("srs");
-                        String matchNo = matchJsonObject.getJSONObject("header").getString("mnum");
-                        String matchId = matchJsonObject.getString("matchId");
-                        String dataPath = matchJsonObject.getString("datapath");
-
-                        data.add(new Match(team1, team2, venue, time, seriesName, matchNo, matchId, dataPath));
-                    }
-
+                    data.addAll((ArrayList<Match>) objectMapper.readValue((String) msg.obj, valueType));
                     recyclerView.getAdapter().notifyDataSetChanged();
-                } catch (JSONException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
 
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
     }
 
     private static class PastMatchesViewHolder extends RecyclerView.ViewHolder {

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.allgames.sportslab.R;
 import com.allgames.sportslab.activity.PlayerCareerActivity;
 import com.allgames.sportslab.adapter.BasicListAdapter;
-import com.allgames.sportslab.model.Match;
+import com.allgames.sportslab.model.match.Match;
 import com.allgames.sportslab.model.Player;
 import com.allgames.sportslab.util.Constants;
 import com.allgames.sportslab.util.DefaultMessageHandler;
@@ -54,26 +54,20 @@ public class PlayingXIFragment extends RoboFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (isVisibleToUser) {
             match = (Match) getArguments().getSerializable("summary");
-            networkService.fetchMatchDetails(match.getDataPath(), new DefaultMessageHandler(getContext(), false) {
+            networkService.fetchMatchDetails(match.getDatapath(), new DefaultMessageHandler(getContext(), false) {
                 @Override
                 public void onSuccess(Message msg) {
                     String string = (String) msg.obj;
 
                     try {
                         response = new JSONObject(string);
-
-                        if (response.toString().equals("{}")) {
-
-                        } else {
+                        if (!response.toString().equals("{}")) {
                             prepareFragment();
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-
-
             });
         }
     }
@@ -159,12 +153,10 @@ public class PlayingXIFragment extends RoboFragment {
                             .into(holder.imageView);
                 }
 
-                holder.textView.setOnClickListener(new View.OnClickListener() {
+                holder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getContext(), PlayerCareerActivity.class);
-                        intent.putExtra("playerID", team1.get(position).getPersonid());
-                        getActivity().startActivity(intent);
+                    public void onClick(View view) {
+                        openPlayerCareer(team1.get(position).getPersonid());
                     }
                 });
             }
@@ -187,12 +179,11 @@ public class PlayingXIFragment extends RoboFragment {
                             .placeholder(R.drawable.default_image)
                             .into(holder.imageView);
                 }
-                holder.textView.setOnClickListener(new View.OnClickListener() {
+
+                holder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getContext(), PlayerCareerActivity.class);
-                        intent.putExtra("playerID", team2.get(position).getPersonid());
-                        getActivity().startActivity(intent);
+                    public void onClick(View view) {
+                        openPlayerCareer(team2.get(position).getPersonid());
                     }
                 });
             }
@@ -200,14 +191,22 @@ public class PlayingXIFragment extends RoboFragment {
         t2.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
+    private void openPlayerCareer(String playerId){
+        Intent intent = new Intent(getContext(), PlayerCareerActivity.class);
+        intent.putExtra("playerID", playerId);
+        getActivity().startActivity(intent);
+    }
+
     private static class PlayingXIViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         ImageView imageView;
+        View view;
 
         PlayingXIViewHolder(View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.tv_player_name);
             this.imageView = itemView.findViewById(R.id.civ_player_image);
+            this.view = itemView;
         }
     }
 }

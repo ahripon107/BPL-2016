@@ -57,9 +57,9 @@ public class RecordsActivity extends CommonActivity {
         setUpViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
-                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
-        adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Constants.ONE_PLUS_TEST_DEVICE)
+//                .addTestDevice(Constants.XIAOMI_TEST_DEVICE).build();
+//        adView.loadAd(adRequest);
 
         networkService.fetchRecords(new DefaultMessageHandler(this, true) {
             @Override

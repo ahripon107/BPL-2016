@@ -18,9 +18,6 @@
             android:id="@+id/nav_highlights_football"
             android:title="ফুটবল হাইলাইটস" />
         <item
-            android:id="@+id/nav_fixture"
-            android:title="ফিক্সচার" />
-        <item
             android:id="@+id/nav_past_matches"
             android:title="পূর্বের খেলা" />
         <item

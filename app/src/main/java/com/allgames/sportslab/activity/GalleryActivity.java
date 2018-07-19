@@ -118,10 +118,10 @@ public class GalleryActivity extends CommonActivity {
         GalleryViewHolder(View itemView) {
             super(itemView);
 
-            matchTitle = ViewHolder.get(itemView, R.id.tv_headline);
+            matchTitle = ViewHolder.get(itemView, R.id.tv_about);
             imageView = ViewHolder.get(itemView, R.id.civ_news_thumb);
             matchDate = ViewHolder.get(itemView, R.id.tv_times_ago);
-            author = ViewHolder.get(itemView, R.id.tv_author);
+            author = ViewHolder.get(itemView, R.id.tv_headline);
             linearLayout = ViewHolder.get(itemView, R.id.news_item_container);
         }
     }

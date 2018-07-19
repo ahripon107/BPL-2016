@@ -21,7 +21,8 @@ import com.allgames.sportslab.adapter.BatsmanAdapter;
 import com.allgames.sportslab.adapter.BowlerAdapter;
 import com.allgames.sportslab.model.Batsman;
 import com.allgames.sportslab.model.Bowler;
-import com.allgames.sportslab.model.Match;
+import com.allgames.sportslab.model.match.Header;
+import com.allgames.sportslab.model.match.Match;
 import com.allgames.sportslab.util.DefaultMessageHandler;
 import com.allgames.sportslab.util.NetworkService;
 import com.google.gson.Gson;
@@ -208,7 +209,7 @@ public class FragmentScoreBoard extends RoboFragment {
     private void sendRequestForLiveMatchDetails() {
         swipeRefreshLayout.setRefreshing(true);
 
-        networkService.fetchMatchDetails(match.getDataPath(), new DefaultMessageHandler(getContext(), false) {
+        networkService.fetchMatchDetails(match.getDatapath(), new DefaultMessageHandler(getContext(), false) {
             @Override
             public void onSuccess(Message msg) {
                 String string = (String) msg.obj;
@@ -250,23 +251,25 @@ public class FragmentScoreBoard extends RoboFragment {
 
     private void setMatchSummary(Match matchSummary, String status) {
         if (isAdded()) {
-            this.labelTournament.setText(matchSummary.getSeriesName());
-            this.labelGround.setText(matchSummary.getVenue());
-            this.labelInfo.setText(matchSummary.getMatchNo());
-            this.labelTeam1.setText(matchSummary.getTeam1());
-            this.labelTeam2.setText(matchSummary.getTeam2());
+            this.labelTournament.setText(matchSummary.getSrs());
+            Header header = matchSummary.getHeader();
+            this.labelGround.setText(header.getGround()+", "+header.getCity()+", "+header.getCountry());
+            this.labelInfo.setText(header.getMatchNumber());
+            this.labelTeam1.setText(matchSummary.getTeam1().getShortName());
+            this.labelTeam2.setText(matchSummary.getTeam2().getShortName());
             this.labelMatchStatus.setText(status);
         }
     }
 
     private void setMatchSummary(Match matchSummary) {
         if (isAdded()) {
-            this.labelTournament.setText(matchSummary.getSeriesName());
-            this.labelGround.setText(matchSummary.getVenue());
-            this.labelInfo.setText(matchSummary.getMatchNo());
-            this.labelTeam1.setText(matchSummary.getTeam1());
-            this.labelTeam2.setText(matchSummary.getTeam2());
-            this.labelMatchStatus.setText(matchSummary.getMatchStatus());
+            this.labelTournament.setText(matchSummary.getSrs());
+            Header header = matchSummary.getHeader();
+            this.labelGround.setText(header.getGround()+", "+header.getCity()+", "+header.getCountry());
+            this.labelInfo.setText(header.getMatchNumber());
+            this.labelTeam1.setText(matchSummary.getTeam1().getShortName());
+            this.labelTeam2.setText(matchSummary.getTeam2().getShortName());
+            this.labelMatchStatus.setText(header.getStatus());
         }
     }
 
@@ -399,11 +402,14 @@ public class FragmentScoreBoard extends RoboFragment {
 
     private void setFirstInningsSummary(JSONObject jsonObject) {
         try {
-            JSONObject extraObject = jsonObject.getJSONObject("extras");
-            innings1extra.setText("B-" + extraObject.getString("byes") + ", LB-" + extraObject.getString("legByes") +
-                    ", W-" + extraObject.getString("wideBalls") + ", NB-" +
-                    extraObject.getString("noBalls") + "  -----  " + extraObject.getString("total"));
-
+            if (jsonObject.has("extras")) {
+                JSONObject extraObject = jsonObject.getJSONObject("extras");
+                innings1extra.setText("B-" + extraObject.getString("byes") + ", LB-" + extraObject.getString("legByes") +
+                        ", W-" + extraObject.getString("wideBalls") + ", NB-" +
+                        extraObject.getString("noBalls") + "  -----  " + extraObject.getString("total"));
+            } else {
+                innings1extra.setText("0");
+            }
 
             innings1total.setText("(" + jsonObject.getString("overs") + " overs)   " + jsonObject.getString("runs") + " for " + jsonObject.getString("wickets"));
 

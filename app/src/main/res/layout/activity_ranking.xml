@@ -14,16 +14,17 @@
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_ranking"
         android:layout_below="@id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/white"
         app:tabGravity="fill"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/colorAccent"
-        app:tabTextAppearance="@style/TextAppearance.Design.Tab" />
+        app:tabTextAppearance="@style/CustomTabTextAppearance" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adViewMatchDetails"
